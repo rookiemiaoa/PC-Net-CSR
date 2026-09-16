@@ -1,0 +1,27 @@
+# 统一换行符：仓库内一律存 LF，检出时也保持 LF。
+# 原因：reproduce.sh / *.sh 要在 Linux 服务器上直接跑，
+# 若因 core.autocrlf=true 被转成 CRLF，会出现
+#   bash: $'\r': command not found   /   set: -: invalid option
+# 这类致命错误（GitHub 的 "Download ZIP" 也会受此影响）。
+# 二进制文件不做任何转换。
+* text=auto eol=lf
+
+# 显式声明可执行脚本
+*.sh            text eol=lf
+reproduce.sh    text eol=lf
+Dockerfile      text eol=lf
+*.py            text eol=lf
+*.md            text eol=lf
+*.json          text eol=lf
+*.txt           text eol=lf
+
+# 二进制：禁止任何换行符转换
+*.pt            binary
+*.pkl           binary
+*.npz           binary
+*.hdf5          binary
+*.h5            binary
+*.png           binary
+*.jpg           binary
+*.pdf           binary
+*.zip           binary
