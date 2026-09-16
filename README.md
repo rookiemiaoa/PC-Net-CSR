@@ -27,6 +27,7 @@ Centre-Shift Refinement》**（Neurocomputing 投稿）的官方代码发布。�
 - [7. 可复现性](#7-可复现性)
 - [8. 引用](#8-引用)
 - [9. 许可与致谢](#9-许可与致谢)
+- [10. 上传到 GitHub](#10-上传到-github)
 
 ---
 
@@ -289,5 +290,35 @@ python csr/tools/format_lint.py
 本仓库以 **MIT** 许可发布（见 [`LICENSE`](LICENSE)）。
 上游 PC-Net 代码遵循其原始许可，版权归原作者所有。
 CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT 授权。
+
+---
+
+## 10. 上传到 GitHub
+
+本目录**已经是初始化好的 git 仓库**（分支 `main`，227 个受控文件，最大单文件 29 MB，
+远低于 GitHub 的 100 MB 上限），只需接上远端即可推送：
+
+```bash
+cd PC-Net-master
+
+# ① 在 GitHub 网页端建一个空仓库（不要勾选 README / .gitignore / LICENSE）
+# ② 接上远端（把 <user>/<repo> 换成你的）
+git remote add origin https://github.com/<user>/<repo>.git
+git push -u origin main
+```
+
+想先本地确认一遍再推：
+
+```bash
+git ls-files | wc -l          # 227
+git status                    # 应为 clean
+git log --oneline             # 两条提交
+```
+
+推送后把仓库地址回填到论文的「Code is available at ...」处即可。
+
+**未随仓库分发**（体积原因，见 §3.2）：`i3d_features.hdf5`（约 3 GB）、
+Glove 之外的原始视频、以及各 baselines（CPL / CNM / PPS）的第三方权重。
+CSV / JSON / `.pt` 等与论文数字直接对应的证据文件均已入库。
 
 感谢 PC-Net 作者开源代码与预训练权重，使本工作的逐位复现成为可能。
