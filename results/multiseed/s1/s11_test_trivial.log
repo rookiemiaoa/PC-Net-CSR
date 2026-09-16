@@ -1,0 +1,12 @@
+[GPU] NVIDIA GeForce RTX 2080 Ti
+[DATA] CharadesSTA split=test_trivial.json N=3096 P=8 L=50 K_REP=3
+2026-09-14 19:00:34 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+    rep0 100/194 28.2s
+  rep0 done | base 0.4636 | CSR 0.4797 | ISR 0.4792 | RBR 0.4796
+    rep1 100/194 28.8s
+  rep1 done | base 0.4628 | CSR 0.4786 | ISR 0.4777 | RBR 0.4782
+    rep2 100/194 28.0s
+  rep2 done | base 0.4623 | CSR 0.4779 | ISR 0.4772 | RBR 0.4794
+[mIoU over 3 rep] base=0.4629  CSR=0.4787  ISR(g.5,T2)=0.4780  RBR k=0.15=0.4791
+WROTE <WS_BASE>/dev_diag/s1/s11_test_trivial.npz
+DONE

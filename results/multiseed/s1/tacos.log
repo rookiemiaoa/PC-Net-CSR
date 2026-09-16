@@ -1,0 +1,15 @@
+[GPU] NVIDIA GeForce RTX 2080 Ti
+[DATA] TACoS split=tacos_test.json N=4001 P=8 L=50 K_REP=3
+2026-09-14 17:26:59 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+    rep0 100/251 43.9s
+    rep0 200/251 87.9s
+  rep0 done | base 0.0831 | CSR 0.0837 | ISR 0.0835 | RBR 0.0840
+    rep1 100/251 41.4s
+    rep1 200/251 79.4s
+  rep1 done | base 0.0822 | CSR 0.0834 | ISR 0.0834 | RBR 0.0829
+    rep2 100/251 45.0s
+    rep2 200/251 81.5s
+  rep2 done | base 0.0834 | CSR 0.0845 | ISR 0.0845 | RBR 0.0844
+[mIoU over 3 rep] base=0.0829  CSR=0.0839  ISR(g.5,T2)=0.0838  RBR k=0.15=0.0838
+WROTE <WS_BASE>/dev_diag/s1/tacos.npz
+DONE

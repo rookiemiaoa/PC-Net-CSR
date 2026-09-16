@@ -1,0 +1,707 @@
+2026-09-14 17:09:28,545 - {'dataset': {'dataset': 'CharadesSTA', 'feature_path': 'i3d_features.hdf5', 'vocab_size': 1111, 'word_dim': 300, 'frame_dim': 1024, 'max_num_words': 20, 'max_num_frames': 200, 'target_stride': 1, 'train_data': 'data/charades/train.json', 'test_data': 'data/charades/test_trivial.json', 'val_data': 'data/charades/test_trivial.json', 'vocab_path': 'data/charades/glove.pkl'}, 'train': {'optimizer': {'lr': 0.0004, 'weight_decay': 0, 'warmup_updates': 400, 'warmup_init_lr': 1e-07}, 'batch_size': 32, 'max_num_epochs': 30, 'model_saved_path': 'checkpoints/CharadesSTA/11_2026-09-14_17-09-28'}, 'model': {'name': 'PCNet', 'config': {'frames_input_size': 1024, 'words_input_size': 300, 'hidden_size': 256, 'use_negative': True, 'num_props': 8, 'sigma': 9, 'sigma_neg': 4.5, 'gamma': 0.5, 'dropout': 0.1, 'DualTransformer': {'d_model': 256, 'num_heads': 4, 'num_decoder_layers1': 3, 'num_decoder_layers2': 3, 'dropout': 0.1}, 'num_iteration': 4}}, 'loss': {'margin_1': 0.15, 'margin_2': 0.15, 'lambda': 0.146, 'alpha_1': 1, 'alpha_2': 5, 'co_cl_loss': 0.5, 'co_qua_loss': 1.0, 'inter_lambda': 0.146}, 'vote': False, 'seed': 11}
+train: 8281 samples, test: 3096 samples
+2026-09-14 17:09:31,311 - train: 8281 samples, test: 3096 samples
+PCNet(
+  (frame_fc): Linear(in_features=1024, out_features=256, bias=True)
+  (word_fc): Linear(in_features=300, out_features=256, bias=True)
+  (trans): DualTransformer(
+    (decoder1): TransformerDecoder(
+      (decoder_layers): ModuleList(
+        (0-2): 3 x TransformerDecoderLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): Linear(in_features=256, out_features=256, bias=True)
+          )
+          (self_attn_layer_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (encoder_attn): MultiheadAttention(
+            (out_proj): Linear(in_features=256, out_features=256, bias=True)
+          )
+          (encoder_attn_layer_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (fc1): Linear(in_features=256, out_features=512, bias=True)
+          (fc2): Linear(in_features=512, out_features=256, bias=True)
+          (final_layer_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+    )
+    (decoder2): TransformerDecoder(
+      (decoder_layers): ModuleList(
+        (0-2): 3 x TransformerDecoderLayer(
+          (self_attn): MultiheadAttention(
+            (out_proj): Linear(in_features=256, out_features=256, bias=True)
+          )
+          (self_attn_layer_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (encoder_attn): MultiheadAttention(
+            (out_proj): Linear(in_features=256, out_features=256, bias=True)
+          )
+          (encoder_attn_layer_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+          (fc1): Linear(in_features=256, out_features=512, bias=True)
+          (fc2): Linear(in_features=512, out_features=256, bias=True)
+          (final_layer_norm): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+    )
+  )
+  (fc_comp): Linear(in_features=256, out_features=1112, bias=True)
+  (fc_gauss): Linear(in_features=256, out_features=16, bias=True)
+  (word_pos_encoder): SinusoidalPositionalEmbedding()
+  (slot_atten): SlotAttention(
+    (norm_inputs): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+    (norm_slots): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+    (norm_mlp): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+    (norm_out): LayerNorm((256,), eps=1e-05, elementwise_affine=True)
+    (project_q): Linear(in_features=256, out_features=256, bias=True)
+    (project_k): Linear(in_features=256, out_features=256, bias=True)
+    (project_v): Linear(in_features=256, out_features=256, bias=True)
+    (attn_holder): Identity()
+    (mlp): MLP(
+      (layers): ModuleList(
+        (0-1): 2 x Linear(in_features=256, out_features=256, bias=True)
+      )
+    )
+  )
+  (fc_sl): Linear(in_features=256, out_features=2, bias=True)
+)
+Start Epoch 1
+2026-09-14 17:09:34,702 - Start Epoch 1
+2026-09-14 17:11:23,872 - Please install tensorboardX: pip install tensorboardX
+Epoch 1, Batch 50, lr = 0.00005, final_loss = 6.2127, nll_loss = 6.1700, ref_nll_loss = 6.2554, ivc_loss = 1.1832, neg_loss_1 = 0.0552, neg_loss_2 = 0.0423, ref_loss = 0.0755, intra_loss = 0.4208, div_loss = 0.1179, 3.826 seconds/batch
+2026-09-14 17:12:45,995 - Epoch 1, Batch 50, lr = 0.00005, final_loss = 6.2127, nll_loss = 6.1700, ref_nll_loss = 6.2554, ivc_loss = 1.1832, neg_loss_1 = 0.0552, neg_loss_2 = 0.0423, ref_loss = 0.0755, intra_loss = 0.4208, div_loss = 0.1179, 3.826 seconds/batch
+Epoch 1, Batch 100, lr = 0.00010, final_loss = 4.7034, nll_loss = 4.6697, ref_nll_loss = 4.7370, ivc_loss = 0.6774, neg_loss_1 = 0.0535, neg_loss_2 = 0.0395, ref_loss = 0.0869, intra_loss = 0.2868, div_loss = 0.0421, 2.427 seconds/batch
+2026-09-14 17:13:38,292 - Epoch 1, Batch 100, lr = 0.00010, final_loss = 4.7034, nll_loss = 4.6697, ref_nll_loss = 4.7370, ivc_loss = 0.6774, neg_loss_1 = 0.0535, neg_loss_2 = 0.0395, ref_loss = 0.0869, intra_loss = 0.2868, div_loss = 0.0421, 2.427 seconds/batch
+Epoch 1, Batch 150, lr = 0.00015, final_loss = 3.9925, nll_loss = 3.9440, ref_nll_loss = 4.0410, ivc_loss = 0.6072, neg_loss_1 = 0.0432, neg_loss_2 = 0.0378, ref_loss = 0.0691, intra_loss = 0.2863, div_loss = 0.0342, 1.790 seconds/batch
+2026-09-14 17:14:03,139 - Epoch 1, Batch 150, lr = 0.00015, final_loss = 3.9925, nll_loss = 3.9440, ref_nll_loss = 4.0410, ivc_loss = 0.6072, neg_loss_1 = 0.0432, neg_loss_2 = 0.0378, ref_loss = 0.0691, intra_loss = 0.2863, div_loss = 0.0342, 1.790 seconds/batch
+Epoch 1, Batch 200, lr = 0.00020, final_loss = 3.5886, nll_loss = 3.5292, ref_nll_loss = 3.6480, ivc_loss = 0.4546, neg_loss_1 = 0.0399, neg_loss_2 = 0.0359, ref_loss = 0.0591, intra_loss = 0.2037, div_loss = 0.0232, 1.440 seconds/batch
+2026-09-14 17:14:22,787 - Epoch 1, Batch 200, lr = 0.00020, final_loss = 3.5886, nll_loss = 3.5292, ref_nll_loss = 3.6480, ivc_loss = 0.4546, neg_loss_1 = 0.0399, neg_loss_2 = 0.0359, ref_loss = 0.0591, intra_loss = 0.2037, div_loss = 0.0232, 1.440 seconds/batch
+Epoch 1, Batch 250, lr = 0.00025, final_loss = 3.3680, nll_loss = 3.3000, ref_nll_loss = 3.4359, ivc_loss = 0.3901, neg_loss_1 = 0.0401, neg_loss_2 = 0.0385, ref_loss = 0.0513, intra_loss = 0.1636, div_loss = 0.0193, 1.372 seconds/batch
+2026-09-14 17:15:17,742 - Epoch 1, Batch 250, lr = 0.00025, final_loss = 3.3680, nll_loss = 3.3000, ref_nll_loss = 3.4359, ivc_loss = 0.3901, neg_loss_1 = 0.0401, neg_loss_2 = 0.0385, ref_loss = 0.0513, intra_loss = 0.1636, div_loss = 0.0193, 1.372 seconds/batch
+Epoch 1, Batch 259, lr = 0.00026, final_loss = 3.3090, nll_loss = 3.2333, ref_nll_loss = 3.3847, ivc_loss = 0.3989, neg_loss_1 = 0.0429, neg_loss_2 = 0.0401, ref_loss = 0.0452, intra_loss = 0.1714, div_loss = 0.0199, 1.376 seconds/batch
+2026-09-14 17:15:30,994 - Epoch 1, Batch 259, lr = 0.00026, final_loss = 3.3090, nll_loss = 3.2333, ref_nll_loss = 3.3847, ivc_loss = 0.3989, neg_loss_1 = 0.0429, neg_loss_2 = 0.0401, ref_loss = 0.0452, intra_loss = 0.1714, div_loss = 0.0199, 1.376 seconds/batch
+merge_alpha: 0.027776336297392845, range_width: 0.18632498383522034
+2026-09-14 17:15:31,003 - merge_alpha: 0.027776336297392845, range_width: 0.18632498383522034
+| R@1,mIoU 0.3096 | R@1,IoU@0.1 0.5824 | R@1,IoU@0.3 0.4658 | R@1,IoU@0.5 0.3324 | R@1,IoU@0.7 0.1450 | R@1,IoU@0.9 0.0187 | R@5,mIoU 0.6181 | R@5,IoU@0.1 0.9577 | R@5,IoU@0.3 0.9002 | R@5,IoU@0.5 0.7510 | R@5,IoU@0.7 0.4121 | R@5,IoU@0.9 0.0585 |
+2026-09-14 17:16:45,147 - | R@1,mIoU 0.3096 | R@1,IoU@0.1 0.5824 | R@1,IoU@0.3 0.4658 | R@1,IoU@0.5 0.3324 | R@1,IoU@0.7 0.1450 | R@1,IoU@0.9 0.0187 | R@5,mIoU 0.6181 | R@5,IoU@0.1 0.9577 | R@5,IoU@0.3 0.9002 | R@5,IoU@0.5 0.7510 | R@5,IoU@0.7 0.4121 | R@5,IoU@0.9 0.0585 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 259.
+2026-09-14 17:16:45,200 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 259.
+Best results have been updated.
+2026-09-14 17:16:45,200 - Best results have been updated.
+============================================================
+2026-09-14 17:16:45,200 - ============================================================
+Start Epoch 2
+2026-09-14 17:16:45,201 - Start Epoch 2
+Epoch 2, Batch 50, lr = 0.00031, final_loss = 3.2072, nll_loss = 3.1357, ref_nll_loss = 3.2787, ivc_loss = 0.3502, neg_loss_1 = 0.0389, neg_loss_2 = 0.0365, ref_loss = 0.0516, intra_loss = 0.1261, div_loss = 0.0194, 1.959 seconds/batch
+2026-09-14 17:18:26,039 - Epoch 2, Batch 50, lr = 0.00031, final_loss = 3.2072, nll_loss = 3.1357, ref_nll_loss = 3.2787, ivc_loss = 0.3502, neg_loss_1 = 0.0389, neg_loss_2 = 0.0365, ref_loss = 0.0516, intra_loss = 0.1261, div_loss = 0.0194, 1.959 seconds/batch
+Epoch 2, Batch 100, lr = 0.00036, final_loss = 3.0767, nll_loss = 2.9958, ref_nll_loss = 3.1576, ivc_loss = 0.2623, neg_loss_1 = 0.0318, neg_loss_2 = 0.0298, ref_loss = 0.0451, intra_loss = 0.0790, div_loss = 0.0153, 1.214 seconds/batch
+2026-09-14 17:18:46,688 - Epoch 2, Batch 100, lr = 0.00036, final_loss = 3.0767, nll_loss = 2.9958, ref_nll_loss = 3.1576, ivc_loss = 0.2623, neg_loss_1 = 0.0318, neg_loss_2 = 0.0298, ref_loss = 0.0451, intra_loss = 0.0790, div_loss = 0.0153, 1.214 seconds/batch
+Epoch 2, Batch 150, lr = 0.00040, final_loss = 3.0454, nll_loss = 2.9620, ref_nll_loss = 3.1287, ivc_loss = 0.2571, neg_loss_1 = 0.0330, neg_loss_2 = 0.0331, ref_loss = 0.0461, intra_loss = 0.0560, div_loss = 0.0178, 0.936 seconds/batch
+2026-09-14 17:19:05,579 - Epoch 2, Batch 150, lr = 0.00040, final_loss = 3.0454, nll_loss = 2.9620, ref_nll_loss = 3.1287, ivc_loss = 0.2571, neg_loss_1 = 0.0330, neg_loss_2 = 0.0331, ref_loss = 0.0461, intra_loss = 0.0560, div_loss = 0.0178, 0.936 seconds/batch
+Epoch 2, Batch 200, lr = 0.00037, final_loss = 2.9576, nll_loss = 2.8676, ref_nll_loss = 3.0475, ivc_loss = 0.2092, neg_loss_1 = 0.0316, neg_loss_2 = 0.0263, ref_loss = 0.0431, intra_loss = 0.0426, div_loss = 0.0131, 0.797 seconds/batch
+2026-09-14 17:19:24,643 - Epoch 2, Batch 200, lr = 0.00037, final_loss = 2.9576, nll_loss = 2.8676, ref_nll_loss = 3.0475, ivc_loss = 0.2092, neg_loss_1 = 0.0316, neg_loss_2 = 0.0263, ref_loss = 0.0431, intra_loss = 0.0426, div_loss = 0.0131, 0.797 seconds/batch
+Epoch 2, Batch 250, lr = 0.00035, final_loss = 2.8879, nll_loss = 2.7966, ref_nll_loss = 2.9791, ivc_loss = 0.2086, neg_loss_1 = 0.0300, neg_loss_2 = 0.0274, ref_loss = 0.0429, intra_loss = 0.0455, div_loss = 0.0126, 0.712 seconds/batch
+2026-09-14 17:19:43,274 - Epoch 2, Batch 250, lr = 0.00035, final_loss = 2.8879, nll_loss = 2.7966, ref_nll_loss = 2.9791, ivc_loss = 0.2086, neg_loss_1 = 0.0300, neg_loss_2 = 0.0274, ref_loss = 0.0429, intra_loss = 0.0455, div_loss = 0.0126, 0.712 seconds/batch
+Epoch 2, Batch 259, lr = 0.00035, final_loss = 2.9253, nll_loss = 2.8411, ref_nll_loss = 3.0095, ivc_loss = 0.2195, neg_loss_1 = 0.0285, neg_loss_2 = 0.0250, ref_loss = 0.0471, intra_loss = 0.0588, div_loss = 0.0120, 0.701 seconds/batch
+2026-09-14 17:19:46,822 - Epoch 2, Batch 259, lr = 0.00035, final_loss = 2.9253, nll_loss = 2.8411, ref_nll_loss = 3.0095, ivc_loss = 0.2195, neg_loss_1 = 0.0285, neg_loss_2 = 0.0250, ref_loss = 0.0471, intra_loss = 0.0588, div_loss = 0.0120, 0.701 seconds/batch
+merge_alpha: 0.08559300750494003, range_width: 0.18416158854961395
+2026-09-14 17:19:46,829 - merge_alpha: 0.08559300750494003, range_width: 0.18416158854961395
+| R@1,mIoU 0.4009 | R@1,IoU@0.1 0.7038 | R@1,IoU@0.3 0.6014 | R@1,IoU@0.5 0.4599 | R@1,IoU@0.7 0.2112 | R@1,IoU@0.9 0.0255 | R@5,mIoU 0.6705 | R@5,IoU@0.1 0.9893 | R@5,IoU@0.3 0.9638 | R@5,IoU@0.5 0.8530 | R@5,IoU@0.7 0.4955 | R@5,IoU@0.9 0.0691 |
+2026-09-14 17:20:07,193 - | R@1,mIoU 0.4009 | R@1,IoU@0.1 0.7038 | R@1,IoU@0.3 0.6014 | R@1,IoU@0.5 0.4599 | R@1,IoU@0.7 0.2112 | R@1,IoU@0.9 0.0255 | R@5,mIoU 0.6705 | R@5,IoU@0.1 0.9893 | R@5,IoU@0.3 0.9638 | R@5,IoU@0.5 0.8530 | R@5,IoU@0.7 0.4955 | R@5,IoU@0.9 0.0691 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 518.
+2026-09-14 17:20:07,249 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 518.
+Best results have been updated.
+2026-09-14 17:20:07,250 - Best results have been updated.
+============================================================
+2026-09-14 17:20:07,250 - ============================================================
+Start Epoch 3
+2026-09-14 17:20:07,250 - Start Epoch 3
+Epoch 3, Batch 50, lr = 0.00034, final_loss = 2.8303, nll_loss = 2.7312, ref_nll_loss = 2.9295, ivc_loss = 0.1539, neg_loss_1 = 0.0259, neg_loss_2 = 0.0210, ref_loss = 0.0361, intra_loss = 0.0233, div_loss = 0.0095, 0.485 seconds/batch
+2026-09-14 17:20:31,550 - Epoch 3, Batch 50, lr = 0.00034, final_loss = 2.8303, nll_loss = 2.7312, ref_nll_loss = 2.9295, ivc_loss = 0.1539, neg_loss_1 = 0.0259, neg_loss_2 = 0.0210, ref_loss = 0.0361, intra_loss = 0.0233, div_loss = 0.0095, 0.485 seconds/batch
+Epoch 3, Batch 100, lr = 0.00032, final_loss = 2.7703, nll_loss = 2.6680, ref_nll_loss = 2.8727, ivc_loss = 0.1482, neg_loss_1 = 0.0229, neg_loss_2 = 0.0206, ref_loss = 0.0365, intra_loss = 0.0178, div_loss = 0.0101, 0.425 seconds/batch
+2026-09-14 17:20:50,128 - Epoch 3, Batch 100, lr = 0.00032, final_loss = 2.7703, nll_loss = 2.6680, ref_nll_loss = 2.8727, ivc_loss = 0.1482, neg_loss_1 = 0.0229, neg_loss_2 = 0.0206, ref_loss = 0.0365, intra_loss = 0.0178, div_loss = 0.0101, 0.425 seconds/batch
+Epoch 3, Batch 150, lr = 0.00031, final_loss = 2.7712, nll_loss = 2.6691, ref_nll_loss = 2.8732, ivc_loss = 0.1210, neg_loss_1 = 0.0216, neg_loss_2 = 0.0162, ref_loss = 0.0357, intra_loss = 0.0120, div_loss = 0.0071, 0.409 seconds/batch
+2026-09-14 17:21:08,705 - Epoch 3, Batch 150, lr = 0.00031, final_loss = 2.7712, nll_loss = 2.6691, ref_nll_loss = 2.8732, ivc_loss = 0.1210, neg_loss_1 = 0.0216, neg_loss_2 = 0.0162, ref_loss = 0.0357, intra_loss = 0.0120, div_loss = 0.0071, 0.409 seconds/batch
+Epoch 3, Batch 200, lr = 0.00030, final_loss = 2.7317, nll_loss = 2.6296, ref_nll_loss = 2.8339, ivc_loss = 0.1197, neg_loss_1 = 0.0227, neg_loss_2 = 0.0186, ref_loss = 0.0376, intra_loss = 0.0167, div_loss = 0.0048, 0.398 seconds/batch
+2026-09-14 17:21:26,862 - Epoch 3, Batch 200, lr = 0.00030, final_loss = 2.7317, nll_loss = 2.6296, ref_nll_loss = 2.8339, ivc_loss = 0.1197, neg_loss_1 = 0.0227, neg_loss_2 = 0.0186, ref_loss = 0.0376, intra_loss = 0.0167, div_loss = 0.0048, 0.398 seconds/batch
+Epoch 3, Batch 250, lr = 0.00029, final_loss = 2.7308, nll_loss = 2.6284, ref_nll_loss = 2.8333, ivc_loss = 0.1245, neg_loss_1 = 0.0220, neg_loss_2 = 0.0168, ref_loss = 0.0355, intra_loss = 0.0226, div_loss = 0.0055, 0.393 seconds/batch
+2026-09-14 17:21:45,504 - Epoch 3, Batch 250, lr = 0.00029, final_loss = 2.7308, nll_loss = 2.6284, ref_nll_loss = 2.8333, ivc_loss = 0.1245, neg_loss_1 = 0.0220, neg_loss_2 = 0.0168, ref_loss = 0.0355, intra_loss = 0.0226, div_loss = 0.0055, 0.393 seconds/batch
+Epoch 3, Batch 259, lr = 0.00029, final_loss = 2.7171, nll_loss = 2.6070, ref_nll_loss = 2.8273, ivc_loss = 0.1107, neg_loss_1 = 0.0177, neg_loss_2 = 0.0259, ref_loss = 0.0332, intra_loss = 0.0149, div_loss = 0.0038, 0.393 seconds/batch
+2026-09-14 17:21:48,969 - Epoch 3, Batch 259, lr = 0.00029, final_loss = 2.7171, nll_loss = 2.6070, ref_nll_loss = 2.8273, ivc_loss = 0.1107, neg_loss_1 = 0.0177, neg_loss_2 = 0.0259, ref_loss = 0.0332, intra_loss = 0.0149, div_loss = 0.0038, 0.393 seconds/batch
+merge_alpha: 0.1032232716679573, range_width: 0.1951597034931183
+2026-09-14 17:21:48,978 - merge_alpha: 0.1032232716679573, range_width: 0.1951597034931183
+| R@1,mIoU 0.4294 | R@1,IoU@0.1 0.7503 | R@1,IoU@0.3 0.6476 | R@1,IoU@0.5 0.4916 | R@1,IoU@0.7 0.2303 | R@1,IoU@0.9 0.0349 | R@5,mIoU 0.6823 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9674 | R@5,IoU@0.5 0.8514 | R@5,IoU@0.7 0.5413 | R@5,IoU@0.9 0.0782 |
+2026-09-14 17:22:07,324 - | R@1,mIoU 0.4294 | R@1,IoU@0.1 0.7503 | R@1,IoU@0.3 0.6476 | R@1,IoU@0.5 0.4916 | R@1,IoU@0.7 0.2303 | R@1,IoU@0.9 0.0349 | R@5,mIoU 0.6823 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9674 | R@5,IoU@0.5 0.8514 | R@5,IoU@0.7 0.5413 | R@5,IoU@0.9 0.0782 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 777.
+2026-09-14 17:22:07,398 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 777.
+Best results have been updated.
+2026-09-14 17:22:07,398 - Best results have been updated.
+============================================================
+2026-09-14 17:22:07,398 - ============================================================
+Start Epoch 4
+2026-09-14 17:22:07,398 - Start Epoch 4
+Epoch 4, Batch 50, lr = 0.00028, final_loss = 2.6464, nll_loss = 2.5378, ref_nll_loss = 2.7551, ivc_loss = 0.0910, neg_loss_1 = 0.0186, neg_loss_2 = 0.0129, ref_loss = 0.0324, intra_loss = 0.0109, div_loss = 0.0032, 0.439 seconds/batch
+2026-09-14 17:22:32,437 - Epoch 4, Batch 50, lr = 0.00028, final_loss = 2.6464, nll_loss = 2.5378, ref_nll_loss = 2.7551, ivc_loss = 0.0910, neg_loss_1 = 0.0186, neg_loss_2 = 0.0129, ref_loss = 0.0324, intra_loss = 0.0109, div_loss = 0.0032, 0.439 seconds/batch
+Epoch 4, Batch 100, lr = 0.00027, final_loss = 2.6288, nll_loss = 2.5192, ref_nll_loss = 2.7385, ivc_loss = 0.0952, neg_loss_1 = 0.0186, neg_loss_2 = 0.0138, ref_loss = 0.0318, intra_loss = 0.0165, div_loss = 0.0029, 0.434 seconds/batch
+2026-09-14 17:22:51,115 - Epoch 4, Batch 100, lr = 0.00027, final_loss = 2.6288, nll_loss = 2.5192, ref_nll_loss = 2.7385, ivc_loss = 0.0952, neg_loss_1 = 0.0186, neg_loss_2 = 0.0138, ref_loss = 0.0318, intra_loss = 0.0165, div_loss = 0.0029, 0.434 seconds/batch
+Epoch 4, Batch 150, lr = 0.00026, final_loss = 2.6395, nll_loss = 2.5310, ref_nll_loss = 2.7481, ivc_loss = 0.0983, neg_loss_1 = 0.0191, neg_loss_2 = 0.0140, ref_loss = 0.0327, intra_loss = 0.0155, div_loss = 0.0034, 0.415 seconds/batch
+2026-09-14 17:23:09,854 - Epoch 4, Batch 150, lr = 0.00026, final_loss = 2.6395, nll_loss = 2.5310, ref_nll_loss = 2.7481, ivc_loss = 0.0983, neg_loss_1 = 0.0191, neg_loss_2 = 0.0140, ref_loss = 0.0327, intra_loss = 0.0155, div_loss = 0.0034, 0.415 seconds/batch
+Epoch 4, Batch 200, lr = 0.00026, final_loss = 2.6512, nll_loss = 2.5444, ref_nll_loss = 2.7581, ivc_loss = 0.0944, neg_loss_1 = 0.0208, neg_loss_2 = 0.0131, ref_loss = 0.0343, intra_loss = 0.0069, div_loss = 0.0038, 0.406 seconds/batch
+2026-09-14 17:23:28,789 - Epoch 4, Batch 200, lr = 0.00026, final_loss = 2.6512, nll_loss = 2.5444, ref_nll_loss = 2.7581, ivc_loss = 0.0944, neg_loss_1 = 0.0208, neg_loss_2 = 0.0131, ref_loss = 0.0343, intra_loss = 0.0069, div_loss = 0.0038, 0.406 seconds/batch
+Epoch 4, Batch 250, lr = 0.00025, final_loss = 2.6279, nll_loss = 2.5172, ref_nll_loss = 2.7387, ivc_loss = 0.0854, neg_loss_1 = 0.0178, neg_loss_2 = 0.0133, ref_loss = 0.0320, intra_loss = 0.0074, div_loss = 0.0030, 0.401 seconds/batch
+2026-09-14 17:23:47,719 - Epoch 4, Batch 250, lr = 0.00025, final_loss = 2.6279, nll_loss = 2.5172, ref_nll_loss = 2.7387, ivc_loss = 0.0854, neg_loss_1 = 0.0178, neg_loss_2 = 0.0133, ref_loss = 0.0320, intra_loss = 0.0074, div_loss = 0.0030, 0.401 seconds/batch
+Epoch 4, Batch 259, lr = 0.00025, final_loss = 2.6656, nll_loss = 2.5526, ref_nll_loss = 2.7786, ivc_loss = 0.0815, neg_loss_1 = 0.0126, neg_loss_2 = 0.0123, ref_loss = 0.0280, intra_loss = 0.0154, div_loss = 0.0026, 0.400 seconds/batch
+2026-09-14 17:23:51,127 - Epoch 4, Batch 259, lr = 0.00025, final_loss = 2.6656, nll_loss = 2.5526, ref_nll_loss = 2.7786, ivc_loss = 0.0815, neg_loss_1 = 0.0126, neg_loss_2 = 0.0123, ref_loss = 0.0280, intra_loss = 0.0154, div_loss = 0.0026, 0.400 seconds/batch
+merge_alpha: 0.10179948806762695, range_width: 0.20451967418193817
+2026-09-14 17:23:51,139 - merge_alpha: 0.10179948806762695, range_width: 0.20451967418193817
+| R@1,mIoU 0.4330 | R@1,IoU@0.1 0.7503 | R@1,IoU@0.3 0.6518 | R@1,IoU@0.5 0.4929 | R@1,IoU@0.7 0.2384 | R@1,IoU@0.9 0.0320 | R@5,mIoU 0.6808 | R@5,IoU@0.1 0.9884 | R@5,IoU@0.3 0.9641 | R@5,IoU@0.5 0.8459 | R@5,IoU@0.7 0.5475 | R@5,IoU@0.9 0.0795 |
+2026-09-14 17:24:10,322 - | R@1,mIoU 0.4330 | R@1,IoU@0.1 0.7503 | R@1,IoU@0.3 0.6518 | R@1,IoU@0.5 0.4929 | R@1,IoU@0.7 0.2384 | R@1,IoU@0.9 0.0320 | R@5,mIoU 0.6808 | R@5,IoU@0.1 0.9884 | R@5,IoU@0.3 0.9641 | R@5,IoU@0.5 0.8459 | R@5,IoU@0.7 0.5475 | R@5,IoU@0.9 0.0795 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1036.
+2026-09-14 17:24:10,409 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1036.
+Best results have been updated.
+2026-09-14 17:24:10,410 - Best results have been updated.
+============================================================
+2026-09-14 17:24:10,410 - ============================================================
+Start Epoch 5
+2026-09-14 17:24:10,410 - Start Epoch 5
+Epoch 5, Batch 50, lr = 0.00024, final_loss = 2.5769, nll_loss = 2.4662, ref_nll_loss = 2.6876, ivc_loss = 0.0797, neg_loss_1 = 0.0157, neg_loss_2 = 0.0147, ref_loss = 0.0296, intra_loss = 0.0070, div_loss = 0.0025, 0.413 seconds/batch
+2026-09-14 17:24:31,309 - Epoch 5, Batch 50, lr = 0.00024, final_loss = 2.5769, nll_loss = 2.4662, ref_nll_loss = 2.6876, ivc_loss = 0.0797, neg_loss_1 = 0.0157, neg_loss_2 = 0.0147, ref_loss = 0.0296, intra_loss = 0.0070, div_loss = 0.0025, 0.413 seconds/batch
+Epoch 5, Batch 100, lr = 0.00024, final_loss = 2.5672, nll_loss = 2.4567, ref_nll_loss = 2.6777, ivc_loss = 0.0872, neg_loss_1 = 0.0161, neg_loss_2 = 0.0137, ref_loss = 0.0302, intra_loss = 0.0116, div_loss = 0.0031, 0.390 seconds/batch
+2026-09-14 17:24:49,419 - Epoch 5, Batch 100, lr = 0.00024, final_loss = 2.5672, nll_loss = 2.4567, ref_nll_loss = 2.6777, ivc_loss = 0.0872, neg_loss_1 = 0.0161, neg_loss_2 = 0.0137, ref_loss = 0.0302, intra_loss = 0.0116, div_loss = 0.0031, 0.390 seconds/batch
+Epoch 5, Batch 150, lr = 0.00023, final_loss = 2.5671, nll_loss = 2.4549, ref_nll_loss = 2.6793, ivc_loss = 0.0820, neg_loss_1 = 0.0169, neg_loss_2 = 0.0102, ref_loss = 0.0317, intra_loss = 0.0091, div_loss = 0.0028, 0.383 seconds/batch
+2026-09-14 17:25:08,353 - Epoch 5, Batch 150, lr = 0.00023, final_loss = 2.5671, nll_loss = 2.4549, ref_nll_loss = 2.6793, ivc_loss = 0.0820, neg_loss_1 = 0.0169, neg_loss_2 = 0.0102, ref_loss = 0.0317, intra_loss = 0.0091, div_loss = 0.0028, 0.383 seconds/batch
+Epoch 5, Batch 200, lr = 0.00023, final_loss = 2.5341, nll_loss = 2.4194, ref_nll_loss = 2.6489, ivc_loss = 0.0837, neg_loss_1 = 0.0162, neg_loss_2 = 0.0128, ref_loss = 0.0286, intra_loss = 0.0114, div_loss = 0.0030, 0.381 seconds/batch
+2026-09-14 17:25:26,581 - Epoch 5, Batch 200, lr = 0.00023, final_loss = 2.5341, nll_loss = 2.4194, ref_nll_loss = 2.6489, ivc_loss = 0.0837, neg_loss_1 = 0.0162, neg_loss_2 = 0.0128, ref_loss = 0.0286, intra_loss = 0.0114, div_loss = 0.0030, 0.381 seconds/batch
+Epoch 5, Batch 250, lr = 0.00022, final_loss = 2.5872, nll_loss = 2.4713, ref_nll_loss = 2.7031, ivc_loss = 0.0796, neg_loss_1 = 0.0170, neg_loss_2 = 0.0108, ref_loss = 0.0284, intra_loss = 0.0071, div_loss = 0.0033, 0.378 seconds/batch
+2026-09-14 17:25:44,939 - Epoch 5, Batch 250, lr = 0.00022, final_loss = 2.5872, nll_loss = 2.4713, ref_nll_loss = 2.7031, ivc_loss = 0.0796, neg_loss_1 = 0.0170, neg_loss_2 = 0.0108, ref_loss = 0.0284, intra_loss = 0.0071, div_loss = 0.0033, 0.378 seconds/batch
+Epoch 5, Batch 259, lr = 0.00022, final_loss = 2.5193, nll_loss = 2.4077, ref_nll_loss = 2.6309, ivc_loss = 0.0655, neg_loss_1 = 0.0138, neg_loss_2 = 0.0126, ref_loss = 0.0247, intra_loss = 0.0014, div_loss = 0.0026, 0.377 seconds/batch
+2026-09-14 17:25:48,170 - Epoch 5, Batch 259, lr = 0.00022, final_loss = 2.5193, nll_loss = 2.4077, ref_nll_loss = 2.6309, ivc_loss = 0.0655, neg_loss_1 = 0.0138, neg_loss_2 = 0.0126, ref_loss = 0.0247, intra_loss = 0.0014, div_loss = 0.0026, 0.377 seconds/batch
+merge_alpha: 0.10059986263513565, range_width: 0.2163463979959488
+2026-09-14 17:25:48,178 - merge_alpha: 0.10059986263513565, range_width: 0.2163463979959488
+| R@1,mIoU 0.4364 | R@1,IoU@0.1 0.7587 | R@1,IoU@0.3 0.6550 | R@1,IoU@0.5 0.5010 | R@1,IoU@0.7 0.2332 | R@1,IoU@0.9 0.0317 | R@5,mIoU 0.6883 | R@5,IoU@0.1 0.9926 | R@5,IoU@0.3 0.9706 | R@5,IoU@0.5 0.8650 | R@5,IoU@0.7 0.5362 | R@5,IoU@0.9 0.0837 |
+2026-09-14 17:26:08,393 - | R@1,mIoU 0.4364 | R@1,IoU@0.1 0.7587 | R@1,IoU@0.3 0.6550 | R@1,IoU@0.5 0.5010 | R@1,IoU@0.7 0.2332 | R@1,IoU@0.9 0.0317 | R@5,mIoU 0.6883 | R@5,IoU@0.1 0.9926 | R@5,IoU@0.3 0.9706 | R@5,IoU@0.5 0.8650 | R@5,IoU@0.7 0.5362 | R@5,IoU@0.9 0.0837 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1295.
+2026-09-14 17:26:08,626 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1295.
+Best results have been updated.
+2026-09-14 17:26:08,627 - Best results have been updated.
+============================================================
+2026-09-14 17:26:08,627 - ============================================================
+Start Epoch 6
+2026-09-14 17:26:08,627 - Start Epoch 6
+Epoch 6, Batch 50, lr = 0.00022, final_loss = 2.5151, nll_loss = 2.3994, ref_nll_loss = 2.6309, ivc_loss = 0.0768, neg_loss_1 = 0.0148, neg_loss_2 = 0.0113, ref_loss = 0.0291, intra_loss = 0.0075, div_loss = 0.0028, 0.468 seconds/batch
+2026-09-14 17:26:32,039 - Epoch 6, Batch 50, lr = 0.00022, final_loss = 2.5151, nll_loss = 2.3994, ref_nll_loss = 2.6309, ivc_loss = 0.0768, neg_loss_1 = 0.0148, neg_loss_2 = 0.0113, ref_loss = 0.0291, intra_loss = 0.0075, div_loss = 0.0028, 0.468 seconds/batch
+Epoch 6, Batch 100, lr = 0.00021, final_loss = 2.5173, nll_loss = 2.3969, ref_nll_loss = 2.6377, ivc_loss = 0.0706, neg_loss_1 = 0.0139, neg_loss_2 = 0.0094, ref_loss = 0.0262, intra_loss = 0.0069, div_loss = 0.0028, 0.423 seconds/batch
+2026-09-14 17:26:51,148 - Epoch 6, Batch 100, lr = 0.00021, final_loss = 2.5173, nll_loss = 2.3969, ref_nll_loss = 2.6377, ivc_loss = 0.0706, neg_loss_1 = 0.0139, neg_loss_2 = 0.0094, ref_loss = 0.0262, intra_loss = 0.0069, div_loss = 0.0028, 0.423 seconds/batch
+Epoch 6, Batch 150, lr = 0.00021, final_loss = 2.5338, nll_loss = 2.4108, ref_nll_loss = 2.6569, ivc_loss = 0.0762, neg_loss_1 = 0.0155, neg_loss_2 = 0.0097, ref_loss = 0.0269, intra_loss = 0.0094, div_loss = 0.0029, 0.417 seconds/batch
+2026-09-14 17:27:11,302 - Epoch 6, Batch 150, lr = 0.00021, final_loss = 2.5338, nll_loss = 2.4108, ref_nll_loss = 2.6569, ivc_loss = 0.0762, neg_loss_1 = 0.0155, neg_loss_2 = 0.0097, ref_loss = 0.0269, intra_loss = 0.0094, div_loss = 0.0029, 0.417 seconds/batch
+Epoch 6, Batch 200, lr = 0.00021, final_loss = 2.5137, nll_loss = 2.3993, ref_nll_loss = 2.6281, ivc_loss = 0.0789, neg_loss_1 = 0.0167, neg_loss_2 = 0.0119, ref_loss = 0.0289, intra_loss = 0.0061, div_loss = 0.0031, 0.413 seconds/batch
+2026-09-14 17:27:31,313 - Epoch 6, Batch 200, lr = 0.00021, final_loss = 2.5137, nll_loss = 2.3993, ref_nll_loss = 2.6281, ivc_loss = 0.0789, neg_loss_1 = 0.0167, neg_loss_2 = 0.0119, ref_loss = 0.0289, intra_loss = 0.0061, div_loss = 0.0031, 0.413 seconds/batch
+Epoch 6, Batch 250, lr = 0.00020, final_loss = 2.4900, nll_loss = 2.3741, ref_nll_loss = 2.6059, ivc_loss = 0.0710, neg_loss_1 = 0.0155, neg_loss_2 = 0.0113, ref_loss = 0.0272, intra_loss = 0.0017, div_loss = 0.0030, 0.414 seconds/batch
+2026-09-14 17:27:52,138 - Epoch 6, Batch 250, lr = 0.00020, final_loss = 2.4900, nll_loss = 2.3741, ref_nll_loss = 2.6059, ivc_loss = 0.0710, neg_loss_1 = 0.0155, neg_loss_2 = 0.0113, ref_loss = 0.0272, intra_loss = 0.0017, div_loss = 0.0030, 0.414 seconds/batch
+Epoch 6, Batch 259, lr = 0.00020, final_loss = 2.5621, nll_loss = 2.4548, ref_nll_loss = 2.6694, ivc_loss = 0.0947, neg_loss_1 = 0.0161, neg_loss_2 = 0.0091, ref_loss = 0.0332, intra_loss = 0.0226, div_loss = 0.0027, 0.413 seconds/batch
+2026-09-14 17:27:55,708 - Epoch 6, Batch 259, lr = 0.00020, final_loss = 2.5621, nll_loss = 2.4548, ref_nll_loss = 2.6694, ivc_loss = 0.0947, neg_loss_1 = 0.0161, neg_loss_2 = 0.0091, ref_loss = 0.0332, intra_loss = 0.0226, div_loss = 0.0027, 0.413 seconds/batch
+merge_alpha: 0.09894902259111404, range_width: 0.2265344262123108
+2026-09-14 17:27:55,716 - merge_alpha: 0.09894902259111404, range_width: 0.2265344262123108
+| R@1,mIoU 0.4471 | R@1,IoU@0.1 0.7729 | R@1,IoU@0.3 0.6822 | R@1,IoU@0.5 0.5223 | R@1,IoU@0.7 0.2345 | R@1,IoU@0.9 0.0258 | R@5,mIoU 0.6841 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9706 | R@5,IoU@0.5 0.8640 | R@5,IoU@0.7 0.5423 | R@5,IoU@0.9 0.0565 |
+2026-09-14 17:28:18,838 - | R@1,mIoU 0.4471 | R@1,IoU@0.1 0.7729 | R@1,IoU@0.3 0.6822 | R@1,IoU@0.5 0.5223 | R@1,IoU@0.7 0.2345 | R@1,IoU@0.9 0.0258 | R@5,mIoU 0.6841 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9706 | R@5,IoU@0.5 0.8640 | R@5,IoU@0.7 0.5423 | R@5,IoU@0.9 0.0565 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1554.
+2026-09-14 17:28:18,893 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1554.
+Best results have been updated.
+2026-09-14 17:28:18,894 - Best results have been updated.
+============================================================
+2026-09-14 17:28:18,894 - ============================================================
+Start Epoch 7
+2026-09-14 17:28:18,894 - Start Epoch 7
+Epoch 7, Batch 50, lr = 0.00020, final_loss = 2.4783, nll_loss = 2.3578, ref_nll_loss = 2.5988, ivc_loss = 0.0712, neg_loss_1 = 0.0149, neg_loss_2 = 0.0091, ref_loss = 0.0260, intra_loss = 0.0052, div_loss = 0.0032, 0.464 seconds/batch
+2026-09-14 17:28:42,178 - Epoch 7, Batch 50, lr = 0.00020, final_loss = 2.4783, nll_loss = 2.3578, ref_nll_loss = 2.5988, ivc_loss = 0.0712, neg_loss_1 = 0.0149, neg_loss_2 = 0.0091, ref_loss = 0.0260, intra_loss = 0.0052, div_loss = 0.0032, 0.464 seconds/batch
+Epoch 7, Batch 100, lr = 0.00020, final_loss = 2.4521, nll_loss = 2.3336, ref_nll_loss = 2.5706, ivc_loss = 0.0663, neg_loss_1 = 0.0140, neg_loss_2 = 0.0093, ref_loss = 0.0286, intra_loss = 0.0006, div_loss = 0.0028, 0.433 seconds/batch
+2026-09-14 17:29:02,195 - Epoch 7, Batch 100, lr = 0.00020, final_loss = 2.4521, nll_loss = 2.3336, ref_nll_loss = 2.5706, ivc_loss = 0.0663, neg_loss_1 = 0.0140, neg_loss_2 = 0.0093, ref_loss = 0.0286, intra_loss = 0.0006, div_loss = 0.0028, 0.433 seconds/batch
+Epoch 7, Batch 150, lr = 0.00019, final_loss = 2.4793, nll_loss = 2.3616, ref_nll_loss = 2.5970, ivc_loss = 0.0637, neg_loss_1 = 0.0139, neg_loss_2 = 0.0102, ref_loss = 0.0260, intra_loss = 0.0004, div_loss = 0.0026, 0.423 seconds/batch
+2026-09-14 17:29:22,312 - Epoch 7, Batch 150, lr = 0.00019, final_loss = 2.4793, nll_loss = 2.3616, ref_nll_loss = 2.5970, ivc_loss = 0.0637, neg_loss_1 = 0.0139, neg_loss_2 = 0.0102, ref_loss = 0.0260, intra_loss = 0.0004, div_loss = 0.0026, 0.423 seconds/batch
+Epoch 7, Batch 200, lr = 0.00019, final_loss = 2.4765, nll_loss = 2.3586, ref_nll_loss = 2.5945, ivc_loss = 0.0798, neg_loss_1 = 0.0139, neg_loss_2 = 0.0104, ref_loss = 0.0269, intra_loss = 0.0105, div_loss = 0.0036, 0.414 seconds/batch
+2026-09-14 17:29:41,639 - Epoch 7, Batch 200, lr = 0.00019, final_loss = 2.4765, nll_loss = 2.3586, ref_nll_loss = 2.5945, ivc_loss = 0.0798, neg_loss_1 = 0.0139, neg_loss_2 = 0.0104, ref_loss = 0.0269, intra_loss = 0.0105, div_loss = 0.0036, 0.414 seconds/batch
+Epoch 7, Batch 250, lr = 0.00019, final_loss = 2.4607, nll_loss = 2.3371, ref_nll_loss = 2.5842, ivc_loss = 0.0685, neg_loss_1 = 0.0135, neg_loss_2 = 0.0088, ref_loss = 0.0244, intra_loss = 0.0089, div_loss = 0.0026, 0.411 seconds/batch
+2026-09-14 17:30:01,680 - Epoch 7, Batch 250, lr = 0.00019, final_loss = 2.4607, nll_loss = 2.3371, ref_nll_loss = 2.5842, ivc_loss = 0.0685, neg_loss_1 = 0.0135, neg_loss_2 = 0.0088, ref_loss = 0.0244, intra_loss = 0.0089, div_loss = 0.0026, 0.411 seconds/batch
+Epoch 7, Batch 259, lr = 0.00019, final_loss = 2.5054, nll_loss = 2.3838, ref_nll_loss = 2.6269, ivc_loss = 0.0542, neg_loss_1 = 0.0100, neg_loss_2 = 0.0051, ref_loss = 0.0246, intra_loss = 0.0005, div_loss = 0.0028, 0.411 seconds/batch
+2026-09-14 17:30:05,229 - Epoch 7, Batch 259, lr = 0.00019, final_loss = 2.5054, nll_loss = 2.3838, ref_nll_loss = 2.6269, ivc_loss = 0.0542, neg_loss_1 = 0.0100, neg_loss_2 = 0.0051, ref_loss = 0.0246, intra_loss = 0.0005, div_loss = 0.0028, 0.411 seconds/batch
+merge_alpha: 0.09807579964399338, range_width: 0.23191571235656738
+2026-09-14 17:30:05,237 - merge_alpha: 0.09807579964399338, range_width: 0.23191571235656738
+| R@1,mIoU 0.4542 | R@1,IoU@0.1 0.7855 | R@1,IoU@0.3 0.6867 | R@1,IoU@0.5 0.5242 | R@1,IoU@0.7 0.2355 | R@1,IoU@0.9 0.0336 | R@5,mIoU 0.6846 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9713 | R@5,IoU@0.5 0.8624 | R@5,IoU@0.7 0.5359 | R@5,IoU@0.9 0.0807 |
+2026-09-14 17:30:24,390 - | R@1,mIoU 0.4542 | R@1,IoU@0.1 0.7855 | R@1,IoU@0.3 0.6867 | R@1,IoU@0.5 0.5242 | R@1,IoU@0.7 0.2355 | R@1,IoU@0.9 0.0336 | R@5,mIoU 0.6846 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9713 | R@5,IoU@0.5 0.8624 | R@5,IoU@0.7 0.5359 | R@5,IoU@0.9 0.0807 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1813.
+2026-09-14 17:30:24,449 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 1813.
+Best results have been updated.
+2026-09-14 17:30:24,449 - Best results have been updated.
+============================================================
+2026-09-14 17:30:24,449 - ============================================================
+Start Epoch 8
+2026-09-14 17:30:24,449 - Start Epoch 8
+Epoch 8, Batch 50, lr = 0.00019, final_loss = 2.4376, nll_loss = 2.3168, ref_nll_loss = 2.5585, ivc_loss = 0.0594, neg_loss_1 = 0.0129, neg_loss_2 = 0.0074, ref_loss = 0.0261, intra_loss = 0.0003, div_loss = 0.0025, 0.460 seconds/batch
+2026-09-14 17:30:47,511 - Epoch 8, Batch 50, lr = 0.00019, final_loss = 2.4376, nll_loss = 2.3168, ref_nll_loss = 2.5585, ivc_loss = 0.0594, neg_loss_1 = 0.0129, neg_loss_2 = 0.0074, ref_loss = 0.0261, intra_loss = 0.0003, div_loss = 0.0025, 0.460 seconds/batch
+Epoch 8, Batch 100, lr = 0.00018, final_loss = 2.4254, nll_loss = 2.3044, ref_nll_loss = 2.5464, ivc_loss = 0.0609, neg_loss_1 = 0.0130, neg_loss_2 = 0.0079, ref_loss = 0.0231, intra_loss = 0.0045, div_loss = 0.0025, 0.425 seconds/batch
+2026-09-14 17:31:06,922 - Epoch 8, Batch 100, lr = 0.00018, final_loss = 2.4254, nll_loss = 2.3044, ref_nll_loss = 2.5464, ivc_loss = 0.0609, neg_loss_1 = 0.0130, neg_loss_2 = 0.0079, ref_loss = 0.0231, intra_loss = 0.0045, div_loss = 0.0025, 0.425 seconds/batch
+Epoch 8, Batch 150, lr = 0.00018, final_loss = 2.4508, nll_loss = 2.3309, ref_nll_loss = 2.5706, ivc_loss = 0.0752, neg_loss_1 = 0.0154, neg_loss_2 = 0.0079, ref_loss = 0.0261, intra_loss = 0.0050, div_loss = 0.0042, 0.412 seconds/batch
+2026-09-14 17:31:26,261 - Epoch 8, Batch 150, lr = 0.00018, final_loss = 2.4508, nll_loss = 2.3309, ref_nll_loss = 2.5706, ivc_loss = 0.0752, neg_loss_1 = 0.0154, neg_loss_2 = 0.0079, ref_loss = 0.0261, intra_loss = 0.0050, div_loss = 0.0042, 0.412 seconds/batch
+Epoch 8, Batch 200, lr = 0.00018, final_loss = 2.4437, nll_loss = 2.3228, ref_nll_loss = 2.5647, ivc_loss = 0.0687, neg_loss_1 = 0.0121, neg_loss_2 = 0.0087, ref_loss = 0.0281, intra_loss = 0.0046, div_loss = 0.0030, 0.408 seconds/batch
+2026-09-14 17:31:45,970 - Epoch 8, Batch 200, lr = 0.00018, final_loss = 2.4437, nll_loss = 2.3228, ref_nll_loss = 2.5647, ivc_loss = 0.0687, neg_loss_1 = 0.0121, neg_loss_2 = 0.0087, ref_loss = 0.0281, intra_loss = 0.0046, div_loss = 0.0030, 0.408 seconds/batch
+Epoch 8, Batch 250, lr = 0.00018, final_loss = 2.4222, nll_loss = 2.3041, ref_nll_loss = 2.5403, ivc_loss = 0.0646, neg_loss_1 = 0.0117, neg_loss_2 = 0.0079, ref_loss = 0.0286, intra_loss = 0.0031, div_loss = 0.0027, 0.404 seconds/batch
+2026-09-14 17:32:05,339 - Epoch 8, Batch 250, lr = 0.00018, final_loss = 2.4222, nll_loss = 2.3041, ref_nll_loss = 2.5403, ivc_loss = 0.0646, neg_loss_1 = 0.0117, neg_loss_2 = 0.0079, ref_loss = 0.0286, intra_loss = 0.0031, div_loss = 0.0027, 0.404 seconds/batch
+Epoch 8, Batch 259, lr = 0.00018, final_loss = 2.4100, nll_loss = 2.2943, ref_nll_loss = 2.5257, ivc_loss = 0.0818, neg_loss_1 = 0.0102, neg_loss_2 = 0.0114, ref_loss = 0.0325, intra_loss = 0.0109, div_loss = 0.0034, 0.403 seconds/batch
+2026-09-14 17:32:08,767 - Epoch 8, Batch 259, lr = 0.00018, final_loss = 2.4100, nll_loss = 2.2943, ref_nll_loss = 2.5257, ivc_loss = 0.0818, neg_loss_1 = 0.0102, neg_loss_2 = 0.0114, ref_loss = 0.0325, intra_loss = 0.0109, div_loss = 0.0034, 0.403 seconds/batch
+merge_alpha: 0.09828958660364151, range_width: 0.23802848160266876
+2026-09-14 17:32:08,776 - merge_alpha: 0.09828958660364151, range_width: 0.23802848160266876
+| R@1,mIoU 0.4505 | R@1,IoU@0.1 0.7762 | R@1,IoU@0.3 0.6828 | R@1,IoU@0.5 0.5191 | R@1,IoU@0.7 0.2387 | R@1,IoU@0.9 0.0317 | R@5,mIoU 0.6844 | R@5,IoU@0.1 0.9893 | R@5,IoU@0.3 0.9680 | R@5,IoU@0.5 0.8605 | R@5,IoU@0.7 0.5275 | R@5,IoU@0.9 0.0933 |
+2026-09-14 17:32:27,851 - | R@1,mIoU 0.4505 | R@1,IoU@0.1 0.7762 | R@1,IoU@0.3 0.6828 | R@1,IoU@0.5 0.5191 | R@1,IoU@0.7 0.2387 | R@1,IoU@0.9 0.0317 | R@5,mIoU 0.6844 | R@5,IoU@0.1 0.9893 | R@5,IoU@0.3 0.9680 | R@5,IoU@0.5 0.8605 | R@5,IoU@0.7 0.5275 | R@5,IoU@0.9 0.0933 |
+============================================================
+2026-09-14 17:32:27,859 - ============================================================
+Start Epoch 9
+2026-09-14 17:32:27,859 - Start Epoch 9
+Epoch 9, Batch 50, lr = 0.00017, final_loss = 2.4028, nll_loss = 2.2818, ref_nll_loss = 2.5238, ivc_loss = 0.0625, neg_loss_1 = 0.0125, neg_loss_2 = 0.0066, ref_loss = 0.0266, intra_loss = 0.0035, div_loss = 0.0026, 0.446 seconds/batch
+2026-09-14 17:32:50,146 - Epoch 9, Batch 50, lr = 0.00017, final_loss = 2.4028, nll_loss = 2.2818, ref_nll_loss = 2.5238, ivc_loss = 0.0625, neg_loss_1 = 0.0125, neg_loss_2 = 0.0066, ref_loss = 0.0266, intra_loss = 0.0035, div_loss = 0.0026, 0.446 seconds/batch
+Epoch 9, Batch 100, lr = 0.00017, final_loss = 2.4116, nll_loss = 2.2913, ref_nll_loss = 2.5319, ivc_loss = 0.0643, neg_loss_1 = 0.0136, neg_loss_2 = 0.0081, ref_loss = 0.0257, intra_loss = 0.0033, div_loss = 0.0027, 0.404 seconds/batch
+2026-09-14 17:33:08,243 - Epoch 9, Batch 100, lr = 0.00017, final_loss = 2.4116, nll_loss = 2.2913, ref_nll_loss = 2.5319, ivc_loss = 0.0643, neg_loss_1 = 0.0136, neg_loss_2 = 0.0081, ref_loss = 0.0257, intra_loss = 0.0033, div_loss = 0.0027, 0.404 seconds/batch
+Epoch 9, Batch 150, lr = 0.00017, final_loss = 2.3963, nll_loss = 2.2740, ref_nll_loss = 2.5186, ivc_loss = 0.0727, neg_loss_1 = 0.0122, neg_loss_2 = 0.0081, ref_loss = 0.0261, intra_loss = 0.0146, div_loss = 0.0024, 0.391 seconds/batch
+2026-09-14 17:33:26,595 - Epoch 9, Batch 150, lr = 0.00017, final_loss = 2.3963, nll_loss = 2.2740, ref_nll_loss = 2.5186, ivc_loss = 0.0727, neg_loss_1 = 0.0122, neg_loss_2 = 0.0081, ref_loss = 0.0261, intra_loss = 0.0146, div_loss = 0.0024, 0.391 seconds/batch
+Epoch 9, Batch 200, lr = 0.00017, final_loss = 2.4206, nll_loss = 2.2994, ref_nll_loss = 2.5418, ivc_loss = 0.0726, neg_loss_1 = 0.0140, neg_loss_2 = 0.0095, ref_loss = 0.0248, intra_loss = 0.0092, div_loss = 0.0030, 0.385 seconds/batch
+2026-09-14 17:33:44,900 - Epoch 9, Batch 200, lr = 0.00017, final_loss = 2.4206, nll_loss = 2.2994, ref_nll_loss = 2.5418, ivc_loss = 0.0726, neg_loss_1 = 0.0140, neg_loss_2 = 0.0095, ref_loss = 0.0248, intra_loss = 0.0092, div_loss = 0.0030, 0.385 seconds/batch
+Epoch 9, Batch 250, lr = 0.00017, final_loss = 2.4050, nll_loss = 2.2832, ref_nll_loss = 2.5268, ivc_loss = 0.0665, neg_loss_1 = 0.0113, neg_loss_2 = 0.0082, ref_loss = 0.0256, intra_loss = 0.0088, div_loss = 0.0025, 0.382 seconds/batch
+2026-09-14 17:34:03,433 - Epoch 9, Batch 250, lr = 0.00017, final_loss = 2.4050, nll_loss = 2.2832, ref_nll_loss = 2.5268, ivc_loss = 0.0665, neg_loss_1 = 0.0113, neg_loss_2 = 0.0082, ref_loss = 0.0256, intra_loss = 0.0088, div_loss = 0.0025, 0.382 seconds/batch
+Epoch 9, Batch 259, lr = 0.00017, final_loss = 2.4078, nll_loss = 2.2776, ref_nll_loss = 2.5380, ivc_loss = 0.0502, neg_loss_1 = 0.0093, neg_loss_2 = 0.0081, ref_loss = 0.0206, intra_loss = 0.0005, div_loss = 0.0023, 0.381 seconds/batch
+2026-09-14 17:34:06,637 - Epoch 9, Batch 259, lr = 0.00017, final_loss = 2.4078, nll_loss = 2.2776, ref_nll_loss = 2.5380, ivc_loss = 0.0502, neg_loss_1 = 0.0093, neg_loss_2 = 0.0081, ref_loss = 0.0206, intra_loss = 0.0005, div_loss = 0.0023, 0.381 seconds/batch
+merge_alpha: 0.09877940267324448, range_width: 0.24001286923885345
+2026-09-14 17:34:06,645 - merge_alpha: 0.09877940267324448, range_width: 0.24001286923885345
+| R@1,mIoU 0.4635 | R@1,IoU@0.1 0.7981 | R@1,IoU@0.3 0.7035 | R@1,IoU@0.5 0.5342 | R@1,IoU@0.7 0.2413 | R@1,IoU@0.9 0.0375 | R@5,mIoU 0.6847 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9703 | R@5,IoU@0.5 0.8547 | R@5,IoU@0.7 0.5346 | R@5,IoU@0.9 0.0856 |
+2026-09-14 17:34:24,560 - | R@1,mIoU 0.4635 | R@1,IoU@0.1 0.7981 | R@1,IoU@0.3 0.7035 | R@1,IoU@0.5 0.5342 | R@1,IoU@0.7 0.2413 | R@1,IoU@0.9 0.0375 | R@5,mIoU 0.6847 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9703 | R@5,IoU@0.5 0.8547 | R@5,IoU@0.7 0.5346 | R@5,IoU@0.9 0.0856 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 2331.
+2026-09-14 17:34:24,618 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 2331.
+Best results have been updated.
+2026-09-14 17:34:24,618 - Best results have been updated.
+============================================================
+2026-09-14 17:34:24,618 - ============================================================
+Start Epoch 10
+2026-09-14 17:34:24,618 - Start Epoch 10
+Epoch 10, Batch 50, lr = 0.00016, final_loss = 2.3625, nll_loss = 2.2378, ref_nll_loss = 2.4873, ivc_loss = 0.0591, neg_loss_1 = 0.0108, neg_loss_2 = 0.0064, ref_loss = 0.0223, intra_loss = 0.0066, div_loss = 0.0026, 0.468 seconds/batch
+2026-09-14 17:34:48,050 - Epoch 10, Batch 50, lr = 0.00016, final_loss = 2.3625, nll_loss = 2.2378, ref_nll_loss = 2.4873, ivc_loss = 0.0591, neg_loss_1 = 0.0108, neg_loss_2 = 0.0064, ref_loss = 0.0223, intra_loss = 0.0066, div_loss = 0.0026, 0.468 seconds/batch
+Epoch 10, Batch 100, lr = 0.00016, final_loss = 2.3679, nll_loss = 2.2393, ref_nll_loss = 2.4964, ivc_loss = 0.0575, neg_loss_1 = 0.0101, neg_loss_2 = 0.0070, ref_loss = 0.0235, intra_loss = 0.0026, div_loss = 0.0029, 0.417 seconds/batch
+2026-09-14 17:35:06,321 - Epoch 10, Batch 100, lr = 0.00016, final_loss = 2.3679, nll_loss = 2.2393, ref_nll_loss = 2.4964, ivc_loss = 0.0575, neg_loss_1 = 0.0101, neg_loss_2 = 0.0070, ref_loss = 0.0235, intra_loss = 0.0026, div_loss = 0.0029, 0.417 seconds/batch
+Epoch 10, Batch 150, lr = 0.00016, final_loss = 2.3671, nll_loss = 2.2400, ref_nll_loss = 2.4943, ivc_loss = 0.0588, neg_loss_1 = 0.0121, neg_loss_2 = 0.0086, ref_loss = 0.0226, intra_loss = 0.0014, div_loss = 0.0028, 0.398 seconds/batch
+2026-09-14 17:35:24,855 - Epoch 10, Batch 150, lr = 0.00016, final_loss = 2.3671, nll_loss = 2.2400, ref_nll_loss = 2.4943, ivc_loss = 0.0588, neg_loss_1 = 0.0121, neg_loss_2 = 0.0086, ref_loss = 0.0226, intra_loss = 0.0014, div_loss = 0.0028, 0.398 seconds/batch
+Epoch 10, Batch 200, lr = 0.00016, final_loss = 2.3792, nll_loss = 2.2576, ref_nll_loss = 2.5007, ivc_loss = 0.0552, neg_loss_1 = 0.0113, neg_loss_2 = 0.0055, ref_loss = 0.0256, intra_loss = 0.0003, div_loss = 0.0025, 0.392 seconds/batch
+2026-09-14 17:35:42,943 - Epoch 10, Batch 200, lr = 0.00016, final_loss = 2.3792, nll_loss = 2.2576, ref_nll_loss = 2.5007, ivc_loss = 0.0552, neg_loss_1 = 0.0113, neg_loss_2 = 0.0055, ref_loss = 0.0256, intra_loss = 0.0003, div_loss = 0.0025, 0.392 seconds/batch
+Epoch 10, Batch 250, lr = 0.00016, final_loss = 2.3840, nll_loss = 2.2583, ref_nll_loss = 2.5097, ivc_loss = 0.0591, neg_loss_1 = 0.0119, neg_loss_2 = 0.0073, ref_loss = 0.0233, intra_loss = 0.0025, div_loss = 0.0028, 0.387 seconds/batch
+2026-09-14 17:36:01,310 - Epoch 10, Batch 250, lr = 0.00016, final_loss = 2.3840, nll_loss = 2.2583, ref_nll_loss = 2.5097, ivc_loss = 0.0591, neg_loss_1 = 0.0119, neg_loss_2 = 0.0073, ref_loss = 0.0233, intra_loss = 0.0025, div_loss = 0.0028, 0.387 seconds/batch
+Epoch 10, Batch 259, lr = 0.00016, final_loss = 2.3808, nll_loss = 2.2650, ref_nll_loss = 2.4966, ivc_loss = 0.0729, neg_loss_1 = 0.0142, neg_loss_2 = 0.0093, ref_loss = 0.0263, intra_loss = 0.0003, div_loss = 0.0046, 0.386 seconds/batch
+2026-09-14 17:36:04,641 - Epoch 10, Batch 259, lr = 0.00016, final_loss = 2.3808, nll_loss = 2.2650, ref_nll_loss = 2.4966, ivc_loss = 0.0729, neg_loss_1 = 0.0142, neg_loss_2 = 0.0093, ref_loss = 0.0263, intra_loss = 0.0003, div_loss = 0.0046, 0.386 seconds/batch
+merge_alpha: 0.09801185876131058, range_width: 0.24295394122600555
+2026-09-14 17:36:04,648 - merge_alpha: 0.09801185876131058, range_width: 0.24295394122600555
+| R@1,mIoU 0.4642 | R@1,IoU@0.1 0.7962 | R@1,IoU@0.3 0.7051 | R@1,IoU@0.5 0.5401 | R@1,IoU@0.7 0.2422 | R@1,IoU@0.9 0.0384 | R@5,mIoU 0.6860 | R@5,IoU@0.1 0.9922 | R@5,IoU@0.3 0.9722 | R@5,IoU@0.5 0.8566 | R@5,IoU@0.7 0.5339 | R@5,IoU@0.9 0.0937 |
+2026-09-14 17:36:20,549 - | R@1,mIoU 0.4642 | R@1,IoU@0.1 0.7962 | R@1,IoU@0.3 0.7051 | R@1,IoU@0.5 0.5401 | R@1,IoU@0.7 0.2422 | R@1,IoU@0.9 0.0384 | R@5,mIoU 0.6860 | R@5,IoU@0.1 0.9922 | R@5,IoU@0.3 0.9722 | R@5,IoU@0.5 0.8566 | R@5,IoU@0.7 0.5339 | R@5,IoU@0.9 0.0937 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 2590.
+2026-09-14 17:36:20,615 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 2590.
+Best results have been updated.
+2026-09-14 17:36:20,615 - Best results have been updated.
+============================================================
+2026-09-14 17:36:20,615 - ============================================================
+Start Epoch 11
+2026-09-14 17:36:20,615 - Start Epoch 11
+Epoch 11, Batch 50, lr = 0.00016, final_loss = 2.3392, nll_loss = 2.2131, ref_nll_loss = 2.4653, ivc_loss = 0.0573, neg_loss_1 = 0.0124, neg_loss_2 = 0.0071, ref_loss = 0.0229, intra_loss = 0.0003, div_loss = 0.0029, 0.407 seconds/batch
+2026-09-14 17:36:40,982 - Epoch 11, Batch 50, lr = 0.00016, final_loss = 2.3392, nll_loss = 2.2131, ref_nll_loss = 2.4653, ivc_loss = 0.0573, neg_loss_1 = 0.0124, neg_loss_2 = 0.0071, ref_loss = 0.0229, intra_loss = 0.0003, div_loss = 0.0029, 0.407 seconds/batch
+Epoch 11, Batch 100, lr = 0.00015, final_loss = 2.3498, nll_loss = 2.2209, ref_nll_loss = 2.4786, ivc_loss = 0.0484, neg_loss_1 = 0.0085, neg_loss_2 = 0.0061, ref_loss = 0.0228, intra_loss = 0.0001, div_loss = 0.0022, 0.388 seconds/batch
+2026-09-14 17:36:59,462 - Epoch 11, Batch 100, lr = 0.00015, final_loss = 2.3498, nll_loss = 2.2209, ref_nll_loss = 2.4786, ivc_loss = 0.0484, neg_loss_1 = 0.0085, neg_loss_2 = 0.0061, ref_loss = 0.0228, intra_loss = 0.0001, div_loss = 0.0022, 0.388 seconds/batch
+Epoch 11, Batch 150, lr = 0.00015, final_loss = 2.3645, nll_loss = 2.2347, ref_nll_loss = 2.4943, ivc_loss = 0.0559, neg_loss_1 = 0.0116, neg_loss_2 = 0.0071, ref_loss = 0.0206, intra_loss = 0.0048, div_loss = 0.0023, 0.382 seconds/batch
+2026-09-14 17:37:18,117 - Epoch 11, Batch 150, lr = 0.00015, final_loss = 2.3645, nll_loss = 2.2347, ref_nll_loss = 2.4943, ivc_loss = 0.0559, neg_loss_1 = 0.0116, neg_loss_2 = 0.0071, ref_loss = 0.0206, intra_loss = 0.0048, div_loss = 0.0023, 0.382 seconds/batch
+Epoch 11, Batch 200, lr = 0.00015, final_loss = 2.3592, nll_loss = 2.2289, ref_nll_loss = 2.4895, ivc_loss = 0.0528, neg_loss_1 = 0.0109, neg_loss_2 = 0.0072, ref_loss = 0.0210, intra_loss = 0.0002, div_loss = 0.0027, 0.380 seconds/batch
+2026-09-14 17:37:36,697 - Epoch 11, Batch 200, lr = 0.00015, final_loss = 2.3592, nll_loss = 2.2289, ref_nll_loss = 2.4895, ivc_loss = 0.0528, neg_loss_1 = 0.0109, neg_loss_2 = 0.0072, ref_loss = 0.0210, intra_loss = 0.0002, div_loss = 0.0027, 0.380 seconds/batch
+Epoch 11, Batch 250, lr = 0.00015, final_loss = 2.3359, nll_loss = 2.2107, ref_nll_loss = 2.4612, ivc_loss = 0.0637, neg_loss_1 = 0.0096, neg_loss_2 = 0.0076, ref_loss = 0.0245, intra_loss = 0.0030, div_loss = 0.0038, 0.379 seconds/batch
+2026-09-14 17:37:55,559 - Epoch 11, Batch 250, lr = 0.00015, final_loss = 2.3359, nll_loss = 2.2107, ref_nll_loss = 2.4612, ivc_loss = 0.0637, neg_loss_1 = 0.0096, neg_loss_2 = 0.0076, ref_loss = 0.0245, intra_loss = 0.0030, div_loss = 0.0038, 0.379 seconds/batch
+Epoch 11, Batch 259, lr = 0.00015, final_loss = 2.2978, nll_loss = 2.1752, ref_nll_loss = 2.4204, ivc_loss = 0.0728, neg_loss_1 = 0.0151, neg_loss_2 = 0.0098, ref_loss = 0.0213, intra_loss = 0.0081, div_loss = 0.0037, 0.380 seconds/batch
+2026-09-14 17:37:59,094 - Epoch 11, Batch 259, lr = 0.00015, final_loss = 2.2978, nll_loss = 2.1752, ref_nll_loss = 2.4204, ivc_loss = 0.0728, neg_loss_1 = 0.0151, neg_loss_2 = 0.0098, ref_loss = 0.0213, intra_loss = 0.0081, div_loss = 0.0037, 0.380 seconds/batch
+merge_alpha: 0.09754401445388794, range_width: 0.24239802360534668
+2026-09-14 17:37:59,101 - merge_alpha: 0.09754401445388794, range_width: 0.24239802360534668
+| R@1,mIoU 0.4588 | R@1,IoU@0.1 0.7930 | R@1,IoU@0.3 0.6980 | R@1,IoU@0.5 0.5291 | R@1,IoU@0.7 0.2380 | R@1,IoU@0.9 0.0346 | R@5,mIoU 0.6862 | R@5,IoU@0.1 0.9910 | R@5,IoU@0.3 0.9725 | R@5,IoU@0.5 0.8637 | R@5,IoU@0.7 0.5362 | R@5,IoU@0.9 0.0782 |
+2026-09-14 17:38:15,008 - | R@1,mIoU 0.4588 | R@1,IoU@0.1 0.7930 | R@1,IoU@0.3 0.6980 | R@1,IoU@0.5 0.5291 | R@1,IoU@0.7 0.2380 | R@1,IoU@0.9 0.0346 | R@5,mIoU 0.6862 | R@5,IoU@0.1 0.9910 | R@5,IoU@0.3 0.9725 | R@5,IoU@0.5 0.8637 | R@5,IoU@0.7 0.5362 | R@5,IoU@0.9 0.0782 |
+============================================================
+2026-09-14 17:38:15,016 - ============================================================
+Start Epoch 12
+2026-09-14 17:38:15,016 - Start Epoch 12
+Epoch 12, Batch 50, lr = 0.00015, final_loss = 2.3089, nll_loss = 2.1853, ref_nll_loss = 2.4324, ivc_loss = 0.0593, neg_loss_1 = 0.0099, neg_loss_2 = 0.0069, ref_loss = 0.0261, intra_loss = 0.0019, div_loss = 0.0029, 0.392 seconds/batch
+2026-09-14 17:38:34,598 - Epoch 12, Batch 50, lr = 0.00015, final_loss = 2.3089, nll_loss = 2.1853, ref_nll_loss = 2.4324, ivc_loss = 0.0593, neg_loss_1 = 0.0099, neg_loss_2 = 0.0069, ref_loss = 0.0261, intra_loss = 0.0019, div_loss = 0.0029, 0.392 seconds/batch
+Epoch 12, Batch 100, lr = 0.00015, final_loss = 2.3175, nll_loss = 2.1930, ref_nll_loss = 2.4419, ivc_loss = 0.0552, neg_loss_1 = 0.0103, neg_loss_2 = 0.0054, ref_loss = 0.0238, intra_loss = 0.0018, div_loss = 0.0028, 0.374 seconds/batch
+2026-09-14 17:38:52,412 - Epoch 12, Batch 100, lr = 0.00015, final_loss = 2.3175, nll_loss = 2.1930, ref_nll_loss = 2.4419, ivc_loss = 0.0552, neg_loss_1 = 0.0103, neg_loss_2 = 0.0054, ref_loss = 0.0238, intra_loss = 0.0018, div_loss = 0.0028, 0.374 seconds/batch
+Epoch 12, Batch 150, lr = 0.00015, final_loss = 2.3186, nll_loss = 2.1892, ref_nll_loss = 2.4481, ivc_loss = 0.0522, neg_loss_1 = 0.0086, neg_loss_2 = 0.0059, ref_loss = 0.0216, intra_loss = 0.0028, div_loss = 0.0026, 0.371 seconds/batch
+2026-09-14 17:39:10,605 - Epoch 12, Batch 150, lr = 0.00015, final_loss = 2.3186, nll_loss = 2.1892, ref_nll_loss = 2.4481, ivc_loss = 0.0522, neg_loss_1 = 0.0086, neg_loss_2 = 0.0059, ref_loss = 0.0216, intra_loss = 0.0028, div_loss = 0.0026, 0.371 seconds/batch
+Epoch 12, Batch 200, lr = 0.00014, final_loss = 2.3393, nll_loss = 2.2127, ref_nll_loss = 2.4659, ivc_loss = 0.0606, neg_loss_1 = 0.0108, neg_loss_2 = 0.0056, ref_loss = 0.0242, intra_loss = 0.0031, div_loss = 0.0034, 0.372 seconds/batch
+2026-09-14 17:39:29,380 - Epoch 12, Batch 200, lr = 0.00014, final_loss = 2.3393, nll_loss = 2.2127, ref_nll_loss = 2.4659, ivc_loss = 0.0606, neg_loss_1 = 0.0108, neg_loss_2 = 0.0056, ref_loss = 0.0242, intra_loss = 0.0031, div_loss = 0.0034, 0.372 seconds/batch
+Epoch 12, Batch 250, lr = 0.00014, final_loss = 2.3076, nll_loss = 2.1821, ref_nll_loss = 2.4330, ivc_loss = 0.0543, neg_loss_1 = 0.0098, neg_loss_2 = 0.0064, ref_loss = 0.0232, intra_loss = 0.0001, div_loss = 0.0030, 0.373 seconds/batch
+2026-09-14 17:39:48,290 - Epoch 12, Batch 250, lr = 0.00014, final_loss = 2.3076, nll_loss = 2.1821, ref_nll_loss = 2.4330, ivc_loss = 0.0543, neg_loss_1 = 0.0098, neg_loss_2 = 0.0064, ref_loss = 0.0232, intra_loss = 0.0001, div_loss = 0.0030, 0.373 seconds/batch
+Epoch 12, Batch 259, lr = 0.00014, final_loss = 2.3206, nll_loss = 2.1933, ref_nll_loss = 2.4479, ivc_loss = 0.0561, neg_loss_1 = 0.0115, neg_loss_2 = 0.0075, ref_loss = 0.0227, intra_loss = 0.0003, div_loss = 0.0028, 0.373 seconds/batch
+2026-09-14 17:39:51,721 - Epoch 12, Batch 259, lr = 0.00014, final_loss = 2.3206, nll_loss = 2.1933, ref_nll_loss = 2.4479, ivc_loss = 0.0561, neg_loss_1 = 0.0115, neg_loss_2 = 0.0075, ref_loss = 0.0227, intra_loss = 0.0003, div_loss = 0.0028, 0.373 seconds/batch
+merge_alpha: 0.09773322939872742, range_width: 0.2414337396621704
+2026-09-14 17:39:51,728 - merge_alpha: 0.09773322939872742, range_width: 0.2414337396621704
+| R@1,mIoU 0.4550 | R@1,IoU@0.1 0.7884 | R@1,IoU@0.3 0.6938 | R@1,IoU@0.5 0.5300 | R@1,IoU@0.7 0.2368 | R@1,IoU@0.9 0.0310 | R@5,mIoU 0.6823 | R@5,IoU@0.1 0.9916 | R@5,IoU@0.3 0.9696 | R@5,IoU@0.5 0.8608 | R@5,IoU@0.7 0.5223 | R@5,IoU@0.9 0.0756 |
+2026-09-14 17:41:40,065 - | R@1,mIoU 0.4550 | R@1,IoU@0.1 0.7884 | R@1,IoU@0.3 0.6938 | R@1,IoU@0.5 0.5300 | R@1,IoU@0.7 0.2368 | R@1,IoU@0.9 0.0310 | R@5,mIoU 0.6823 | R@5,IoU@0.1 0.9916 | R@5,IoU@0.3 0.9696 | R@5,IoU@0.5 0.8608 | R@5,IoU@0.7 0.5223 | R@5,IoU@0.9 0.0756 |
+============================================================
+2026-09-14 17:41:40,074 - ============================================================
+Start Epoch 13
+2026-09-14 17:41:40,074 - Start Epoch 13
+Epoch 13, Batch 50, lr = 0.00014, final_loss = 2.3034, nll_loss = 2.1758, ref_nll_loss = 2.4311, ivc_loss = 0.0487, neg_loss_1 = 0.0098, neg_loss_2 = 0.0057, ref_loss = 0.0221, intra_loss = 0.0002, div_loss = 0.0022, 0.772 seconds/batch
+2026-09-14 17:42:19,048 - Epoch 13, Batch 50, lr = 0.00014, final_loss = 2.3034, nll_loss = 2.1758, ref_nll_loss = 2.4311, ivc_loss = 0.0487, neg_loss_1 = 0.0098, neg_loss_2 = 0.0057, ref_loss = 0.0221, intra_loss = 0.0002, div_loss = 0.0022, 0.772 seconds/batch
+Epoch 13, Batch 100, lr = 0.00014, final_loss = 2.2959, nll_loss = 2.1669, ref_nll_loss = 2.4249, ivc_loss = 0.0484, neg_loss_1 = 0.0100, neg_loss_2 = 0.0062, ref_loss = 0.0216, intra_loss = 0.0001, div_loss = 0.0021, 0.582 seconds/batch
+2026-09-14 17:42:38,688 - Epoch 13, Batch 100, lr = 0.00014, final_loss = 2.2959, nll_loss = 2.1669, ref_nll_loss = 2.4249, ivc_loss = 0.0484, neg_loss_1 = 0.0100, neg_loss_2 = 0.0062, ref_loss = 0.0216, intra_loss = 0.0001, div_loss = 0.0021, 0.582 seconds/batch
+Epoch 13, Batch 150, lr = 0.00014, final_loss = 2.2936, nll_loss = 2.1643, ref_nll_loss = 2.4228, ivc_loss = 0.0510, neg_loss_1 = 0.0080, neg_loss_2 = 0.0062, ref_loss = 0.0227, intra_loss = 0.0032, div_loss = 0.0022, 0.508 seconds/batch
+2026-09-14 17:42:56,205 - Epoch 13, Batch 150, lr = 0.00014, final_loss = 2.2936, nll_loss = 2.1643, ref_nll_loss = 2.4228, ivc_loss = 0.0510, neg_loss_1 = 0.0080, neg_loss_2 = 0.0062, ref_loss = 0.0227, intra_loss = 0.0032, div_loss = 0.0022, 0.508 seconds/batch
+Epoch 13, Batch 200, lr = 0.00014, final_loss = 2.2914, nll_loss = 2.1664, ref_nll_loss = 2.4164, ivc_loss = 0.0561, neg_loss_1 = 0.0100, neg_loss_2 = 0.0059, ref_loss = 0.0232, intra_loss = 0.0001, div_loss = 0.0034, 0.471 seconds/batch
+2026-09-14 17:43:14,292 - Epoch 13, Batch 200, lr = 0.00014, final_loss = 2.2914, nll_loss = 2.1664, ref_nll_loss = 2.4164, ivc_loss = 0.0561, neg_loss_1 = 0.0100, neg_loss_2 = 0.0059, ref_loss = 0.0232, intra_loss = 0.0001, div_loss = 0.0034, 0.471 seconds/batch
+Epoch 13, Batch 250, lr = 0.00014, final_loss = 2.2933, nll_loss = 2.1604, ref_nll_loss = 2.4262, ivc_loss = 0.0488, neg_loss_1 = 0.0084, neg_loss_2 = 0.0056, ref_loss = 0.0202, intra_loss = 0.0001, div_loss = 0.0029, 0.446 seconds/batch
+2026-09-14 17:43:31,620 - Epoch 13, Batch 250, lr = 0.00014, final_loss = 2.2933, nll_loss = 2.1604, ref_nll_loss = 2.4262, ivc_loss = 0.0488, neg_loss_1 = 0.0084, neg_loss_2 = 0.0056, ref_loss = 0.0202, intra_loss = 0.0001, div_loss = 0.0029, 0.446 seconds/batch
+Epoch 13, Batch 259, lr = 0.00014, final_loss = 2.2650, nll_loss = 2.1310, ref_nll_loss = 2.3990, ivc_loss = 0.0413, neg_loss_1 = 0.0068, neg_loss_2 = 0.0041, ref_loss = 0.0170, intra_loss = 0.0000, div_loss = 0.0027, 0.444 seconds/batch
+2026-09-14 17:43:34,984 - Epoch 13, Batch 259, lr = 0.00014, final_loss = 2.2650, nll_loss = 2.1310, ref_nll_loss = 2.3990, ivc_loss = 0.0413, neg_loss_1 = 0.0068, neg_loss_2 = 0.0041, ref_loss = 0.0170, intra_loss = 0.0000, div_loss = 0.0027, 0.444 seconds/batch
+merge_alpha: 0.09821008890867233, range_width: 0.24489931762218475
+2026-09-14 17:43:34,995 - merge_alpha: 0.09821008890867233, range_width: 0.24489931762218475
+| R@1,mIoU 0.4550 | R@1,IoU@0.1 0.7907 | R@1,IoU@0.3 0.6941 | R@1,IoU@0.5 0.5149 | R@1,IoU@0.7 0.2326 | R@1,IoU@0.9 0.0359 | R@5,mIoU 0.6883 | R@5,IoU@0.1 0.9926 | R@5,IoU@0.3 0.9713 | R@5,IoU@0.5 0.8566 | R@5,IoU@0.7 0.5449 | R@5,IoU@0.9 0.0927 |
+2026-09-14 17:44:01,123 - | R@1,mIoU 0.4550 | R@1,IoU@0.1 0.7907 | R@1,IoU@0.3 0.6941 | R@1,IoU@0.5 0.5149 | R@1,IoU@0.7 0.2326 | R@1,IoU@0.9 0.0359 | R@5,mIoU 0.6883 | R@5,IoU@0.1 0.9926 | R@5,IoU@0.3 0.9713 | R@5,IoU@0.5 0.8566 | R@5,IoU@0.7 0.5449 | R@5,IoU@0.9 0.0927 |
+============================================================
+2026-09-14 17:44:01,139 - ============================================================
+Start Epoch 14
+2026-09-14 17:44:01,139 - Start Epoch 14
+Epoch 14, Batch 50, lr = 0.00014, final_loss = 2.2793, nll_loss = 2.1497, ref_nll_loss = 2.4090, ivc_loss = 0.0535, neg_loss_1 = 0.0100, neg_loss_2 = 0.0057, ref_loss = 0.0224, intra_loss = 0.0001, div_loss = 0.0031, 0.452 seconds/batch
+2026-09-14 17:44:23,747 - Epoch 14, Batch 50, lr = 0.00014, final_loss = 2.2793, nll_loss = 2.1497, ref_nll_loss = 2.4090, ivc_loss = 0.0535, neg_loss_1 = 0.0100, neg_loss_2 = 0.0057, ref_loss = 0.0224, intra_loss = 0.0001, div_loss = 0.0031, 0.452 seconds/batch
+Epoch 14, Batch 100, lr = 0.00014, final_loss = 2.2746, nll_loss = 2.1450, ref_nll_loss = 2.4041, ivc_loss = 0.0515, neg_loss_1 = 0.0084, neg_loss_2 = 0.0073, ref_loss = 0.0211, intra_loss = 0.0035, div_loss = 0.0022, 0.419 seconds/batch
+2026-09-14 17:44:43,086 - Epoch 14, Batch 100, lr = 0.00014, final_loss = 2.2746, nll_loss = 2.1450, ref_nll_loss = 2.4041, ivc_loss = 0.0515, neg_loss_1 = 0.0084, neg_loss_2 = 0.0073, ref_loss = 0.0211, intra_loss = 0.0035, div_loss = 0.0022, 0.419 seconds/batch
+Epoch 14, Batch 150, lr = 0.00013, final_loss = 2.2649, nll_loss = 2.1344, ref_nll_loss = 2.3954, ivc_loss = 0.0475, neg_loss_1 = 0.0086, neg_loss_2 = 0.0049, ref_loss = 0.0217, intra_loss = 0.0015, div_loss = 0.0022, 0.408 seconds/batch
+2026-09-14 17:45:02,728 - Epoch 14, Batch 150, lr = 0.00013, final_loss = 2.2649, nll_loss = 2.1344, ref_nll_loss = 2.3954, ivc_loss = 0.0475, neg_loss_1 = 0.0086, neg_loss_2 = 0.0049, ref_loss = 0.0217, intra_loss = 0.0015, div_loss = 0.0022, 0.408 seconds/batch
+Epoch 14, Batch 200, lr = 0.00013, final_loss = 2.2536, nll_loss = 2.1177, ref_nll_loss = 2.3896, ivc_loss = 0.0470, neg_loss_1 = 0.0098, neg_loss_2 = 0.0061, ref_loss = 0.0199, intra_loss = 0.0001, div_loss = 0.0022, 0.402 seconds/batch
+2026-09-14 17:45:21,978 - Epoch 14, Batch 200, lr = 0.00013, final_loss = 2.2536, nll_loss = 2.1177, ref_nll_loss = 2.3896, ivc_loss = 0.0470, neg_loss_1 = 0.0098, neg_loss_2 = 0.0061, ref_loss = 0.0199, intra_loss = 0.0001, div_loss = 0.0022, 0.402 seconds/batch
+Epoch 14, Batch 250, lr = 0.00013, final_loss = 2.2790, nll_loss = 2.1484, ref_nll_loss = 2.4096, ivc_loss = 0.0462, neg_loss_1 = 0.0074, neg_loss_2 = 0.0059, ref_loss = 0.0205, intra_loss = 0.0001, div_loss = 0.0024, 0.403 seconds/batch
+2026-09-14 17:45:42,053 - Epoch 14, Batch 250, lr = 0.00013, final_loss = 2.2790, nll_loss = 2.1484, ref_nll_loss = 2.4096, ivc_loss = 0.0462, neg_loss_1 = 0.0074, neg_loss_2 = 0.0059, ref_loss = 0.0205, intra_loss = 0.0001, div_loss = 0.0024, 0.403 seconds/batch
+Epoch 14, Batch 259, lr = 0.00013, final_loss = 2.3200, nll_loss = 2.1881, ref_nll_loss = 2.4519, ivc_loss = 0.0486, neg_loss_1 = 0.0101, neg_loss_2 = 0.0055, ref_loss = 0.0223, intra_loss = 0.0001, div_loss = 0.0021, 0.403 seconds/batch
+2026-09-14 17:45:45,410 - Epoch 14, Batch 259, lr = 0.00013, final_loss = 2.3200, nll_loss = 2.1881, ref_nll_loss = 2.4519, ivc_loss = 0.0486, neg_loss_1 = 0.0101, neg_loss_2 = 0.0055, ref_loss = 0.0223, intra_loss = 0.0001, div_loss = 0.0021, 0.403 seconds/batch
+merge_alpha: 0.09738859534263611, range_width: 0.24388718605041504
+2026-09-14 17:45:45,418 - merge_alpha: 0.09738859534263611, range_width: 0.24388718605041504
+| R@1,mIoU 0.4645 | R@1,IoU@0.1 0.8026 | R@1,IoU@0.3 0.7074 | R@1,IoU@0.5 0.5275 | R@1,IoU@0.7 0.2439 | R@1,IoU@0.9 0.0410 | R@5,mIoU 0.6863 | R@5,IoU@0.1 0.9922 | R@5,IoU@0.3 0.9729 | R@5,IoU@0.5 0.8563 | R@5,IoU@0.7 0.5394 | R@5,IoU@0.9 0.0943 |
+2026-09-14 17:46:11,843 - | R@1,mIoU 0.4645 | R@1,IoU@0.1 0.8026 | R@1,IoU@0.3 0.7074 | R@1,IoU@0.5 0.5275 | R@1,IoU@0.7 0.2439 | R@1,IoU@0.9 0.0410 | R@5,mIoU 0.6863 | R@5,IoU@0.1 0.9922 | R@5,IoU@0.3 0.9729 | R@5,IoU@0.5 0.8563 | R@5,IoU@0.7 0.5394 | R@5,IoU@0.9 0.0943 |
+save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 3626.
+2026-09-14 17:46:29,530 - save model to checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt, num_updates 3626.
+Best results have been updated.
+2026-09-14 17:46:29,531 - Best results have been updated.
+============================================================
+2026-09-14 17:46:29,531 - ============================================================
+Start Epoch 15
+2026-09-14 17:46:29,531 - Start Epoch 15
+Epoch 15, Batch 50, lr = 0.00013, final_loss = 2.2526, nll_loss = 2.1179, ref_nll_loss = 2.3873, ivc_loss = 0.0566, neg_loss_1 = 0.0087, neg_loss_2 = 0.0047, ref_loss = 0.0209, intra_loss = 0.0012, div_loss = 0.0042, 0.388 seconds/batch
+2026-09-14 17:46:48,908 - Epoch 15, Batch 50, lr = 0.00013, final_loss = 2.2526, nll_loss = 2.1179, ref_nll_loss = 2.3873, ivc_loss = 0.0566, neg_loss_1 = 0.0087, neg_loss_2 = 0.0047, ref_loss = 0.0209, intra_loss = 0.0012, div_loss = 0.0042, 0.388 seconds/batch
+Epoch 15, Batch 100, lr = 0.00013, final_loss = 2.2353, nll_loss = 2.1053, ref_nll_loss = 2.3654, ivc_loss = 0.0467, neg_loss_1 = 0.0076, neg_loss_2 = 0.0038, ref_loss = 0.0223, intra_loss = 0.0000, div_loss = 0.0026, 0.383 seconds/batch
+2026-09-14 17:47:07,803 - Epoch 15, Batch 100, lr = 0.00013, final_loss = 2.2353, nll_loss = 2.1053, ref_nll_loss = 2.3654, ivc_loss = 0.0467, neg_loss_1 = 0.0076, neg_loss_2 = 0.0038, ref_loss = 0.0223, intra_loss = 0.0000, div_loss = 0.0026, 0.383 seconds/batch
+Epoch 15, Batch 150, lr = 0.00013, final_loss = 2.2456, nll_loss = 2.1115, ref_nll_loss = 2.3796, ivc_loss = 0.0459, neg_loss_1 = 0.0085, neg_loss_2 = 0.0057, ref_loss = 0.0210, intra_loss = 0.0001, div_loss = 0.0021, 0.380 seconds/batch
+2026-09-14 17:47:26,568 - Epoch 15, Batch 150, lr = 0.00013, final_loss = 2.2456, nll_loss = 2.1115, ref_nll_loss = 2.3796, ivc_loss = 0.0459, neg_loss_1 = 0.0085, neg_loss_2 = 0.0057, ref_loss = 0.0210, intra_loss = 0.0001, div_loss = 0.0021, 0.380 seconds/batch
+Epoch 15, Batch 200, lr = 0.00013, final_loss = 2.2411, nll_loss = 2.1103, ref_nll_loss = 2.3718, ivc_loss = 0.0517, neg_loss_1 = 0.0078, neg_loss_2 = 0.0049, ref_loss = 0.0227, intra_loss = 0.0021, div_loss = 0.0028, 0.382 seconds/batch
+2026-09-14 17:47:46,331 - Epoch 15, Batch 200, lr = 0.00013, final_loss = 2.2411, nll_loss = 2.1103, ref_nll_loss = 2.3718, ivc_loss = 0.0517, neg_loss_1 = 0.0078, neg_loss_2 = 0.0049, ref_loss = 0.0227, intra_loss = 0.0021, div_loss = 0.0028, 0.382 seconds/batch
+Epoch 15, Batch 250, lr = 0.00013, final_loss = 2.2547, nll_loss = 2.1222, ref_nll_loss = 2.3873, ivc_loss = 0.0506, neg_loss_1 = 0.0093, neg_loss_2 = 0.0050, ref_loss = 0.0219, intra_loss = 0.0025, div_loss = 0.0024, 0.384 seconds/batch
+2026-09-14 17:48:05,483 - Epoch 15, Batch 250, lr = 0.00013, final_loss = 2.2547, nll_loss = 2.1222, ref_nll_loss = 2.3873, ivc_loss = 0.0506, neg_loss_1 = 0.0093, neg_loss_2 = 0.0050, ref_loss = 0.0219, intra_loss = 0.0025, div_loss = 0.0024, 0.384 seconds/batch
+Epoch 15, Batch 259, lr = 0.00013, final_loss = 2.2821, nll_loss = 2.1413, ref_nll_loss = 2.4229, ivc_loss = 0.0545, neg_loss_1 = 0.0101, neg_loss_2 = 0.0063, ref_loss = 0.0181, intra_loss = 0.0084, div_loss = 0.0023, 0.384 seconds/batch
+2026-09-14 17:48:08,911 - Epoch 15, Batch 259, lr = 0.00013, final_loss = 2.2821, nll_loss = 2.1413, ref_nll_loss = 2.4229, ivc_loss = 0.0545, neg_loss_1 = 0.0101, neg_loss_2 = 0.0063, ref_loss = 0.0181, intra_loss = 0.0084, div_loss = 0.0023, 0.384 seconds/batch
+merge_alpha: 0.09727023541927338, range_width: 0.23921746015548706
+2026-09-14 17:48:08,921 - merge_alpha: 0.09727023541927338, range_width: 0.23921746015548706
+| R@1,mIoU 0.4611 | R@1,IoU@0.1 0.8001 | R@1,IoU@0.3 0.7096 | R@1,IoU@0.5 0.5362 | R@1,IoU@0.7 0.2368 | R@1,IoU@0.9 0.0310 | R@5,mIoU 0.6813 | R@5,IoU@0.1 0.9906 | R@5,IoU@0.3 0.9700 | R@5,IoU@0.5 0.8514 | R@5,IoU@0.7 0.5404 | R@5,IoU@0.9 0.0730 |
+2026-09-14 17:48:25,923 - | R@1,mIoU 0.4611 | R@1,IoU@0.1 0.8001 | R@1,IoU@0.3 0.7096 | R@1,IoU@0.5 0.5362 | R@1,IoU@0.7 0.2368 | R@1,IoU@0.9 0.0310 | R@5,mIoU 0.6813 | R@5,IoU@0.1 0.9906 | R@5,IoU@0.3 0.9700 | R@5,IoU@0.5 0.8514 | R@5,IoU@0.7 0.5404 | R@5,IoU@0.9 0.0730 |
+============================================================
+2026-09-14 17:48:25,931 - ============================================================
+Start Epoch 16
+2026-09-14 17:48:25,931 - Start Epoch 16
+Epoch 16, Batch 50, lr = 0.00013, final_loss = 2.2161, nll_loss = 2.0843, ref_nll_loss = 2.3479, ivc_loss = 0.0479, neg_loss_1 = 0.0088, neg_loss_2 = 0.0040, ref_loss = 0.0213, intra_loss = 0.0030, div_loss = 0.0022, 0.411 seconds/batch
+2026-09-14 17:48:46,853 - Epoch 16, Batch 50, lr = 0.00013, final_loss = 2.2161, nll_loss = 2.0843, ref_nll_loss = 2.3479, ivc_loss = 0.0479, neg_loss_1 = 0.0088, neg_loss_2 = 0.0040, ref_loss = 0.0213, intra_loss = 0.0030, div_loss = 0.0022, 0.411 seconds/batch
+Epoch 16, Batch 100, lr = 0.00013, final_loss = 2.2232, nll_loss = 2.0916, ref_nll_loss = 2.3549, ivc_loss = 0.0475, neg_loss_1 = 0.0088, neg_loss_2 = 0.0037, ref_loss = 0.0216, intra_loss = 0.0023, div_loss = 0.0022, 0.392 seconds/batch
+2026-09-14 17:49:05,524 - Epoch 16, Batch 100, lr = 0.00013, final_loss = 2.2232, nll_loss = 2.0916, ref_nll_loss = 2.3549, ivc_loss = 0.0475, neg_loss_1 = 0.0088, neg_loss_2 = 0.0037, ref_loss = 0.0216, intra_loss = 0.0023, div_loss = 0.0022, 0.392 seconds/batch
+Epoch 16, Batch 150, lr = 0.00013, final_loss = 2.2416, nll_loss = 2.1060, ref_nll_loss = 2.3772, ivc_loss = 0.0455, neg_loss_1 = 0.0097, neg_loss_2 = 0.0040, ref_loss = 0.0194, intra_loss = 0.0001, div_loss = 0.0025, 0.389 seconds/batch
+2026-09-14 17:49:24,341 - Epoch 16, Batch 150, lr = 0.00013, final_loss = 2.2416, nll_loss = 2.1060, ref_nll_loss = 2.3772, ivc_loss = 0.0455, neg_loss_1 = 0.0097, neg_loss_2 = 0.0040, ref_loss = 0.0194, intra_loss = 0.0001, div_loss = 0.0025, 0.389 seconds/batch
+Epoch 16, Batch 200, lr = 0.00013, final_loss = 2.2316, nll_loss = 2.1011, ref_nll_loss = 2.3621, ivc_loss = 0.0465, neg_loss_1 = 0.0065, neg_loss_2 = 0.0045, ref_loss = 0.0223, intra_loss = 0.0016, div_loss = 0.0023, 0.389 seconds/batch
+2026-09-14 17:49:44,040 - Epoch 16, Batch 200, lr = 0.00013, final_loss = 2.2316, nll_loss = 2.1011, ref_nll_loss = 2.3621, ivc_loss = 0.0465, neg_loss_1 = 0.0065, neg_loss_2 = 0.0045, ref_loss = 0.0223, intra_loss = 0.0016, div_loss = 0.0023, 0.389 seconds/batch
+Epoch 16, Batch 250, lr = 0.00012, final_loss = 2.2286, nll_loss = 2.0921, ref_nll_loss = 2.3652, ivc_loss = 0.0468, neg_loss_1 = 0.0074, neg_loss_2 = 0.0067, ref_loss = 0.0202, intra_loss = 0.0014, div_loss = 0.0022, 0.388 seconds/batch
+2026-09-14 17:50:02,900 - Epoch 16, Batch 250, lr = 0.00012, final_loss = 2.2286, nll_loss = 2.0921, ref_nll_loss = 2.3652, ivc_loss = 0.0468, neg_loss_1 = 0.0074, neg_loss_2 = 0.0067, ref_loss = 0.0202, intra_loss = 0.0014, div_loss = 0.0022, 0.388 seconds/batch
+Epoch 16, Batch 259, lr = 0.00012, final_loss = 2.2605, nll_loss = 2.1289, ref_nll_loss = 2.3922, ivc_loss = 0.0462, neg_loss_1 = 0.0072, neg_loss_2 = 0.0050, ref_loss = 0.0208, intra_loss = 0.0000, div_loss = 0.0026, 0.387 seconds/batch
+2026-09-14 17:50:06,282 - Epoch 16, Batch 259, lr = 0.00012, final_loss = 2.2605, nll_loss = 2.1289, ref_nll_loss = 2.3922, ivc_loss = 0.0462, neg_loss_1 = 0.0072, neg_loss_2 = 0.0050, ref_loss = 0.0208, intra_loss = 0.0000, div_loss = 0.0026, 0.387 seconds/batch
+merge_alpha: 0.09750167280435562, range_width: 0.23592130839824677
+2026-09-14 17:50:06,290 - merge_alpha: 0.09750167280435562, range_width: 0.23592130839824677
+| R@1,mIoU 0.4595 | R@1,IoU@0.1 0.7917 | R@1,IoU@0.3 0.6980 | R@1,IoU@0.5 0.5268 | R@1,IoU@0.7 0.2419 | R@1,IoU@0.9 0.0359 | R@5,mIoU 0.6846 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9706 | R@5,IoU@0.5 0.8537 | R@5,IoU@0.7 0.5404 | R@5,IoU@0.9 0.0911 |
+2026-09-14 17:50:23,244 - | R@1,mIoU 0.4595 | R@1,IoU@0.1 0.7917 | R@1,IoU@0.3 0.6980 | R@1,IoU@0.5 0.5268 | R@1,IoU@0.7 0.2419 | R@1,IoU@0.9 0.0359 | R@5,mIoU 0.6846 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9706 | R@5,IoU@0.5 0.8537 | R@5,IoU@0.7 0.5404 | R@5,IoU@0.9 0.0911 |
+============================================================
+2026-09-14 17:50:23,253 - ============================================================
+Start Epoch 17
+2026-09-14 17:50:23,253 - Start Epoch 17
+Epoch 17, Batch 50, lr = 0.00012, final_loss = 2.1816, nll_loss = 2.0500, ref_nll_loss = 2.3133, ivc_loss = 0.0452, neg_loss_1 = 0.0081, neg_loss_2 = 0.0034, ref_loss = 0.0210, intra_loss = 0.0014, div_loss = 0.0022, 0.391 seconds/batch
+2026-09-14 17:50:42,821 - Epoch 17, Batch 50, lr = 0.00012, final_loss = 2.1816, nll_loss = 2.0500, ref_nll_loss = 2.3133, ivc_loss = 0.0452, neg_loss_1 = 0.0081, neg_loss_2 = 0.0034, ref_loss = 0.0210, intra_loss = 0.0014, div_loss = 0.0022, 0.391 seconds/batch
+Epoch 17, Batch 100, lr = 0.00012, final_loss = 2.1842, nll_loss = 2.0523, ref_nll_loss = 2.3160, ivc_loss = 0.0482, neg_loss_1 = 0.0083, neg_loss_2 = 0.0050, ref_loss = 0.0211, intra_loss = 0.0011, div_loss = 0.0026, 0.381 seconds/batch
+2026-09-14 17:51:01,398 - Epoch 17, Batch 100, lr = 0.00012, final_loss = 2.1842, nll_loss = 2.0523, ref_nll_loss = 2.3160, ivc_loss = 0.0482, neg_loss_1 = 0.0083, neg_loss_2 = 0.0050, ref_loss = 0.0211, intra_loss = 0.0011, div_loss = 0.0026, 0.381 seconds/batch
+Epoch 17, Batch 150, lr = 0.00012, final_loss = 2.2159, nll_loss = 2.0829, ref_nll_loss = 2.3490, ivc_loss = 0.0477, neg_loss_1 = 0.0068, neg_loss_2 = 0.0048, ref_loss = 0.0216, intra_loss = 0.0028, div_loss = 0.0023, 0.373 seconds/batch
+2026-09-14 17:51:19,189 - Epoch 17, Batch 150, lr = 0.00012, final_loss = 2.2159, nll_loss = 2.0829, ref_nll_loss = 2.3490, ivc_loss = 0.0477, neg_loss_1 = 0.0068, neg_loss_2 = 0.0048, ref_loss = 0.0216, intra_loss = 0.0028, div_loss = 0.0023, 0.373 seconds/batch
+Epoch 17, Batch 200, lr = 0.00012, final_loss = 2.2211, nll_loss = 2.0872, ref_nll_loss = 2.3549, ivc_loss = 0.0458, neg_loss_1 = 0.0080, neg_loss_2 = 0.0052, ref_loss = 0.0199, intra_loss = 0.0001, div_loss = 0.0025, 0.370 seconds/batch
+2026-09-14 17:51:37,201 - Epoch 17, Batch 200, lr = 0.00012, final_loss = 2.2211, nll_loss = 2.0872, ref_nll_loss = 2.3549, ivc_loss = 0.0458, neg_loss_1 = 0.0080, neg_loss_2 = 0.0052, ref_loss = 0.0199, intra_loss = 0.0001, div_loss = 0.0025, 0.370 seconds/batch
+Epoch 17, Batch 250, lr = 0.00012, final_loss = 2.2123, nll_loss = 2.0805, ref_nll_loss = 2.3441, ivc_loss = 0.0460, neg_loss_1 = 0.0090, neg_loss_2 = 0.0060, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0021, 0.368 seconds/batch
+2026-09-14 17:51:55,174 - Epoch 17, Batch 250, lr = 0.00012, final_loss = 2.2123, nll_loss = 2.0805, ref_nll_loss = 2.3441, ivc_loss = 0.0460, neg_loss_1 = 0.0090, neg_loss_2 = 0.0060, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0021, 0.368 seconds/batch
+Epoch 17, Batch 259, lr = 0.00012, final_loss = 2.3053, nll_loss = 2.1841, ref_nll_loss = 2.4265, ivc_loss = 0.0531, neg_loss_1 = 0.0086, neg_loss_2 = 0.0069, ref_loss = 0.0265, intra_loss = 0.0003, div_loss = 0.0021, 0.368 seconds/batch
+2026-09-14 17:51:58,636 - Epoch 17, Batch 259, lr = 0.00012, final_loss = 2.3053, nll_loss = 2.1841, ref_nll_loss = 2.4265, ivc_loss = 0.0531, neg_loss_1 = 0.0086, neg_loss_2 = 0.0069, ref_loss = 0.0265, intra_loss = 0.0003, div_loss = 0.0021, 0.368 seconds/batch
+merge_alpha: 0.09685906022787094, range_width: 0.2287554293870926
+2026-09-14 17:51:58,641 - merge_alpha: 0.09685906022787094, range_width: 0.2287554293870926
+| R@1,mIoU 0.4558 | R@1,IoU@0.1 0.7868 | R@1,IoU@0.3 0.6896 | R@1,IoU@0.5 0.5233 | R@1,IoU@0.7 0.2406 | R@1,IoU@0.9 0.0355 | R@5,mIoU 0.6869 | R@5,IoU@0.1 0.9932 | R@5,IoU@0.3 0.9719 | R@5,IoU@0.5 0.8543 | R@5,IoU@0.7 0.5446 | R@5,IoU@0.9 0.0927 |
+2026-09-14 17:52:20,117 - | R@1,mIoU 0.4558 | R@1,IoU@0.1 0.7868 | R@1,IoU@0.3 0.6896 | R@1,IoU@0.5 0.5233 | R@1,IoU@0.7 0.2406 | R@1,IoU@0.9 0.0355 | R@5,mIoU 0.6869 | R@5,IoU@0.1 0.9932 | R@5,IoU@0.3 0.9719 | R@5,IoU@0.5 0.8543 | R@5,IoU@0.7 0.5446 | R@5,IoU@0.9 0.0927 |
+============================================================
+2026-09-14 17:52:20,126 - ============================================================
+Start Epoch 18
+2026-09-14 17:52:20,127 - Start Epoch 18
+Epoch 18, Batch 50, lr = 0.00012, final_loss = 2.1739, nll_loss = 2.0425, ref_nll_loss = 2.3053, ivc_loss = 0.0468, neg_loss_1 = 0.0068, neg_loss_2 = 0.0037, ref_loss = 0.0206, intra_loss = 0.0047, div_loss = 0.0022, 0.463 seconds/batch
+2026-09-14 17:52:43,297 - Epoch 18, Batch 50, lr = 0.00012, final_loss = 2.1739, nll_loss = 2.0425, ref_nll_loss = 2.3053, ivc_loss = 0.0468, neg_loss_1 = 0.0068, neg_loss_2 = 0.0037, ref_loss = 0.0206, intra_loss = 0.0047, div_loss = 0.0022, 0.463 seconds/batch
+Epoch 18, Batch 100, lr = 0.00012, final_loss = 2.1630, nll_loss = 2.0298, ref_nll_loss = 2.2962, ivc_loss = 0.0476, neg_loss_1 = 0.0064, neg_loss_2 = 0.0044, ref_loss = 0.0226, intra_loss = 0.0000, div_loss = 0.0028, 0.417 seconds/batch
+2026-09-14 17:53:01,874 - Epoch 18, Batch 100, lr = 0.00012, final_loss = 2.1630, nll_loss = 2.0298, ref_nll_loss = 2.2962, ivc_loss = 0.0476, neg_loss_1 = 0.0064, neg_loss_2 = 0.0044, ref_loss = 0.0226, intra_loss = 0.0000, div_loss = 0.0028, 0.417 seconds/batch
+Epoch 18, Batch 150, lr = 0.00012, final_loss = 2.1968, nll_loss = 2.0635, ref_nll_loss = 2.3301, ivc_loss = 0.0433, neg_loss_1 = 0.0066, neg_loss_2 = 0.0039, ref_loss = 0.0214, intra_loss = 0.0000, div_loss = 0.0023, 0.403 seconds/batch
+2026-09-14 17:53:20,619 - Epoch 18, Batch 150, lr = 0.00012, final_loss = 2.1968, nll_loss = 2.0635, ref_nll_loss = 2.3301, ivc_loss = 0.0433, neg_loss_1 = 0.0066, neg_loss_2 = 0.0039, ref_loss = 0.0214, intra_loss = 0.0000, div_loss = 0.0023, 0.403 seconds/batch
+Epoch 18, Batch 200, lr = 0.00012, final_loss = 2.1924, nll_loss = 2.0596, ref_nll_loss = 2.3252, ivc_loss = 0.0464, neg_loss_1 = 0.0072, neg_loss_2 = 0.0036, ref_loss = 0.0211, intra_loss = 0.0024, div_loss = 0.0024, 0.397 seconds/batch
+2026-09-14 17:53:39,431 - Epoch 18, Batch 200, lr = 0.00012, final_loss = 2.1924, nll_loss = 2.0596, ref_nll_loss = 2.3252, ivc_loss = 0.0464, neg_loss_1 = 0.0072, neg_loss_2 = 0.0036, ref_loss = 0.0211, intra_loss = 0.0024, div_loss = 0.0024, 0.397 seconds/batch
+Epoch 18, Batch 250, lr = 0.00012, final_loss = 2.1912, nll_loss = 2.0601, ref_nll_loss = 2.3223, ivc_loss = 0.0466, neg_loss_1 = 0.0075, neg_loss_2 = 0.0045, ref_loss = 0.0215, intra_loss = 0.0014, div_loss = 0.0023, 0.390 seconds/batch
+2026-09-14 17:53:57,528 - Epoch 18, Batch 250, lr = 0.00012, final_loss = 2.1912, nll_loss = 2.0601, ref_nll_loss = 2.3223, ivc_loss = 0.0466, neg_loss_1 = 0.0075, neg_loss_2 = 0.0045, ref_loss = 0.0215, intra_loss = 0.0014, div_loss = 0.0023, 0.390 seconds/batch
+Epoch 18, Batch 259, lr = 0.00012, final_loss = 2.1684, nll_loss = 2.0385, ref_nll_loss = 2.2983, ivc_loss = 0.0469, neg_loss_1 = 0.0057, neg_loss_2 = 0.0069, ref_loss = 0.0229, intra_loss = 0.0000, div_loss = 0.0023, 0.389 seconds/batch
+2026-09-14 17:54:00,793 - Epoch 18, Batch 259, lr = 0.00012, final_loss = 2.1684, nll_loss = 2.0385, ref_nll_loss = 2.2983, ivc_loss = 0.0469, neg_loss_1 = 0.0057, neg_loss_2 = 0.0069, ref_loss = 0.0229, intra_loss = 0.0000, div_loss = 0.0023, 0.389 seconds/batch
+merge_alpha: 0.09675867855548859, range_width: 0.22267982363700867
+2026-09-14 17:54:00,800 - merge_alpha: 0.09675867855548859, range_width: 0.22267982363700867
+| R@1,mIoU 0.4513 | R@1,IoU@0.1 0.7852 | R@1,IoU@0.3 0.6909 | R@1,IoU@0.5 0.5113 | R@1,IoU@0.7 0.2390 | R@1,IoU@0.9 0.0381 | R@5,mIoU 0.6854 | R@5,IoU@0.1 0.9916 | R@5,IoU@0.3 0.9722 | R@5,IoU@0.5 0.8556 | R@5,IoU@0.7 0.5472 | R@5,IoU@0.9 0.0888 |
+2026-09-14 17:54:43,367 - | R@1,mIoU 0.4513 | R@1,IoU@0.1 0.7852 | R@1,IoU@0.3 0.6909 | R@1,IoU@0.5 0.5113 | R@1,IoU@0.7 0.2390 | R@1,IoU@0.9 0.0381 | R@5,mIoU 0.6854 | R@5,IoU@0.1 0.9916 | R@5,IoU@0.3 0.9722 | R@5,IoU@0.5 0.8556 | R@5,IoU@0.7 0.5472 | R@5,IoU@0.9 0.0888 |
+============================================================
+2026-09-14 17:54:43,378 - ============================================================
+Start Epoch 19
+2026-09-14 17:54:43,378 - Start Epoch 19
+Epoch 19, Batch 50, lr = 0.00012, final_loss = 2.1511, nll_loss = 2.0194, ref_nll_loss = 2.2827, ivc_loss = 0.0451, neg_loss_1 = 0.0080, neg_loss_2 = 0.0039, ref_loss = 0.0210, intra_loss = 0.0000, div_loss = 0.0024, 0.419 seconds/batch
+2026-09-14 17:55:04,318 - Epoch 19, Batch 50, lr = 0.00012, final_loss = 2.1511, nll_loss = 2.0194, ref_nll_loss = 2.2827, ivc_loss = 0.0451, neg_loss_1 = 0.0080, neg_loss_2 = 0.0039, ref_loss = 0.0210, intra_loss = 0.0000, div_loss = 0.0024, 0.419 seconds/batch
+Epoch 19, Batch 100, lr = 0.00012, final_loss = 2.1550, nll_loss = 2.0206, ref_nll_loss = 2.2894, ivc_loss = 0.0449, neg_loss_1 = 0.0085, neg_loss_2 = 0.0035, ref_loss = 0.0194, intra_loss = 0.0019, div_loss = 0.0023, 0.399 seconds/batch
+2026-09-14 17:55:23,262 - Epoch 19, Batch 100, lr = 0.00012, final_loss = 2.1550, nll_loss = 2.0206, ref_nll_loss = 2.2894, ivc_loss = 0.0449, neg_loss_1 = 0.0085, neg_loss_2 = 0.0035, ref_loss = 0.0194, intra_loss = 0.0019, div_loss = 0.0023, 0.399 seconds/batch
+Epoch 19, Batch 150, lr = 0.00012, final_loss = 2.1674, nll_loss = 2.0316, ref_nll_loss = 2.3031, ivc_loss = 0.0426, neg_loss_1 = 0.0065, neg_loss_2 = 0.0040, ref_loss = 0.0194, intra_loss = 0.0000, div_loss = 0.0025, 0.398 seconds/batch
+2026-09-14 17:55:43,102 - Epoch 19, Batch 150, lr = 0.00012, final_loss = 2.1674, nll_loss = 2.0316, ref_nll_loss = 2.3031, ivc_loss = 0.0426, neg_loss_1 = 0.0065, neg_loss_2 = 0.0040, ref_loss = 0.0194, intra_loss = 0.0000, div_loss = 0.0025, 0.398 seconds/batch
+Epoch 19, Batch 200, lr = 0.00011, final_loss = 2.1728, nll_loss = 2.0347, ref_nll_loss = 2.3109, ivc_loss = 0.0436, neg_loss_1 = 0.0068, neg_loss_2 = 0.0046, ref_loss = 0.0208, intra_loss = 0.0000, div_loss = 0.0023, 0.396 seconds/batch
+2026-09-14 17:56:02,618 - Epoch 19, Batch 200, lr = 0.00011, final_loss = 2.1728, nll_loss = 2.0347, ref_nll_loss = 2.3109, ivc_loss = 0.0436, neg_loss_1 = 0.0068, neg_loss_2 = 0.0046, ref_loss = 0.0208, intra_loss = 0.0000, div_loss = 0.0023, 0.396 seconds/batch
+Epoch 19, Batch 250, lr = 0.00011, final_loss = 2.1719, nll_loss = 2.0326, ref_nll_loss = 2.3111, ivc_loss = 0.0427, neg_loss_1 = 0.0061, neg_loss_2 = 0.0033, ref_loss = 0.0189, intra_loss = 0.0038, div_loss = 0.0021, 0.393 seconds/batch
+2026-09-14 17:56:21,674 - Epoch 19, Batch 250, lr = 0.00011, final_loss = 2.1719, nll_loss = 2.0326, ref_nll_loss = 2.3111, ivc_loss = 0.0427, neg_loss_1 = 0.0061, neg_loss_2 = 0.0033, ref_loss = 0.0189, intra_loss = 0.0038, div_loss = 0.0021, 0.393 seconds/batch
+Epoch 19, Batch 259, lr = 0.00011, final_loss = 2.2152, nll_loss = 2.0790, ref_nll_loss = 2.3513, ivc_loss = 0.0397, neg_loss_1 = 0.0066, neg_loss_2 = 0.0029, ref_loss = 0.0194, intra_loss = 0.0000, div_loss = 0.0022, 0.393 seconds/batch
+2026-09-14 17:56:25,083 - Epoch 19, Batch 259, lr = 0.00011, final_loss = 2.2152, nll_loss = 2.0790, ref_nll_loss = 2.3513, ivc_loss = 0.0397, neg_loss_1 = 0.0066, neg_loss_2 = 0.0029, ref_loss = 0.0194, intra_loss = 0.0000, div_loss = 0.0022, 0.393 seconds/batch
+merge_alpha: 0.09650691598653793, range_width: 0.21408085525035858
+2026-09-14 17:56:25,090 - merge_alpha: 0.09650691598653793, range_width: 0.21408085525035858
+| R@1,mIoU 0.4515 | R@1,IoU@0.1 0.7833 | R@1,IoU@0.3 0.6928 | R@1,IoU@0.5 0.5129 | R@1,IoU@0.7 0.2380 | R@1,IoU@0.9 0.0336 | R@5,mIoU 0.6824 | R@5,IoU@0.1 0.9906 | R@5,IoU@0.3 0.9693 | R@5,IoU@0.5 0.8456 | R@5,IoU@0.7 0.5452 | R@5,IoU@0.9 0.0853 |
+2026-09-14 17:56:49,719 - | R@1,mIoU 0.4515 | R@1,IoU@0.1 0.7833 | R@1,IoU@0.3 0.6928 | R@1,IoU@0.5 0.5129 | R@1,IoU@0.7 0.2380 | R@1,IoU@0.9 0.0336 | R@5,mIoU 0.6824 | R@5,IoU@0.1 0.9906 | R@5,IoU@0.3 0.9693 | R@5,IoU@0.5 0.8456 | R@5,IoU@0.7 0.5452 | R@5,IoU@0.9 0.0853 |
+============================================================
+2026-09-14 17:56:49,725 - ============================================================
+Start Epoch 20
+2026-09-14 17:56:49,725 - Start Epoch 20
+Epoch 20, Batch 50, lr = 0.00011, final_loss = 2.1330, nll_loss = 2.0006, ref_nll_loss = 2.2653, ivc_loss = 0.0514, neg_loss_1 = 0.0086, neg_loss_2 = 0.0059, ref_loss = 0.0218, intra_loss = 0.0000, div_loss = 0.0030, 0.439 seconds/batch
+2026-09-14 17:57:11,686 - Epoch 20, Batch 50, lr = 0.00011, final_loss = 2.1330, nll_loss = 2.0006, ref_nll_loss = 2.2653, ivc_loss = 0.0514, neg_loss_1 = 0.0086, neg_loss_2 = 0.0059, ref_loss = 0.0218, intra_loss = 0.0000, div_loss = 0.0030, 0.439 seconds/batch
+Epoch 20, Batch 100, lr = 0.00011, final_loss = 2.1362, nll_loss = 1.9998, ref_nll_loss = 2.2727, ivc_loss = 0.0422, neg_loss_1 = 0.0076, neg_loss_2 = 0.0033, ref_loss = 0.0200, intra_loss = 0.0000, div_loss = 0.0022, 0.401 seconds/batch
+2026-09-14 17:57:29,833 - Epoch 20, Batch 100, lr = 0.00011, final_loss = 2.1362, nll_loss = 1.9998, ref_nll_loss = 2.2727, ivc_loss = 0.0422, neg_loss_1 = 0.0076, neg_loss_2 = 0.0033, ref_loss = 0.0200, intra_loss = 0.0000, div_loss = 0.0022, 0.401 seconds/batch
+Epoch 20, Batch 150, lr = 0.00011, final_loss = 2.1725, nll_loss = 2.0356, ref_nll_loss = 2.3094, ivc_loss = 0.0434, neg_loss_1 = 0.0064, neg_loss_2 = 0.0045, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0024, 0.390 seconds/batch
+2026-09-14 17:57:48,320 - Epoch 20, Batch 150, lr = 0.00011, final_loss = 2.1725, nll_loss = 2.0356, ref_nll_loss = 2.3094, ivc_loss = 0.0434, neg_loss_1 = 0.0064, neg_loss_2 = 0.0045, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0024, 0.390 seconds/batch
+Epoch 20, Batch 200, lr = 0.00011, final_loss = 2.1380, nll_loss = 2.0050, ref_nll_loss = 2.2709, ivc_loss = 0.0455, neg_loss_1 = 0.0064, neg_loss_2 = 0.0054, ref_loss = 0.0224, intra_loss = 0.0000, div_loss = 0.0023, 0.386 seconds/batch
+2026-09-14 17:58:07,040 - Epoch 20, Batch 200, lr = 0.00011, final_loss = 2.1380, nll_loss = 2.0050, ref_nll_loss = 2.2709, ivc_loss = 0.0455, neg_loss_1 = 0.0064, neg_loss_2 = 0.0054, ref_loss = 0.0224, intra_loss = 0.0000, div_loss = 0.0023, 0.386 seconds/batch
+Epoch 20, Batch 250, lr = 0.00011, final_loss = 2.1478, nll_loss = 2.0082, ref_nll_loss = 2.2873, ivc_loss = 0.0460, neg_loss_1 = 0.0073, neg_loss_2 = 0.0052, ref_loss = 0.0201, intra_loss = 0.0020, div_loss = 0.0023, 0.383 seconds/batch
+2026-09-14 17:58:25,374 - Epoch 20, Batch 250, lr = 0.00011, final_loss = 2.1478, nll_loss = 2.0082, ref_nll_loss = 2.2873, ivc_loss = 0.0460, neg_loss_1 = 0.0073, neg_loss_2 = 0.0052, ref_loss = 0.0201, intra_loss = 0.0020, div_loss = 0.0023, 0.383 seconds/batch
+Epoch 20, Batch 259, lr = 0.00011, final_loss = 2.1542, nll_loss = 2.0167, ref_nll_loss = 2.2918, ivc_loss = 0.0367, neg_loss_1 = 0.0049, neg_loss_2 = 0.0023, ref_loss = 0.0189, intra_loss = 0.0000, div_loss = 0.0021, 0.383 seconds/batch
+2026-09-14 17:58:28,968 - Epoch 20, Batch 259, lr = 0.00011, final_loss = 2.1542, nll_loss = 2.0167, ref_nll_loss = 2.2918, ivc_loss = 0.0367, neg_loss_1 = 0.0049, neg_loss_2 = 0.0023, ref_loss = 0.0189, intra_loss = 0.0000, div_loss = 0.0021, 0.383 seconds/batch
+merge_alpha: 0.09660235047340393, range_width: 0.2067200243473053
+2026-09-14 17:58:28,974 - merge_alpha: 0.09660235047340393, range_width: 0.2067200243473053
+| R@1,mIoU 0.4519 | R@1,IoU@0.1 0.7855 | R@1,IoU@0.3 0.6906 | R@1,IoU@0.5 0.5139 | R@1,IoU@0.7 0.2351 | R@1,IoU@0.9 0.0352 | R@5,mIoU 0.6840 | R@5,IoU@0.1 0.9900 | R@5,IoU@0.3 0.9690 | R@5,IoU@0.5 0.8524 | R@5,IoU@0.7 0.5433 | R@5,IoU@0.9 0.0914 |
+2026-09-14 17:58:53,627 - | R@1,mIoU 0.4519 | R@1,IoU@0.1 0.7855 | R@1,IoU@0.3 0.6906 | R@1,IoU@0.5 0.5139 | R@1,IoU@0.7 0.2351 | R@1,IoU@0.9 0.0352 | R@5,mIoU 0.6840 | R@5,IoU@0.1 0.9900 | R@5,IoU@0.3 0.9690 | R@5,IoU@0.5 0.8524 | R@5,IoU@0.7 0.5433 | R@5,IoU@0.9 0.0914 |
+============================================================
+2026-09-14 17:58:53,638 - ============================================================
+Start Epoch 21
+2026-09-14 17:58:53,638 - Start Epoch 21
+Epoch 21, Batch 50, lr = 0.00011, final_loss = 2.1587, nll_loss = 2.0181, ref_nll_loss = 2.2993, ivc_loss = 0.0411, neg_loss_1 = 0.0062, neg_loss_2 = 0.0030, ref_loss = 0.0194, intra_loss = 0.0000, div_loss = 0.0025, 0.441 seconds/batch
+2026-09-14 17:59:15,681 - Epoch 21, Batch 50, lr = 0.00011, final_loss = 2.1587, nll_loss = 2.0181, ref_nll_loss = 2.2993, ivc_loss = 0.0411, neg_loss_1 = 0.0062, neg_loss_2 = 0.0030, ref_loss = 0.0194, intra_loss = 0.0000, div_loss = 0.0025, 0.441 seconds/batch
+Epoch 21, Batch 100, lr = 0.00011, final_loss = 2.1241, nll_loss = 1.9894, ref_nll_loss = 2.2589, ivc_loss = 0.0471, neg_loss_1 = 0.0061, neg_loss_2 = 0.0043, ref_loss = 0.0213, intra_loss = 0.0000, div_loss = 0.0031, 0.413 seconds/batch
+2026-09-14 17:59:34,925 - Epoch 21, Batch 100, lr = 0.00011, final_loss = 2.1241, nll_loss = 1.9894, ref_nll_loss = 2.2589, ivc_loss = 0.0471, neg_loss_1 = 0.0061, neg_loss_2 = 0.0043, ref_loss = 0.0213, intra_loss = 0.0000, div_loss = 0.0031, 0.413 seconds/batch
+Epoch 21, Batch 150, lr = 0.00011, final_loss = 2.1336, nll_loss = 1.9947, ref_nll_loss = 2.2725, ivc_loss = 0.0441, neg_loss_1 = 0.0067, neg_loss_2 = 0.0042, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0026, 0.398 seconds/batch
+2026-09-14 17:59:53,291 - Epoch 21, Batch 150, lr = 0.00011, final_loss = 2.1336, nll_loss = 1.9947, ref_nll_loss = 2.2725, ivc_loss = 0.0441, neg_loss_1 = 0.0067, neg_loss_2 = 0.0042, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0026, 0.398 seconds/batch
+Epoch 21, Batch 200, lr = 0.00011, final_loss = 2.1288, nll_loss = 1.9954, ref_nll_loss = 2.2621, ivc_loss = 0.0457, neg_loss_1 = 0.0068, neg_loss_2 = 0.0034, ref_loss = 0.0231, intra_loss = 0.0017, div_loss = 0.0021, 0.393 seconds/batch
+2026-09-14 18:00:12,166 - Epoch 21, Batch 200, lr = 0.00011, final_loss = 2.1288, nll_loss = 1.9954, ref_nll_loss = 2.2621, ivc_loss = 0.0457, neg_loss_1 = 0.0068, neg_loss_2 = 0.0034, ref_loss = 0.0231, intra_loss = 0.0017, div_loss = 0.0021, 0.393 seconds/batch
+Epoch 21, Batch 250, lr = 0.00011, final_loss = 2.1084, nll_loss = 1.9703, ref_nll_loss = 2.2464, ivc_loss = 0.0387, neg_loss_1 = 0.0061, neg_loss_2 = 0.0037, ref_loss = 0.0183, intra_loss = 0.0000, div_loss = 0.0021, 0.391 seconds/batch
+2026-09-14 18:00:31,511 - Epoch 21, Batch 250, lr = 0.00011, final_loss = 2.1084, nll_loss = 1.9703, ref_nll_loss = 2.2464, ivc_loss = 0.0387, neg_loss_1 = 0.0061, neg_loss_2 = 0.0037, ref_loss = 0.0183, intra_loss = 0.0000, div_loss = 0.0021, 0.391 seconds/batch
+Epoch 21, Batch 259, lr = 0.00011, final_loss = 2.0913, nll_loss = 1.9509, ref_nll_loss = 2.2317, ivc_loss = 0.0385, neg_loss_1 = 0.0061, neg_loss_2 = 0.0024, ref_loss = 0.0178, intra_loss = 0.0000, div_loss = 0.0025, 0.400 seconds/batch
+2026-09-14 18:00:37,344 - Epoch 21, Batch 259, lr = 0.00011, final_loss = 2.0913, nll_loss = 1.9509, ref_nll_loss = 2.2317, ivc_loss = 0.0385, neg_loss_1 = 0.0061, neg_loss_2 = 0.0024, ref_loss = 0.0178, intra_loss = 0.0000, div_loss = 0.0025, 0.400 seconds/batch
+merge_alpha: 0.0962223932147026, range_width: 0.19897526502609253
+2026-09-14 18:00:37,352 - merge_alpha: 0.0962223932147026, range_width: 0.19897526502609253
+| R@1,mIoU 0.4549 | R@1,IoU@0.1 0.7884 | R@1,IoU@0.3 0.6961 | R@1,IoU@0.5 0.5220 | R@1,IoU@0.7 0.2319 | R@1,IoU@0.9 0.0359 | R@5,mIoU 0.6856 | R@5,IoU@0.1 0.9910 | R@5,IoU@0.3 0.9716 | R@5,IoU@0.5 0.8569 | R@5,IoU@0.7 0.5439 | R@5,IoU@0.9 0.0820 |
+2026-09-14 18:01:03,155 - | R@1,mIoU 0.4549 | R@1,IoU@0.1 0.7884 | R@1,IoU@0.3 0.6961 | R@1,IoU@0.5 0.5220 | R@1,IoU@0.7 0.2319 | R@1,IoU@0.9 0.0359 | R@5,mIoU 0.6856 | R@5,IoU@0.1 0.9910 | R@5,IoU@0.3 0.9716 | R@5,IoU@0.5 0.8569 | R@5,IoU@0.7 0.5439 | R@5,IoU@0.9 0.0820 |
+============================================================
+2026-09-14 18:01:03,165 - ============================================================
+Start Epoch 22
+2026-09-14 18:01:03,165 - Start Epoch 22
+Epoch 22, Batch 50, lr = 0.00011, final_loss = 2.0905, nll_loss = 1.9550, ref_nll_loss = 2.2260, ivc_loss = 0.0440, neg_loss_1 = 0.0059, neg_loss_2 = 0.0042, ref_loss = 0.0206, intra_loss = 0.0001, div_loss = 0.0027, 0.387 seconds/batch
+2026-09-14 18:01:22,998 - Epoch 22, Batch 50, lr = 0.00011, final_loss = 2.0905, nll_loss = 1.9550, ref_nll_loss = 2.2260, ivc_loss = 0.0440, neg_loss_1 = 0.0059, neg_loss_2 = 0.0042, ref_loss = 0.0206, intra_loss = 0.0001, div_loss = 0.0027, 0.387 seconds/batch
+Epoch 22, Batch 100, lr = 0.00011, final_loss = 2.0930, nll_loss = 1.9568, ref_nll_loss = 2.2292, ivc_loss = 0.0419, neg_loss_1 = 0.0061, neg_loss_2 = 0.0042, ref_loss = 0.0208, intra_loss = 0.0000, div_loss = 0.0022, 0.387 seconds/batch
+2026-09-14 18:01:41,881 - Epoch 22, Batch 100, lr = 0.00011, final_loss = 2.0930, nll_loss = 1.9568, ref_nll_loss = 2.2292, ivc_loss = 0.0419, neg_loss_1 = 0.0061, neg_loss_2 = 0.0042, ref_loss = 0.0208, intra_loss = 0.0000, div_loss = 0.0022, 0.387 seconds/batch
+Epoch 22, Batch 150, lr = 0.00011, final_loss = 2.1229, nll_loss = 1.9833, ref_nll_loss = 2.2626, ivc_loss = 0.0395, neg_loss_1 = 0.0054, neg_loss_2 = 0.0034, ref_loss = 0.0204, intra_loss = 0.0000, div_loss = 0.0021, 0.387 seconds/batch
+2026-09-14 18:02:01,261 - Epoch 22, Batch 150, lr = 0.00011, final_loss = 2.1229, nll_loss = 1.9833, ref_nll_loss = 2.2626, ivc_loss = 0.0395, neg_loss_1 = 0.0054, neg_loss_2 = 0.0034, ref_loss = 0.0204, intra_loss = 0.0000, div_loss = 0.0021, 0.387 seconds/batch
+Epoch 22, Batch 200, lr = 0.00011, final_loss = 2.1069, nll_loss = 1.9678, ref_nll_loss = 2.2461, ivc_loss = 0.0435, neg_loss_1 = 0.0069, neg_loss_2 = 0.0034, ref_loss = 0.0205, intra_loss = 0.0017, div_loss = 0.0022, 0.386 seconds/batch
+2026-09-14 18:02:21,952 - Epoch 22, Batch 200, lr = 0.00011, final_loss = 2.1069, nll_loss = 1.9678, ref_nll_loss = 2.2461, ivc_loss = 0.0435, neg_loss_1 = 0.0069, neg_loss_2 = 0.0034, ref_loss = 0.0205, intra_loss = 0.0017, div_loss = 0.0022, 0.386 seconds/batch
+Epoch 22, Batch 250, lr = 0.00011, final_loss = 2.1064, nll_loss = 1.9665, ref_nll_loss = 2.2464, ivc_loss = 0.0505, neg_loss_1 = 0.0067, neg_loss_2 = 0.0034, ref_loss = 0.0206, intra_loss = 0.0017, div_loss = 0.0036, 0.391 seconds/batch
+2026-09-14 18:02:41,235 - Epoch 22, Batch 250, lr = 0.00011, final_loss = 2.1064, nll_loss = 1.9665, ref_nll_loss = 2.2464, ivc_loss = 0.0505, neg_loss_1 = 0.0067, neg_loss_2 = 0.0034, ref_loss = 0.0206, intra_loss = 0.0017, div_loss = 0.0036, 0.391 seconds/batch
+Epoch 22, Batch 259, lr = 0.00011, final_loss = 2.1554, nll_loss = 2.0151, ref_nll_loss = 2.2957, ivc_loss = 0.0387, neg_loss_1 = 0.0072, neg_loss_2 = 0.0010, ref_loss = 0.0185, intra_loss = 0.0000, div_loss = 0.0024, 0.392 seconds/batch
+2026-09-14 18:02:48,077 - Epoch 22, Batch 259, lr = 0.00011, final_loss = 2.1554, nll_loss = 2.0151, ref_nll_loss = 2.2957, ivc_loss = 0.0387, neg_loss_1 = 0.0072, neg_loss_2 = 0.0010, ref_loss = 0.0185, intra_loss = 0.0000, div_loss = 0.0024, 0.392 seconds/batch
+merge_alpha: 0.09691684693098068, range_width: 0.1907099485397339
+2026-09-14 18:02:48,086 - merge_alpha: 0.09691684693098068, range_width: 0.1907099485397339
+| R@1,mIoU 0.4477 | R@1,IoU@0.1 0.7820 | R@1,IoU@0.3 0.6818 | R@1,IoU@0.5 0.5120 | R@1,IoU@0.7 0.2303 | R@1,IoU@0.9 0.0317 | R@5,mIoU 0.6786 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9690 | R@5,IoU@0.5 0.8472 | R@5,IoU@0.7 0.5323 | R@5,IoU@0.9 0.0665 |
+2026-09-14 18:03:21,888 - | R@1,mIoU 0.4477 | R@1,IoU@0.1 0.7820 | R@1,IoU@0.3 0.6818 | R@1,IoU@0.5 0.5120 | R@1,IoU@0.7 0.2303 | R@1,IoU@0.9 0.0317 | R@5,mIoU 0.6786 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9690 | R@5,IoU@0.5 0.8472 | R@5,IoU@0.7 0.5323 | R@5,IoU@0.9 0.0665 |
+============================================================
+2026-09-14 18:03:21,898 - ============================================================
+Start Epoch 23
+2026-09-14 18:03:21,899 - Start Epoch 23
+Epoch 23, Batch 50, lr = 0.00011, final_loss = 2.0834, nll_loss = 1.9467, ref_nll_loss = 2.2202, ivc_loss = 0.0383, neg_loss_1 = 0.0046, neg_loss_2 = 0.0036, ref_loss = 0.0171, intra_loss = 0.0000, div_loss = 0.0026, 0.415 seconds/batch
+2026-09-14 18:03:42,630 - Epoch 23, Batch 50, lr = 0.00011, final_loss = 2.0834, nll_loss = 1.9467, ref_nll_loss = 2.2202, ivc_loss = 0.0383, neg_loss_1 = 0.0046, neg_loss_2 = 0.0036, ref_loss = 0.0171, intra_loss = 0.0000, div_loss = 0.0026, 0.415 seconds/batch
+Epoch 23, Batch 100, lr = 0.00011, final_loss = 2.0832, nll_loss = 1.9460, ref_nll_loss = 2.2203, ivc_loss = 0.0442, neg_loss_1 = 0.0060, neg_loss_2 = 0.0033, ref_loss = 0.0220, intra_loss = 0.0000, div_loss = 0.0026, 0.407 seconds/batch
+2026-09-14 18:04:02,616 - Epoch 23, Batch 100, lr = 0.00011, final_loss = 2.0832, nll_loss = 1.9460, ref_nll_loss = 2.2203, ivc_loss = 0.0442, neg_loss_1 = 0.0060, neg_loss_2 = 0.0033, ref_loss = 0.0220, intra_loss = 0.0000, div_loss = 0.0026, 0.407 seconds/batch
+Epoch 23, Batch 150, lr = 0.00010, final_loss = 2.0941, nll_loss = 1.9560, ref_nll_loss = 2.2321, ivc_loss = 0.0393, neg_loss_1 = 0.0062, neg_loss_2 = 0.0030, ref_loss = 0.0186, intra_loss = 0.0000, div_loss = 0.0023, 0.403 seconds/batch
+2026-09-14 18:04:22,305 - Epoch 23, Batch 150, lr = 0.00010, final_loss = 2.0941, nll_loss = 1.9560, ref_nll_loss = 2.2321, ivc_loss = 0.0393, neg_loss_1 = 0.0062, neg_loss_2 = 0.0030, ref_loss = 0.0186, intra_loss = 0.0000, div_loss = 0.0023, 0.403 seconds/batch
+Epoch 23, Batch 200, lr = 0.00010, final_loss = 2.0865, nll_loss = 1.9509, ref_nll_loss = 2.2220, ivc_loss = 0.0417, neg_loss_1 = 0.0050, neg_loss_2 = 0.0037, ref_loss = 0.0222, intra_loss = 0.0001, div_loss = 0.0022, 0.399 seconds/batch
+2026-09-14 18:04:41,760 - Epoch 23, Batch 200, lr = 0.00010, final_loss = 2.0865, nll_loss = 1.9509, ref_nll_loss = 2.2220, ivc_loss = 0.0417, neg_loss_1 = 0.0050, neg_loss_2 = 0.0037, ref_loss = 0.0222, intra_loss = 0.0001, div_loss = 0.0022, 0.399 seconds/batch
+Epoch 23, Batch 250, lr = 0.00010, final_loss = 2.0960, nll_loss = 1.9586, ref_nll_loss = 2.2334, ivc_loss = 0.0423, neg_loss_1 = 0.0057, neg_loss_2 = 0.0050, ref_loss = 0.0200, intra_loss = 0.0000, div_loss = 0.0023, 0.393 seconds/batch
+2026-09-14 18:05:00,259 - Epoch 23, Batch 250, lr = 0.00010, final_loss = 2.0960, nll_loss = 1.9586, ref_nll_loss = 2.2334, ivc_loss = 0.0423, neg_loss_1 = 0.0057, neg_loss_2 = 0.0050, ref_loss = 0.0200, intra_loss = 0.0000, div_loss = 0.0023, 0.393 seconds/batch
+Epoch 23, Batch 259, lr = 0.00010, final_loss = 2.1156, nll_loss = 1.9762, ref_nll_loss = 2.2550, ivc_loss = 0.0406, neg_loss_1 = 0.0032, neg_loss_2 = 0.0042, ref_loss = 0.0224, intra_loss = 0.0000, div_loss = 0.0022, 0.393 seconds/batch
+2026-09-14 18:05:03,710 - Epoch 23, Batch 259, lr = 0.00010, final_loss = 2.1156, nll_loss = 1.9762, ref_nll_loss = 2.2550, ivc_loss = 0.0406, neg_loss_1 = 0.0032, neg_loss_2 = 0.0042, ref_loss = 0.0224, intra_loss = 0.0000, div_loss = 0.0022, 0.393 seconds/batch
+merge_alpha: 0.0968867689371109, range_width: 0.18437348306179047
+2026-09-14 18:05:03,718 - merge_alpha: 0.0968867689371109, range_width: 0.18437348306179047
+| R@1,mIoU 0.4557 | R@1,IoU@0.1 0.7904 | R@1,IoU@0.3 0.6951 | R@1,IoU@0.5 0.5194 | R@1,IoU@0.7 0.2358 | R@1,IoU@0.9 0.0333 | R@5,mIoU 0.6875 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9738 | R@5,IoU@0.5 0.8511 | R@5,IoU@0.7 0.5481 | R@5,IoU@0.9 0.0879 |
+2026-09-14 18:05:21,519 - | R@1,mIoU 0.4557 | R@1,IoU@0.1 0.7904 | R@1,IoU@0.3 0.6951 | R@1,IoU@0.5 0.5194 | R@1,IoU@0.7 0.2358 | R@1,IoU@0.9 0.0333 | R@5,mIoU 0.6875 | R@5,IoU@0.1 0.9913 | R@5,IoU@0.3 0.9738 | R@5,IoU@0.5 0.8511 | R@5,IoU@0.7 0.5481 | R@5,IoU@0.9 0.0879 |
+============================================================
+2026-09-14 18:05:21,529 - ============================================================
+Start Epoch 24
+2026-09-14 18:05:21,529 - Start Epoch 24
+Epoch 24, Batch 50, lr = 0.00010, final_loss = 2.0432, nll_loss = 1.9069, ref_nll_loss = 2.1795, ivc_loss = 0.0396, neg_loss_1 = 0.0065, neg_loss_2 = 0.0028, ref_loss = 0.0193, intra_loss = 0.0000, div_loss = 0.0022, 0.434 seconds/batch
+2026-09-14 18:05:43,255 - Epoch 24, Batch 50, lr = 0.00010, final_loss = 2.0432, nll_loss = 1.9069, ref_nll_loss = 2.1795, ivc_loss = 0.0396, neg_loss_1 = 0.0065, neg_loss_2 = 0.0028, ref_loss = 0.0193, intra_loss = 0.0000, div_loss = 0.0022, 0.434 seconds/batch
+Epoch 24, Batch 100, lr = 0.00010, final_loss = 2.0601, nll_loss = 1.9275, ref_nll_loss = 2.1927, ivc_loss = 0.0444, neg_loss_1 = 0.0057, neg_loss_2 = 0.0038, ref_loss = 0.0229, intra_loss = 0.0000, div_loss = 0.0024, 0.406 seconds/batch
+2026-09-14 18:06:02,153 - Epoch 24, Batch 100, lr = 0.00010, final_loss = 2.0601, nll_loss = 1.9275, ref_nll_loss = 2.1927, ivc_loss = 0.0444, neg_loss_1 = 0.0057, neg_loss_2 = 0.0038, ref_loss = 0.0229, intra_loss = 0.0000, div_loss = 0.0024, 0.406 seconds/batch
+Epoch 24, Batch 150, lr = 0.00010, final_loss = 2.0805, nll_loss = 1.9438, ref_nll_loss = 2.2172, ivc_loss = 0.0444, neg_loss_1 = 0.0071, neg_loss_2 = 0.0034, ref_loss = 0.0216, intra_loss = 0.0000, div_loss = 0.0024, 0.394 seconds/batch
+2026-09-14 18:06:20,575 - Epoch 24, Batch 150, lr = 0.00010, final_loss = 2.0805, nll_loss = 1.9438, ref_nll_loss = 2.2172, ivc_loss = 0.0444, neg_loss_1 = 0.0071, neg_loss_2 = 0.0034, ref_loss = 0.0216, intra_loss = 0.0000, div_loss = 0.0024, 0.394 seconds/batch
+Epoch 24, Batch 200, lr = 0.00010, final_loss = 2.0708, nll_loss = 1.9344, ref_nll_loss = 2.2072, ivc_loss = 0.0475, neg_loss_1 = 0.0067, neg_loss_2 = 0.0048, ref_loss = 0.0223, intra_loss = 0.0000, div_loss = 0.0027, 0.389 seconds/batch
+2026-09-14 18:06:39,309 - Epoch 24, Batch 200, lr = 0.00010, final_loss = 2.0708, nll_loss = 1.9344, ref_nll_loss = 2.2072, ivc_loss = 0.0475, neg_loss_1 = 0.0067, neg_loss_2 = 0.0048, ref_loss = 0.0223, intra_loss = 0.0000, div_loss = 0.0027, 0.389 seconds/batch
+Epoch 24, Batch 250, lr = 0.00010, final_loss = 2.0825, nll_loss = 1.9424, ref_nll_loss = 2.2225, ivc_loss = 0.0430, neg_loss_1 = 0.0063, neg_loss_2 = 0.0027, ref_loss = 0.0217, intra_loss = 0.0017, div_loss = 0.0021, 0.386 seconds/batch
+2026-09-14 18:06:58,140 - Epoch 24, Batch 250, lr = 0.00010, final_loss = 2.0825, nll_loss = 1.9424, ref_nll_loss = 2.2225, ivc_loss = 0.0430, neg_loss_1 = 0.0063, neg_loss_2 = 0.0027, ref_loss = 0.0217, intra_loss = 0.0017, div_loss = 0.0021, 0.386 seconds/batch
+Epoch 24, Batch 259, lr = 0.00010, final_loss = 2.0712, nll_loss = 1.9279, ref_nll_loss = 2.2146, ivc_loss = 0.0388, neg_loss_1 = 0.0064, neg_loss_2 = 0.0054, ref_loss = 0.0152, intra_loss = 0.0000, div_loss = 0.0024, 0.386 seconds/batch
+2026-09-14 18:07:01,780 - Epoch 24, Batch 259, lr = 0.00010, final_loss = 2.0712, nll_loss = 1.9279, ref_nll_loss = 2.2146, ivc_loss = 0.0388, neg_loss_1 = 0.0064, neg_loss_2 = 0.0054, ref_loss = 0.0152, intra_loss = 0.0000, div_loss = 0.0024, 0.386 seconds/batch
+merge_alpha: 0.09681475907564163, range_width: 0.17821985483169556
+2026-09-14 18:07:01,790 - merge_alpha: 0.09681475907564163, range_width: 0.17821985483169556
+| R@1,mIoU 0.4484 | R@1,IoU@0.1 0.7823 | R@1,IoU@0.3 0.6857 | R@1,IoU@0.5 0.5155 | R@1,IoU@0.7 0.2255 | R@1,IoU@0.9 0.0278 | R@5,mIoU 0.6803 | R@5,IoU@0.1 0.9893 | R@5,IoU@0.3 0.9674 | R@5,IoU@0.5 0.8479 | R@5,IoU@0.7 0.5362 | R@5,IoU@0.9 0.0704 |
+2026-09-14 18:07:21,467 - | R@1,mIoU 0.4484 | R@1,IoU@0.1 0.7823 | R@1,IoU@0.3 0.6857 | R@1,IoU@0.5 0.5155 | R@1,IoU@0.7 0.2255 | R@1,IoU@0.9 0.0278 | R@5,mIoU 0.6803 | R@5,IoU@0.1 0.9893 | R@5,IoU@0.3 0.9674 | R@5,IoU@0.5 0.8479 | R@5,IoU@0.7 0.5362 | R@5,IoU@0.9 0.0704 |
+============================================================
+2026-09-14 18:07:21,477 - ============================================================
+Start Epoch 25
+2026-09-14 18:07:21,477 - Start Epoch 25
+Epoch 25, Batch 50, lr = 0.00010, final_loss = 2.0480, nll_loss = 1.9087, ref_nll_loss = 2.1874, ivc_loss = 0.0409, neg_loss_1 = 0.0053, neg_loss_2 = 0.0031, ref_loss = 0.0198, intra_loss = 0.0023, div_loss = 0.0021, 0.462 seconds/batch
+2026-09-14 18:07:44,562 - Epoch 25, Batch 50, lr = 0.00010, final_loss = 2.0480, nll_loss = 1.9087, ref_nll_loss = 2.1874, ivc_loss = 0.0409, neg_loss_1 = 0.0053, neg_loss_2 = 0.0031, ref_loss = 0.0198, intra_loss = 0.0023, div_loss = 0.0021, 0.462 seconds/batch
+Epoch 25, Batch 100, lr = 0.00010, final_loss = 2.0512, nll_loss = 1.9121, ref_nll_loss = 2.1903, ivc_loss = 0.0425, neg_loss_1 = 0.0054, neg_loss_2 = 0.0033, ref_loss = 0.0204, intra_loss = 0.0020, div_loss = 0.0023, 0.418 seconds/batch
+2026-09-14 18:08:03,383 - Epoch 25, Batch 100, lr = 0.00010, final_loss = 2.0512, nll_loss = 1.9121, ref_nll_loss = 2.1903, ivc_loss = 0.0425, neg_loss_1 = 0.0054, neg_loss_2 = 0.0033, ref_loss = 0.0204, intra_loss = 0.0020, div_loss = 0.0023, 0.418 seconds/batch
+Epoch 25, Batch 150, lr = 0.00010, final_loss = 2.0420, nll_loss = 1.9007, ref_nll_loss = 2.1833, ivc_loss = 0.0403, neg_loss_1 = 0.0048, neg_loss_2 = 0.0038, ref_loss = 0.0196, intra_loss = 0.0000, div_loss = 0.0024, 0.405 seconds/batch
+2026-09-14 18:08:22,259 - Epoch 25, Batch 150, lr = 0.00010, final_loss = 2.0420, nll_loss = 1.9007, ref_nll_loss = 2.1833, ivc_loss = 0.0403, neg_loss_1 = 0.0048, neg_loss_2 = 0.0038, ref_loss = 0.0196, intra_loss = 0.0000, div_loss = 0.0024, 0.405 seconds/batch
+Epoch 25, Batch 200, lr = 0.00010, final_loss = 2.0729, nll_loss = 1.9291, ref_nll_loss = 2.2167, ivc_loss = 0.0421, neg_loss_1 = 0.0059, neg_loss_2 = 0.0025, ref_loss = 0.0200, intra_loss = 0.0016, div_loss = 0.0024, 0.400 seconds/batch
+2026-09-14 18:08:41,518 - Epoch 25, Batch 200, lr = 0.00010, final_loss = 2.0729, nll_loss = 1.9291, ref_nll_loss = 2.2167, ivc_loss = 0.0421, neg_loss_1 = 0.0059, neg_loss_2 = 0.0025, ref_loss = 0.0200, intra_loss = 0.0016, div_loss = 0.0024, 0.400 seconds/batch
+Epoch 25, Batch 250, lr = 0.00010, final_loss = 2.0744, nll_loss = 1.9315, ref_nll_loss = 2.2172, ivc_loss = 0.0422, neg_loss_1 = 0.0056, neg_loss_2 = 0.0038, ref_loss = 0.0207, intra_loss = 0.0000, div_loss = 0.0024, 0.397 seconds/batch
+2026-09-14 18:09:00,698 - Epoch 25, Batch 250, lr = 0.00010, final_loss = 2.0744, nll_loss = 1.9315, ref_nll_loss = 2.2172, ivc_loss = 0.0422, neg_loss_1 = 0.0056, neg_loss_2 = 0.0038, ref_loss = 0.0207, intra_loss = 0.0000, div_loss = 0.0024, 0.397 seconds/batch
+Epoch 25, Batch 259, lr = 0.00010, final_loss = 2.0493, nll_loss = 1.9096, ref_nll_loss = 2.1889, ivc_loss = 0.0417, neg_loss_1 = 0.0091, neg_loss_2 = 0.0044, ref_loss = 0.0174, intra_loss = 0.0001, div_loss = 0.0021, 0.396 seconds/batch
+2026-09-14 18:09:04,116 - Epoch 25, Batch 259, lr = 0.00010, final_loss = 2.0493, nll_loss = 1.9096, ref_nll_loss = 2.1889, ivc_loss = 0.0417, neg_loss_1 = 0.0091, neg_loss_2 = 0.0044, ref_loss = 0.0174, intra_loss = 0.0001, div_loss = 0.0021, 0.396 seconds/batch
+merge_alpha: 0.09650585055351257, range_width: 0.16905730962753296
+2026-09-14 18:09:04,123 - merge_alpha: 0.09650585055351257, range_width: 0.16905730962753296
+| R@1,mIoU 0.4492 | R@1,IoU@0.1 0.7846 | R@1,IoU@0.3 0.6860 | R@1,IoU@0.5 0.5103 | R@1,IoU@0.7 0.2332 | R@1,IoU@0.9 0.0342 | R@5,mIoU 0.6837 | R@5,IoU@0.1 0.9897 | R@5,IoU@0.3 0.9713 | R@5,IoU@0.5 0.8537 | R@5,IoU@0.7 0.5426 | R@5,IoU@0.9 0.0872 |
+2026-09-14 18:09:25,055 - | R@1,mIoU 0.4492 | R@1,IoU@0.1 0.7846 | R@1,IoU@0.3 0.6860 | R@1,IoU@0.5 0.5103 | R@1,IoU@0.7 0.2332 | R@1,IoU@0.9 0.0342 | R@5,mIoU 0.6837 | R@5,IoU@0.1 0.9897 | R@5,IoU@0.3 0.9713 | R@5,IoU@0.5 0.8537 | R@5,IoU@0.7 0.5426 | R@5,IoU@0.9 0.0872 |
+============================================================
+2026-09-14 18:09:25,064 - ============================================================
+Start Epoch 26
+2026-09-14 18:09:25,064 - Start Epoch 26
+Epoch 26, Batch 50, lr = 0.00010, final_loss = 2.0093, nll_loss = 1.8690, ref_nll_loss = 2.1496, ivc_loss = 0.0382, neg_loss_1 = 0.0046, neg_loss_2 = 0.0031, ref_loss = 0.0179, intra_loss = 0.0013, div_loss = 0.0023, 0.460 seconds/batch
+2026-09-14 18:09:48,077 - Epoch 26, Batch 50, lr = 0.00010, final_loss = 2.0093, nll_loss = 1.8690, ref_nll_loss = 2.1496, ivc_loss = 0.0382, neg_loss_1 = 0.0046, neg_loss_2 = 0.0031, ref_loss = 0.0179, intra_loss = 0.0013, div_loss = 0.0023, 0.460 seconds/batch
+Epoch 26, Batch 100, lr = 0.00010, final_loss = 2.0307, nll_loss = 1.8911, ref_nll_loss = 2.1703, ivc_loss = 0.0399, neg_loss_1 = 0.0056, neg_loss_2 = 0.0022, ref_loss = 0.0211, intra_loss = 0.0000, div_loss = 0.0022, 0.419 seconds/batch
+2026-09-14 18:10:07,254 - Epoch 26, Batch 100, lr = 0.00010, final_loss = 2.0307, nll_loss = 1.8911, ref_nll_loss = 2.1703, ivc_loss = 0.0399, neg_loss_1 = 0.0056, neg_loss_2 = 0.0022, ref_loss = 0.0211, intra_loss = 0.0000, div_loss = 0.0022, 0.419 seconds/batch
+Epoch 26, Batch 150, lr = 0.00010, final_loss = 2.0372, nll_loss = 1.8936, ref_nll_loss = 2.1808, ivc_loss = 0.0389, neg_loss_1 = 0.0057, neg_loss_2 = 0.0030, ref_loss = 0.0183, intra_loss = 0.0000, div_loss = 0.0024, 0.406 seconds/batch
+2026-09-14 18:10:26,409 - Epoch 26, Batch 150, lr = 0.00010, final_loss = 2.0372, nll_loss = 1.8936, ref_nll_loss = 2.1808, ivc_loss = 0.0389, neg_loss_1 = 0.0057, neg_loss_2 = 0.0030, ref_loss = 0.0183, intra_loss = 0.0000, div_loss = 0.0024, 0.406 seconds/batch
+Epoch 26, Batch 200, lr = 0.00010, final_loss = 2.0322, nll_loss = 1.8913, ref_nll_loss = 2.1731, ivc_loss = 0.0435, neg_loss_1 = 0.0063, neg_loss_2 = 0.0035, ref_loss = 0.0222, intra_loss = 0.0000, div_loss = 0.0023, 0.403 seconds/batch
+2026-09-14 18:10:45,589 - Epoch 26, Batch 200, lr = 0.00010, final_loss = 2.0322, nll_loss = 1.8913, ref_nll_loss = 2.1731, ivc_loss = 0.0435, neg_loss_1 = 0.0063, neg_loss_2 = 0.0035, ref_loss = 0.0222, intra_loss = 0.0000, div_loss = 0.0023, 0.403 seconds/batch
+Epoch 26, Batch 250, lr = 0.00010, final_loss = 2.0491, nll_loss = 1.9058, ref_nll_loss = 2.1924, ivc_loss = 0.0411, neg_loss_1 = 0.0055, neg_loss_2 = 0.0030, ref_loss = 0.0198, intra_loss = 0.0000, div_loss = 0.0026, 0.397 seconds/batch
+2026-09-14 18:11:04,275 - Epoch 26, Batch 250, lr = 0.00010, final_loss = 2.0491, nll_loss = 1.9058, ref_nll_loss = 2.1924, ivc_loss = 0.0411, neg_loss_1 = 0.0055, neg_loss_2 = 0.0030, ref_loss = 0.0198, intra_loss = 0.0000, div_loss = 0.0026, 0.397 seconds/batch
+Epoch 26, Batch 259, lr = 0.00010, final_loss = 2.0739, nll_loss = 1.9351, ref_nll_loss = 2.2128, ivc_loss = 0.0394, neg_loss_1 = 0.0056, neg_loss_2 = 0.0013, ref_loss = 0.0211, intra_loss = 0.0000, div_loss = 0.0023, 0.397 seconds/batch
+2026-09-14 18:11:07,878 - Epoch 26, Batch 259, lr = 0.00010, final_loss = 2.0739, nll_loss = 1.9351, ref_nll_loss = 2.2128, ivc_loss = 0.0394, neg_loss_1 = 0.0056, neg_loss_2 = 0.0013, ref_loss = 0.0211, intra_loss = 0.0000, div_loss = 0.0023, 0.397 seconds/batch
+merge_alpha: 0.09654298424720764, range_width: 0.15973368287086487
+2026-09-14 18:11:07,887 - merge_alpha: 0.09654298424720764, range_width: 0.15973368287086487
+| R@1,mIoU 0.4468 | R@1,IoU@0.1 0.7784 | R@1,IoU@0.3 0.6883 | R@1,IoU@0.5 0.4987 | R@1,IoU@0.7 0.2261 | R@1,IoU@0.9 0.0333 | R@5,mIoU 0.6832 | R@5,IoU@0.1 0.9900 | R@5,IoU@0.3 0.9696 | R@5,IoU@0.5 0.8443 | R@5,IoU@0.7 0.5462 | R@5,IoU@0.9 0.0885 |
+2026-09-14 18:11:27,455 - | R@1,mIoU 0.4468 | R@1,IoU@0.1 0.7784 | R@1,IoU@0.3 0.6883 | R@1,IoU@0.5 0.4987 | R@1,IoU@0.7 0.2261 | R@1,IoU@0.9 0.0333 | R@5,mIoU 0.6832 | R@5,IoU@0.1 0.9900 | R@5,IoU@0.3 0.9696 | R@5,IoU@0.5 0.8443 | R@5,IoU@0.7 0.5462 | R@5,IoU@0.9 0.0885 |
+============================================================
+2026-09-14 18:11:27,465 - ============================================================
+Start Epoch 27
+2026-09-14 18:11:27,465 - Start Epoch 27
+Epoch 27, Batch 50, lr = 0.00010, final_loss = 2.0005, nll_loss = 1.8576, ref_nll_loss = 2.1435, ivc_loss = 0.0343, neg_loss_1 = 0.0048, neg_loss_2 = 0.0022, ref_loss = 0.0168, intra_loss = 0.0000, div_loss = 0.0021, 0.475 seconds/batch
+2026-09-14 18:11:51,232 - Epoch 27, Batch 50, lr = 0.00010, final_loss = 2.0005, nll_loss = 1.8576, ref_nll_loss = 2.1435, ivc_loss = 0.0343, neg_loss_1 = 0.0048, neg_loss_2 = 0.0022, ref_loss = 0.0168, intra_loss = 0.0000, div_loss = 0.0021, 0.475 seconds/batch
+Epoch 27, Batch 100, lr = 0.00010, final_loss = 2.0196, nll_loss = 1.8785, ref_nll_loss = 2.1606, ivc_loss = 0.0396, neg_loss_1 = 0.0051, neg_loss_2 = 0.0032, ref_loss = 0.0204, intra_loss = 0.0000, div_loss = 0.0022, 0.433 seconds/batch
+2026-09-14 18:12:10,818 - Epoch 27, Batch 100, lr = 0.00010, final_loss = 2.0196, nll_loss = 1.8785, ref_nll_loss = 2.1606, ivc_loss = 0.0396, neg_loss_1 = 0.0051, neg_loss_2 = 0.0032, ref_loss = 0.0204, intra_loss = 0.0000, div_loss = 0.0022, 0.433 seconds/batch
+Epoch 27, Batch 150, lr = 0.00010, final_loss = 2.0245, nll_loss = 1.8815, ref_nll_loss = 2.1675, ivc_loss = 0.0409, neg_loss_1 = 0.0044, neg_loss_2 = 0.0022, ref_loss = 0.0195, intra_loss = 0.0036, div_loss = 0.0022, 0.420 seconds/batch
+2026-09-14 18:12:30,447 - Epoch 27, Batch 150, lr = 0.00010, final_loss = 2.0245, nll_loss = 1.8815, ref_nll_loss = 2.1675, ivc_loss = 0.0409, neg_loss_1 = 0.0044, neg_loss_2 = 0.0022, ref_loss = 0.0195, intra_loss = 0.0036, div_loss = 0.0022, 0.420 seconds/batch
+Epoch 27, Batch 200, lr = 0.00010, final_loss = 1.9973, nll_loss = 1.8569, ref_nll_loss = 2.1377, ivc_loss = 0.0444, neg_loss_1 = 0.0060, neg_loss_2 = 0.0026, ref_loss = 0.0232, intra_loss = 0.0000, div_loss = 0.0025, 0.411 seconds/batch
+2026-09-14 18:12:49,707 - Epoch 27, Batch 200, lr = 0.00010, final_loss = 1.9973, nll_loss = 1.8569, ref_nll_loss = 2.1377, ivc_loss = 0.0444, neg_loss_1 = 0.0060, neg_loss_2 = 0.0026, ref_loss = 0.0232, intra_loss = 0.0000, div_loss = 0.0025, 0.411 seconds/batch
+Epoch 27, Batch 250, lr = 0.00010, final_loss = 2.0671, nll_loss = 1.9263, ref_nll_loss = 2.2078, ivc_loss = 0.0408, neg_loss_1 = 0.0057, neg_loss_2 = 0.0030, ref_loss = 0.0202, intra_loss = 0.0000, div_loss = 0.0024, 0.405 seconds/batch
+2026-09-14 18:13:08,752 - Epoch 27, Batch 250, lr = 0.00010, final_loss = 2.0671, nll_loss = 1.9263, ref_nll_loss = 2.2078, ivc_loss = 0.0408, neg_loss_1 = 0.0057, neg_loss_2 = 0.0030, ref_loss = 0.0202, intra_loss = 0.0000, div_loss = 0.0024, 0.405 seconds/batch
+Epoch 27, Batch 259, lr = 0.00010, final_loss = 2.0288, nll_loss = 1.8885, ref_nll_loss = 2.1692, ivc_loss = 0.0410, neg_loss_1 = 0.0038, neg_loss_2 = 0.0017, ref_loss = 0.0209, intra_loss = 0.0000, div_loss = 0.0029, 0.404 seconds/batch
+2026-09-14 18:13:12,120 - Epoch 27, Batch 259, lr = 0.00010, final_loss = 2.0288, nll_loss = 1.8885, ref_nll_loss = 2.1692, ivc_loss = 0.0410, neg_loss_1 = 0.0038, neg_loss_2 = 0.0017, ref_loss = 0.0209, intra_loss = 0.0000, div_loss = 0.0029, 0.404 seconds/batch
+merge_alpha: 0.09578730165958405, range_width: 0.15072911977767944
+2026-09-14 18:13:12,128 - merge_alpha: 0.09578730165958405, range_width: 0.15072911977767944
+| R@1,mIoU 0.4503 | R@1,IoU@0.1 0.7768 | R@1,IoU@0.3 0.6854 | R@1,IoU@0.5 0.5094 | R@1,IoU@0.7 0.2361 | R@1,IoU@0.9 0.0362 | R@5,mIoU 0.6868 | R@5,IoU@0.1 0.9926 | R@5,IoU@0.3 0.9767 | R@5,IoU@0.5 0.8550 | R@5,IoU@0.7 0.5384 | R@5,IoU@0.9 0.0875 |
+2026-09-14 18:13:29,219 - | R@1,mIoU 0.4503 | R@1,IoU@0.1 0.7768 | R@1,IoU@0.3 0.6854 | R@1,IoU@0.5 0.5094 | R@1,IoU@0.7 0.2361 | R@1,IoU@0.9 0.0362 | R@5,mIoU 0.6868 | R@5,IoU@0.1 0.9926 | R@5,IoU@0.3 0.9767 | R@5,IoU@0.5 0.8550 | R@5,IoU@0.7 0.5384 | R@5,IoU@0.9 0.0875 |
+============================================================
+2026-09-14 18:13:29,228 - ============================================================
+Start Epoch 28
+2026-09-14 18:13:29,228 - Start Epoch 28
+Epoch 28, Batch 50, lr = 0.00010, final_loss = 2.0036, nll_loss = 1.8604, ref_nll_loss = 2.1467, ivc_loss = 0.0381, neg_loss_1 = 0.0050, neg_loss_2 = 0.0024, ref_loss = 0.0188, intra_loss = 0.0000, div_loss = 0.0024, 0.420 seconds/batch
+2026-09-14 18:13:50,343 - Epoch 28, Batch 50, lr = 0.00010, final_loss = 2.0036, nll_loss = 1.8604, ref_nll_loss = 2.1467, ivc_loss = 0.0381, neg_loss_1 = 0.0050, neg_loss_2 = 0.0024, ref_loss = 0.0188, intra_loss = 0.0000, div_loss = 0.0024, 0.420 seconds/batch
+Epoch 28, Batch 100, lr = 0.00009, final_loss = 1.9949, nll_loss = 1.8523, ref_nll_loss = 2.1376, ivc_loss = 0.0408, neg_loss_1 = 0.0055, neg_loss_2 = 0.0032, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0023, 0.402 seconds/batch
+2026-09-14 18:14:09,429 - Epoch 28, Batch 100, lr = 0.00009, final_loss = 1.9949, nll_loss = 1.8523, ref_nll_loss = 2.1376, ivc_loss = 0.0408, neg_loss_1 = 0.0055, neg_loss_2 = 0.0032, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0023, 0.402 seconds/batch
+Epoch 28, Batch 150, lr = 0.00009, final_loss = 2.0034, nll_loss = 1.8647, ref_nll_loss = 2.1422, ivc_loss = 0.0423, neg_loss_1 = 0.0058, neg_loss_2 = 0.0035, ref_loss = 0.0211, intra_loss = 0.0015, div_loss = 0.0021, 0.404 seconds/batch
+2026-09-14 18:14:29,798 - Epoch 28, Batch 150, lr = 0.00009, final_loss = 2.0034, nll_loss = 1.8647, ref_nll_loss = 2.1422, ivc_loss = 0.0423, neg_loss_1 = 0.0058, neg_loss_2 = 0.0035, ref_loss = 0.0211, intra_loss = 0.0015, div_loss = 0.0021, 0.404 seconds/batch
+Epoch 28, Batch 200, lr = 0.00009, final_loss = 1.9899, nll_loss = 1.8495, ref_nll_loss = 2.1303, ivc_loss = 0.0398, neg_loss_1 = 0.0058, neg_loss_2 = 0.0025, ref_loss = 0.0207, intra_loss = 0.0000, div_loss = 0.0021, 0.400 seconds/batch
+2026-09-14 18:14:49,167 - Epoch 28, Batch 200, lr = 0.00009, final_loss = 1.9899, nll_loss = 1.8495, ref_nll_loss = 2.1303, ivc_loss = 0.0398, neg_loss_1 = 0.0058, neg_loss_2 = 0.0025, ref_loss = 0.0207, intra_loss = 0.0000, div_loss = 0.0021, 0.400 seconds/batch
+Epoch 28, Batch 250, lr = 0.00009, final_loss = 2.0205, nll_loss = 1.8783, ref_nll_loss = 2.1626, ivc_loss = 0.0414, neg_loss_1 = 0.0052, neg_loss_2 = 0.0025, ref_loss = 0.0202, intra_loss = 0.0023, div_loss = 0.0022, 0.396 seconds/batch
+2026-09-14 18:15:08,156 - Epoch 28, Batch 250, lr = 0.00009, final_loss = 2.0205, nll_loss = 1.8783, ref_nll_loss = 2.1626, ivc_loss = 0.0414, neg_loss_1 = 0.0052, neg_loss_2 = 0.0025, ref_loss = 0.0202, intra_loss = 0.0023, div_loss = 0.0022, 0.396 seconds/batch
+Epoch 28, Batch 259, lr = 0.00009, final_loss = 2.0207, nll_loss = 1.8783, ref_nll_loss = 2.1630, ivc_loss = 0.0381, neg_loss_1 = 0.0040, neg_loss_2 = 0.0034, ref_loss = 0.0200, intra_loss = 0.0000, div_loss = 0.0021, 0.395 seconds/batch
+2026-09-14 18:15:11,483 - Epoch 28, Batch 259, lr = 0.00009, final_loss = 2.0207, nll_loss = 1.8783, ref_nll_loss = 2.1630, ivc_loss = 0.0381, neg_loss_1 = 0.0040, neg_loss_2 = 0.0034, ref_loss = 0.0200, intra_loss = 0.0000, div_loss = 0.0021, 0.395 seconds/batch
+merge_alpha: 0.09633344411849976, range_width: 0.1391260027885437
+2026-09-14 18:15:11,495 - merge_alpha: 0.09633344411849976, range_width: 0.1391260027885437
+| R@1,mIoU 0.4489 | R@1,IoU@0.1 0.7807 | R@1,IoU@0.3 0.6890 | R@1,IoU@0.5 0.5023 | R@1,IoU@0.7 0.2348 | R@1,IoU@0.9 0.0320 | R@5,mIoU 0.6835 | R@5,IoU@0.1 0.9906 | R@5,IoU@0.3 0.9716 | R@5,IoU@0.5 0.8414 | R@5,IoU@0.7 0.5439 | R@5,IoU@0.9 0.0872 |
+2026-09-14 18:15:31,690 - | R@1,mIoU 0.4489 | R@1,IoU@0.1 0.7807 | R@1,IoU@0.3 0.6890 | R@1,IoU@0.5 0.5023 | R@1,IoU@0.7 0.2348 | R@1,IoU@0.9 0.0320 | R@5,mIoU 0.6835 | R@5,IoU@0.1 0.9906 | R@5,IoU@0.3 0.9716 | R@5,IoU@0.5 0.8414 | R@5,IoU@0.7 0.5439 | R@5,IoU@0.9 0.0872 |
+============================================================
+2026-09-14 18:15:31,702 - ============================================================
+Start Epoch 29
+2026-09-14 18:15:31,703 - Start Epoch 29
+Epoch 29, Batch 50, lr = 0.00009, final_loss = 1.9652, nll_loss = 1.8230, ref_nll_loss = 2.1073, ivc_loss = 0.0368, neg_loss_1 = 0.0051, neg_loss_2 = 0.0025, ref_loss = 0.0186, intra_loss = 0.0000, div_loss = 0.0021, 0.433 seconds/batch
+2026-09-14 18:15:53,397 - Epoch 29, Batch 50, lr = 0.00009, final_loss = 1.9652, nll_loss = 1.8230, ref_nll_loss = 2.1073, ivc_loss = 0.0368, neg_loss_1 = 0.0051, neg_loss_2 = 0.0025, ref_loss = 0.0186, intra_loss = 0.0000, div_loss = 0.0021, 0.433 seconds/batch
+Epoch 29, Batch 100, lr = 0.00009, final_loss = 1.9741, nll_loss = 1.8327, ref_nll_loss = 2.1156, ivc_loss = 0.0438, neg_loss_1 = 0.0064, neg_loss_2 = 0.0025, ref_loss = 0.0194, intra_loss = 0.0037, div_loss = 0.0024, 0.402 seconds/batch
+2026-09-14 18:16:11,901 - Epoch 29, Batch 100, lr = 0.00009, final_loss = 1.9741, nll_loss = 1.8327, ref_nll_loss = 2.1156, ivc_loss = 0.0438, neg_loss_1 = 0.0064, neg_loss_2 = 0.0025, ref_loss = 0.0194, intra_loss = 0.0037, div_loss = 0.0024, 0.402 seconds/batch
+Epoch 29, Batch 150, lr = 0.00009, final_loss = 1.9813, nll_loss = 1.8385, ref_nll_loss = 2.1241, ivc_loss = 0.0351, neg_loss_1 = 0.0041, neg_loss_2 = 0.0025, ref_loss = 0.0181, intra_loss = 0.0000, div_loss = 0.0021, 0.395 seconds/batch
+2026-09-14 18:16:30,927 - Epoch 29, Batch 150, lr = 0.00009, final_loss = 1.9813, nll_loss = 1.8385, ref_nll_loss = 2.1241, ivc_loss = 0.0351, neg_loss_1 = 0.0041, neg_loss_2 = 0.0025, ref_loss = 0.0181, intra_loss = 0.0000, div_loss = 0.0021, 0.395 seconds/batch
+Epoch 29, Batch 200, lr = 0.00009, final_loss = 1.9679, nll_loss = 1.8280, ref_nll_loss = 2.1078, ivc_loss = 0.0383, neg_loss_1 = 0.0049, neg_loss_2 = 0.0023, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0021, 0.395 seconds/batch
+2026-09-14 18:16:50,621 - Epoch 29, Batch 200, lr = 0.00009, final_loss = 1.9679, nll_loss = 1.8280, ref_nll_loss = 2.1078, ivc_loss = 0.0383, neg_loss_1 = 0.0049, neg_loss_2 = 0.0023, ref_loss = 0.0203, intra_loss = 0.0000, div_loss = 0.0021, 0.395 seconds/batch
+Epoch 29, Batch 250, lr = 0.00009, final_loss = 2.0327, nll_loss = 1.8877, ref_nll_loss = 2.1777, ivc_loss = 0.0396, neg_loss_1 = 0.0048, neg_loss_2 = 0.0031, ref_loss = 0.0205, intra_loss = 0.0000, div_loss = 0.0022, 0.394 seconds/batch
+2026-09-14 18:17:10,258 - Epoch 29, Batch 250, lr = 0.00009, final_loss = 2.0327, nll_loss = 1.8877, ref_nll_loss = 2.1777, ivc_loss = 0.0396, neg_loss_1 = 0.0048, neg_loss_2 = 0.0031, ref_loss = 0.0205, intra_loss = 0.0000, div_loss = 0.0022, 0.394 seconds/batch
+Epoch 29, Batch 259, lr = 0.00009, final_loss = 2.0199, nll_loss = 1.8797, ref_nll_loss = 2.1601, ivc_loss = 0.0380, neg_loss_1 = 0.0038, neg_loss_2 = 0.0029, ref_loss = 0.0207, intra_loss = 0.0000, div_loss = 0.0021, 0.394 seconds/batch
+2026-09-14 18:17:13,856 - Epoch 29, Batch 259, lr = 0.00009, final_loss = 2.0199, nll_loss = 1.8797, ref_nll_loss = 2.1601, ivc_loss = 0.0380, neg_loss_1 = 0.0038, neg_loss_2 = 0.0029, ref_loss = 0.0207, intra_loss = 0.0000, div_loss = 0.0021, 0.394 seconds/batch
+merge_alpha: 0.09590379148721695, range_width: 0.13178762793540955
+2026-09-14 18:17:13,863 - merge_alpha: 0.09590379148721695, range_width: 0.13178762793540955
+| R@1,mIoU 0.4484 | R@1,IoU@0.1 0.7749 | R@1,IoU@0.3 0.6831 | R@1,IoU@0.5 0.5087 | R@1,IoU@0.7 0.2413 | R@1,IoU@0.9 0.0349 | R@5,mIoU 0.6814 | R@5,IoU@0.1 0.9884 | R@5,IoU@0.3 0.9674 | R@5,IoU@0.5 0.8517 | R@5,IoU@0.7 0.5365 | R@5,IoU@0.9 0.0862 |
+2026-09-14 18:17:31,589 - | R@1,mIoU 0.4484 | R@1,IoU@0.1 0.7749 | R@1,IoU@0.3 0.6831 | R@1,IoU@0.5 0.5087 | R@1,IoU@0.7 0.2413 | R@1,IoU@0.9 0.0349 | R@5,mIoU 0.6814 | R@5,IoU@0.1 0.9884 | R@5,IoU@0.3 0.9674 | R@5,IoU@0.5 0.8517 | R@5,IoU@0.7 0.5365 | R@5,IoU@0.9 0.0862 |
+============================================================
+2026-09-14 18:17:31,598 - ============================================================
+Start Epoch 30
+2026-09-14 18:17:31,598 - Start Epoch 30
+Epoch 30, Batch 50, lr = 0.00009, final_loss = 1.9781, nll_loss = 1.8392, ref_nll_loss = 2.1171, ivc_loss = 0.0390, neg_loss_1 = 0.0045, neg_loss_2 = 0.0025, ref_loss = 0.0211, intra_loss = 0.0000, div_loss = 0.0022, 0.500 seconds/batch
+2026-09-14 18:17:56,685 - Epoch 30, Batch 50, lr = 0.00009, final_loss = 1.9781, nll_loss = 1.8392, ref_nll_loss = 2.1171, ivc_loss = 0.0390, neg_loss_1 = 0.0045, neg_loss_2 = 0.0025, ref_loss = 0.0211, intra_loss = 0.0000, div_loss = 0.0022, 0.500 seconds/batch
+Epoch 30, Batch 100, lr = 0.00009, final_loss = 1.9567, nll_loss = 1.8210, ref_nll_loss = 2.0925, ivc_loss = 0.0387, neg_loss_1 = 0.0047, neg_loss_2 = 0.0025, ref_loss = 0.0196, intra_loss = 0.0000, div_loss = 0.0024, 0.440 seconds/batch
+2026-09-14 18:18:15,563 - Epoch 30, Batch 100, lr = 0.00009, final_loss = 1.9567, nll_loss = 1.8210, ref_nll_loss = 2.0925, ivc_loss = 0.0387, neg_loss_1 = 0.0047, neg_loss_2 = 0.0025, ref_loss = 0.0196, intra_loss = 0.0000, div_loss = 0.0024, 0.440 seconds/batch
+Epoch 30, Batch 150, lr = 0.00009, final_loss = 1.9886, nll_loss = 1.8423, ref_nll_loss = 2.1348, ivc_loss = 0.0390, neg_loss_1 = 0.0058, neg_loss_2 = 0.0019, ref_loss = 0.0190, intra_loss = 0.0000, div_loss = 0.0025, 0.418 seconds/batch
+2026-09-14 18:18:34,281 - Epoch 30, Batch 150, lr = 0.00009, final_loss = 1.9886, nll_loss = 1.8423, ref_nll_loss = 2.1348, ivc_loss = 0.0390, neg_loss_1 = 0.0058, neg_loss_2 = 0.0019, ref_loss = 0.0190, intra_loss = 0.0000, div_loss = 0.0025, 0.418 seconds/batch
+Epoch 30, Batch 200, lr = 0.00009, final_loss = 1.9823, nll_loss = 1.8343, ref_nll_loss = 2.1303, ivc_loss = 0.0362, neg_loss_1 = 0.0053, neg_loss_2 = 0.0029, ref_loss = 0.0173, intra_loss = 0.0000, div_loss = 0.0021, 0.408 seconds/batch
+2026-09-14 18:18:53,175 - Epoch 30, Batch 200, lr = 0.00009, final_loss = 1.9823, nll_loss = 1.8343, ref_nll_loss = 2.1303, ivc_loss = 0.0362, neg_loss_1 = 0.0053, neg_loss_2 = 0.0029, ref_loss = 0.0173, intra_loss = 0.0000, div_loss = 0.0021, 0.408 seconds/batch
+Epoch 30, Batch 250, lr = 0.00009, final_loss = 1.9701, nll_loss = 1.8324, ref_nll_loss = 2.1078, ivc_loss = 0.0408, neg_loss_1 = 0.0049, neg_loss_2 = 0.0028, ref_loss = 0.0224, intra_loss = 0.0000, div_loss = 0.0021, 0.398 seconds/batch
+2026-09-14 18:19:11,153 - Epoch 30, Batch 250, lr = 0.00009, final_loss = 1.9701, nll_loss = 1.8324, ref_nll_loss = 2.1078, ivc_loss = 0.0408, neg_loss_1 = 0.0049, neg_loss_2 = 0.0028, ref_loss = 0.0224, intra_loss = 0.0000, div_loss = 0.0021, 0.398 seconds/batch
+Epoch 30, Batch 259, lr = 0.00009, final_loss = 1.9347, nll_loss = 1.7943, ref_nll_loss = 2.0751, ivc_loss = 0.0404, neg_loss_1 = 0.0053, neg_loss_2 = 0.0042, ref_loss = 0.0206, intra_loss = 0.0000, div_loss = 0.0021, 0.397 seconds/batch
+2026-09-14 18:19:14,455 - Epoch 30, Batch 259, lr = 0.00009, final_loss = 1.9347, nll_loss = 1.7943, ref_nll_loss = 2.0751, ivc_loss = 0.0404, neg_loss_1 = 0.0053, neg_loss_2 = 0.0042, ref_loss = 0.0206, intra_loss = 0.0000, div_loss = 0.0021, 0.397 seconds/batch
+merge_alpha: 0.0962793305516243, range_width: 0.1224353089928627
+2026-09-14 18:19:14,465 - merge_alpha: 0.0962793305516243, range_width: 0.1224353089928627
+| R@1,mIoU 0.4501 | R@1,IoU@0.1 0.7820 | R@1,IoU@0.3 0.6870 | R@1,IoU@0.5 0.5042 | R@1,IoU@0.7 0.2397 | R@1,IoU@0.9 0.0375 | R@5,mIoU 0.6835 | R@5,IoU@0.1 0.9903 | R@5,IoU@0.3 0.9742 | R@5,IoU@0.5 0.8498 | R@5,IoU@0.7 0.5407 | R@5,IoU@0.9 0.0930 |
+2026-09-14 18:19:30,049 - | R@1,mIoU 0.4501 | R@1,IoU@0.1 0.7820 | R@1,IoU@0.3 0.6870 | R@1,IoU@0.5 0.5042 | R@1,IoU@0.7 0.2397 | R@1,IoU@0.9 0.0375 | R@5,mIoU 0.6835 | R@5,IoU@0.1 0.9903 | R@5,IoU@0.3 0.9742 | R@5,IoU@0.5 0.8498 | R@5,IoU@0.7 0.5407 | R@5,IoU@0.9 0.0930 |
+============================================================
+2026-09-14 18:19:30,057 - ============================================================
+Best results:
+2026-09-14 18:19:30,057 - Best results:
+| R@1,mIoU 0.4645 | R@1,IoU@0.1 0.8026 | R@1,IoU@0.3 0.7074 | R@1,IoU@0.5 0.5275 | R@1,IoU@0.7 0.2439 | R@1,IoU@0.9 0.0410 | R@5,mIoU 0.6863 | R@5,IoU@0.1 0.9922 | R@5,IoU@0.3 0.9729 | R@5,IoU@0.5 0.8563 | R@5,IoU@0.7 0.5394 | R@5,IoU@0.9 0.0943 |
+2026-09-14 18:19:30,057 - | R@1,mIoU 0.4645 | R@1,IoU@0.1 0.8026 | R@1,IoU@0.3 0.7074 | R@1,IoU@0.5 0.5275 | R@1,IoU@0.7 0.2439 | R@1,IoU@0.9 0.0410 | R@5,mIoU 0.6863 | R@5,IoU@0.1 0.9922 | R@5,IoU@0.3 0.9729 | R@5,IoU@0.5 0.8563 | R@5,IoU@0.7 0.5394 | R@5,IoU@0.9 0.0943 |

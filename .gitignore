@@ -1,0 +1,53 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ---- 虚拟环境 ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- 大体积数据（不入库，见 README §3.2） ----
+*.hdf5
+*.h5
+# 注意：data/ 与 checkpoints/ 下的小体积 json / pkl / pt 是有意入库的，
+# 不要把它们加进忽略列表，否则复现会失败。
+
+# ---- 运行时产物 ----
+csr/outputs/
+csr/analysis/figures/
+csr/**/figures/
+w4x_check/
+
+# ---- 日志 ----
+# 注意：checkpoints/ 与 results/ 下的 .log 是论文附录 A.5 引用的原始证据，
+# 必须入库；只忽略仓库根目录的临时日志。
+/*.log
+!checkpoints/**/*.log
+!results/**/*.log
+
+# ---- 编辑器 / 系统 ----
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+~$*
