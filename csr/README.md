@@ -25,8 +25,21 @@
 
 ## 2. 目录与文件对照表
 
-> eval 脚本采用**语义化命名**；历史编号保留在各脚本 docstring 首行与
-> `docs/ARCHITECTURE.md` §5 的映射表中，以便与论文、实验日志逐条对应。
+> eval 脚本采用**语义化命名**；历史编号保留在各脚本 docstring 首行，
+> 对应的映射见下方 §2.1。
+
+### 2.1 历史编号 ↔ 语义化命名
+
+部分脚本的 docstring 首行仍保留最初的实验编号（如 `w11_eval_final.py`），
+按编号检索论文/实验日志时请对照下表：
+
+| docstring 首行的历史名 | 现文件名 |
+|---|---|
+| `w11_eval_final.py` | `csr/eval/eval_final.py` |
+| `w30_main_ops.py` | 见独立发布包 `PC-Net-CSR-release/eval_all_ops.py` |
+| `w46_prop2_proof_check.py` | `csr/analysis/w46_prop2_proof_check.py`（名未变） |
+| `w47_traj_analysis.py` | `csr/analysis/w47_traj_calibration.py` |
+| `w48_fig3_b.py` | `csr/analysis/w48_fig3_validity_map.py` |
 
 ```
 csr/

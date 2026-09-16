@@ -73,8 +73,13 @@ export CACHE_DIR=/path/to/feat_cache          # 或 FEAT_CACHE_DIR
 | 脚本 | 作用 | 数据 |
 |---|---|---|
 | `w46_prop2_proof_check.py` | 命题 1 闭式 κ(h)=1−m(h)/h 的数值核对；命题 2 两参数最小二乘反解 | 自算（无外部输入） |
-| `w47_traj_calibration.py` | 5 收敛点 + 16 轨迹点 → 18 个互异工作点；符号单调性、实测夹逼区间、门限重解 | `results/curve_availability/w34_*.json`、`w36_cnm.json`、`w45_*.json` |
-| `w48_fig3_validity_map.py` | 论文图 3：第一坐标 ρ_geo 与第二坐标 a 的双坐标图（含轨迹点） | 同上（数值内嵌于脚本 docstring 说明） |
+| `w47_traj_calibration.py` | 5 个收敛点 + 13 个互异轨迹工作点 → **18 个互异工作点**；符号单调性、实测夹逼区间、门限重解 | `results/curve_availability/w34_*.json`、`w36_cnm.json`、`w45_*.json` |
+| `w48_fig3_validity_map.py` | 论文图 3：第一坐标 ρ_geo 与第二坐标 a 的双坐标图（含轨迹点）。**需 matplotlib**；无 CJK 字体时会告警 | 同上（数值内嵌于脚本 docstring 说明） |
+
+> 计数口径：`w45_*.json` 共 **16 个文件**，去重后为 **13 个互异轨迹工作点**
+> （CNM 7 + CPL 3 + CCR 3；`w45_cnm_ebest.json` 与 `w45_cnm_e40.json` 同文件，
+> `w45_cpl_best.json` 与 CPL 收敛点同一检查点，另有一组 CNM 重复）。
+> 13 轨迹点 + 5 收敛点 = **18 个互异工作点**，与论文一致。
 
 `w47` 的默认数据目录是包内 `results/curve_availability/`，可用
 `python w47_traj_calibration.py <dir>` 或环境变量 `CSR_CURVE_DIR` 覆盖。
