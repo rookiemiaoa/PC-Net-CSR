@@ -45,6 +45,12 @@ PC-Net 通过「掩码词重建」的对比学习做定位，但它的**单帧�
 在固定框宽下 IoU 对中心偏移是**单峰偶函数**，因此中心修正**不存在子群偏置**——
 这是它与 RBR 的本质区别，也是它在长短两个子群上**同向非负**的原因。
 
+> **"精确保留"的准确含义**：算子内部对宽度**不做任何缩放**
+> （实测 `max|w_out − w_in| = 1.1e-16`，即机器精度）。
+> 唯一的例外是中心平移后框被推出 `[0,1]` 的样本——此时按视频边界裁剪，
+> 宽度会随之缩短。这是坐标本身的物理约束（框不可能超出视频），
+> 不是算子引入了宽度偏置。
+
 三个算子全部满足：**推理期 · 零训练 · 零参数 · 不访问真值**。
 
 ---
@@ -146,7 +152,7 @@ from csr import CenterShiftRefiner, RelevanceBoundaryRefiner
 from csr import ops                       # 纯 NumPy，无需 torch
 
 csr = CenterShiftRefiner(beta=0.20, rho=0.10, alpha=1.0, dmin=0.01)
-c_new = csr.refine(centers, widths, rel_curves)   # 宽度精确保留
+c_new = csr.refine(centers, widths, rel_curves)   # 宽度不做缩放（见 §1 注）
 ```
 
 ---
