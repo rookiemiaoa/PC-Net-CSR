@@ -327,11 +327,11 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
    该批次已定位并核对存在，但**生成脚本未入库**。
    在脚本取回之前，这一列只能作为历史测量引用，不能宣称可端到端重跑。
    不要用测试列的 0.776/0.510/0.472/0.447 顶替训练列。
-2. **表 3 只有产物、生成器不全**。`results/curve_availability/*.json` 是已入库的测量结果，
-   渲染器 `scripts/render_table3.py` 能一字不差地复现表格（30 格全部 `CHECK PASS`）。
-   但「从零重测这 30 个格子」需要三个采集脚本，现状是：
-   `w34_curve_usability.py` **已定位**（在开发机实验目录，未入 git）；
-   `w32_baseline_csr.py`、`w36_cnm_curve.py` **全盘检索未见**，只有产物 `w36_cnm.json`。
+2. **表 3 有产物、也有采集器了，但仍有两个脚本缺失**。`results/curve_availability/*.json`
+   是已入库的测量结果，`scripts/render_table3.py` 能一字不差地复现表格（30 格 `CHECK PASS`）。
+   「从零重测这 30 个格子」的采集器 `csr/analysis/w34_curve_usability.py` **已入库**，
+   换一个新骨干也能重测。仍缺的两个：`w32_baseline_csr.py`（其功能已被 `w34` 覆盖）与
+   `w36_cnm_curve.py`（只服务 CNM，而 CNM 的代码与权重都已不可得，见 §9.1 的口径）。
 3. **发布版 `train.py` 与研究版不同，二者不可互换**。本仓库的 `train.py` 是干净的发布版
    （76 行，只有上游参数）；产出论文数字的是研究分支版本（103 行，多出 `depend_center` /
    `depend_width` / `depend_width_log` / `depend_spread` / `rel_width` / `alpha_dep` / `probe`

@@ -60,7 +60,7 @@
 | 论文位置 | 现状 | 说明 |
 |---|---|---|
 | **表 4 的「训练」列** | 数据**已定位**：开发机 `w61` 批次共 8 个 JSON（`{pcnet,cpl,qmn,ccr}` × `{probe,test}`）；**生成脚本未入库** | 该列（PC-Net 0.742 / CPL 0.508 / QMN 0.491 / CCR 0.453）目前只能作为历史测量引用；脚本取回后才能端到端复现 |
-| **表 3 的生成器** | 产物 JSON 已入库；`w34_curve_usability.py` **已定位但未入库**；`w32_baseline_csr.py`、`w36_cnm_curve.py` **全盘检索未见** | 渲染器 `scripts/render_table3.py` 已能逐格复现（`--check` 30/30 PASS）；「从零重测这 30 个格子」缺采集脚本 |
+| **表 3 的生成器** | `w34_curve_usability.py` **已入库**（`csr/analysis/`，表 3 的唯一采集器） | 渲染器 `scripts/render_table3.py` 能逐格复现（`--check` 30/30 PASS）；采集器入库后，「在新骨干上重测这 30 个格子」才成为可能。`w32_baseline_csr.py`、`w36_cnm_curve.py` 仍未见（前者被 w34 覆盖，后者只服务已不可得的 CNM） |
 | **训练脚本的研究分支** | 本仓库 `train.py` 是 76 行发布版；产出论文数字的是 103 行研究版（多 7 个内部开关） | 见 §5。发布版足以复现 base 与全部 CSR 结果，但复现不出研究版的训练轨迹 |
 | **图 3 以外的图** | 架构图 `method_figure/method_pdf.png` 非程序化生成 | 源文件不随仓库分发 |
 
