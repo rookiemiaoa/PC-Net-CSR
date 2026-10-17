@@ -356,7 +356,7 @@ git push -u origin main
 ```bash
 git ls-files | wc -l          # 236
 git status                    # 应为 clean
-git log --oneline | wc -l     # 应随发布版本递增（本版 18）
+git log --oneline | wc -l     # 以实际输出为准（历史长度随发布递增）
 ```
 
 推送后把仓库地址回填到论文的「Code is available at ...」处即可。
