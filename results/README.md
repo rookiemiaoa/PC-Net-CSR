@@ -25,6 +25,19 @@ ActivityNet-CG 三个切分的**重测基线**。论文正文与已发表值存�
 
 详细说明见 `curve_availability/README.md`。
 
+## `oracle_bounds/`
+
+论文 §3.1「余量在位置、不在范围」这一主张的**唯一原始依据**：
+
+- `w6_charades_oracle.log` —— Charades-CG，`ORACLE_c` mIoU 0.4720 → 0.7040，**+23.21**
+- `diag41_anet_oracle.log` —— ActivityNet-CG，`ORACLE_c` mIoU 0.3239 → 0.4461，**+12.22**
+  （同批 `ORACLE_w` 为 **−5.70**，即宽度轴在 ANET 上无正向空间）
+
+正文按两位有效数字写作 `+23.2` / `+12.2`。`ORACLE_c` 只换真值中心、保留预测框宽，
+仅用于分析，不进入部署。⚠️ 该值与表 3 五骨干等后处理框架下的 `ORACLE_c` **不是同一个量**。
+
+详细说明见 `oracle_bounds/README.md`。
+
 ## 复现
 
 ```bash

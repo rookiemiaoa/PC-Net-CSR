@@ -189,6 +189,7 @@ CNM 的**短动作桶三切分三指标全部为正**（PC-Net 上只能做到"�
 | PPS 结构探测 | `results/curve_availability/w43_pps.json` |
 | 效应量（d_z / Cliff's δ） | `results/curve_availability/w44_effectsize.json` |
 | ActivityNet-CG 重测基线 | `results/anet_cg_remeasured.json` |
+| §3.1 的 `ORACLE_c` 上界（+23.2 / +12.2） | `csr/analysis/w6_centre_bias.py`、`csr/analysis/diag41_anet_oracle.py` → `results/oracle_bounds/`（含原始日志） |
 
 ### 6.1 第二坐标的符号单调性（18 个互异工作点）
 
