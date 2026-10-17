@@ -104,5 +104,5 @@
    0.009166786447167397
   ]
  },
- "ckpt_note": "原始绝对路径已改写为相对 WS_BASE 的占位形式（见 csr/paths.py）。原始值：<WS_BASE>/ws_base/pps/checkpoints/cg_main/pps/exp-charades_2026-09-12_08-32-46/model-25.pt"
+ "ckpt_note": "原始绝对路径已改写为相对 WS_BASE 的占位形式（见 csr/paths.py）。"
 }

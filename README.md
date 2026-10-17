@@ -116,7 +116,20 @@ docker run --gpus all -v /path/to/data:/data pcnet-csr smoke
 
 - `data/*/*.json` —— 切分与查询（Charades-CG / ActivityNet-CG / TACoS / Ego4D）
 - `data/*/glove.pkl` —— 词向量
-- `checkpoints/*/…/model-best.pt` —— 官方发布权重
+
+**不入库、需另行获取**的是模型权重与特征：
+
+- `checkpoints/*/…/model-best.pt` —— 7 个官方发布权重（22–29 MB/个，合计约 170 MB）。
+  为控制仓库体积与历史长度，权重以发布附件形式提供；落到同名路径后 `csr/eval/*.py` 可直接使用。
+  | 路径 | 字节数 |
+  |---|---|
+  | `checkpoints/ActivityNet/8_2025-05-14_14-07-12/model-best.pt` | 29,434,581 |
+  | `checkpoints/TACoS/8_2025-05-14_21-05-09/model-best.pt` | 26,688,789 |
+  | `checkpoints/CharadesSTA/8_2025-05-14_13-26-12/model-best.pt` | 22,891,349 |
+  | `checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
+  | `checkpoints/CharadesSTA/12_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
+  | `checkpoints/CharadesSTA/13_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
+  | `checkpoints/CharadesSTA/14_2026-09-14_17-39-33/model-best.pt` | 22,891,285 |
 
 **需要自行准备**的是特征文件 `i3d_features.hdf5`（约 3 GB，I3D 特征）。
 把 `FEAT_PATH` 指向它，或放在仓库根目录：
@@ -267,16 +280,17 @@ python csr/tools/format_lint.py
 ## 8. 引用
 
 ```bibtex
-@article{feng2026improvability,
+@article{pcnetcsr2026,
   title   = {On the Improvability Boundary of Inference-Time Refinement for
              Weakly Supervised Compositional Moment Retrieval:
              A Two-Axis Validity Map and Training-Free Centre-Shift Refinement},
-  author  = {Feng, Zhichao and Xie, Wei and Sun, Hao},
-  journal = {Neurocomputing (submitted)},
-  year    = {2026},
-  note    = {Corresponding author: Xie, Wei (xw@mail.ccnu.edu.cn)}
+  author  = {{Anonymous Authors}},
+  journal = {Under review},
+  year    = {2026}
 }
 ```
+
+> 双盲审稿期间作者与刊物字段留空；camera-ready 时按 `docs/RELEASE_CHECKLIST.md` 恢复。
 
 本工作建立在 **PC-Net** 之上，请一并引用：
 
@@ -295,18 +309,20 @@ python csr/tools/format_lint.py
 
 本仓库以 **MIT** 许可发布（见 [`LICENSE`](LICENSE)）。
 其中 `models/modules/net_vlad.py` 来自 Antoine Miech（2018），以 **Apache-2.0** 授权，
-其许可证头已原样保留，合并作品的归属见 [`NOTICE`](NOTICE)。
+其许可证头已原样保留；`optimizers/` 下文件源自 fairseq（Facebook，MIT 授权）。
+合并作品的完整归属见 [`NOTICE`](NOTICE)。
 上游 PC-Net 代码遵循其原始许可，版权归原作者所有。
 CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT 授权。
 
-> 双盲审稿期间请使用匿名镜像仓库（如 anonymous.4open.science），
-> 不要直接给出带作者姓名的 GitHub 地址；camera-ready 后再换成正式仓库。
+> 双盲审稿期间版权人写作 `Anonymous Authors`，提交邮箱亦已替换为匿名地址。
+> 请使用匿名镜像仓库（如 anonymous.4open.science），不要直接给出带作者姓名的 GitHub 地址；
+> camera-ready 后按 `docs/RELEASE_CHECKLIST.md` 恢复实名。
 
 ---
 
 ## 10. 上传到 GitHub
 
-本目录**已经是初始化好的 git 仓库**（分支 `main`，222 个受控文件，最大单文件 16.6 MB
+本目录**已经是初始化好的 git 仓库**（分支 `main`，228 个受控文件，最大单文件 16.6 MB
 即 `data/activitynet/glove.pkl`，远低于 GitHub 的 100 MB 上限；模型权重已排除、改由发布页提供），
 只需接上远端即可推送：
 
