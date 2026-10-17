@@ -1,0 +1,9 @@
+# 7 个官方权重的 MD5（权重不入库，见 README §3.2）
+# 校验：md5sum -c checkpoints/WEIGHTS.md5
+a7ccf9183cb0baddb9518e57be06625f *checkpoints/ActivityNet/8_2025-05-14_14-07-12/model-best.pt
+07d9325c71c92be203a572e4a8b10233 *checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt
+476197c08507be3cc41facda2c895f5b *checkpoints/CharadesSTA/12_2026-09-14_17-09-28/model-best.pt
+49ca6efa01884c8038f9580e844a4c84 *checkpoints/CharadesSTA/13_2026-09-14_17-09-28/model-best.pt
+60d7460a0be7fc0a2f7bc423a196bd51 *checkpoints/CharadesSTA/14_2026-09-14_17-39-33/model-best.pt
+982c75b79617ccd1edd8b77926b05efe *checkpoints/CharadesSTA/8_2025-05-14_13-26-12/model-best.pt
+f50e7ec692243c79f262c5c08bce8a3d *checkpoints/TACoS/8_2025-05-14_21-05-09/model-best.pt
