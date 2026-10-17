@@ -130,9 +130,14 @@ def boxes_cw(c, w):
 
 
 def csr_center(Z_raw, cb, wb):
-    """CSR 的中心修正（宽度保持），返回 (c2, moved, shift, Z)。"""
-    c2, moved, shift = ops.refine_center(
-        Z_raw, cb, wb, CG, smooth=SMOOTH, beta=BETA, rho=RHO, alpha=ALPHA, dmin=DMIN)[:3]
+    """CSR 的中心修正（宽度保持），返回 (c2, moved, shift, Z)。
+
+    ⚠️ 必须用 ``ops.refine_center_c2`` 取**中心**：``ops.refine_center`` 返回的是
+    ``(lo, hi, moved, shift)``，若写成 ``c2, moved, shift = ...[0][:3]`` 会把左边界
+    当成中心（2026-10 曾如此，导致本脚本给出的 ANET-CSR 数字全错）。
+    """
+    c2, moved, shift = ops.refine_center_c2(
+        Z_raw, cb, wb, CG, smooth=SMOOTH, beta=BETA, rho=RHO, alpha=ALPHA, dmin=DMIN)
     Z = ops.smooth_curve(ops.zscore(Z_raw), SMOOTH)
     return c2, moved, shift, Z
 

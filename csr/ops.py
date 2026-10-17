@@ -37,6 +37,7 @@ __all__ = [
     'inside_score',
     'estimate_window_center',
     'shift_center',
+    'refine_center_c2',
     'refine_center',
     'flood_expand',
     'boxes_from_center_width',
@@ -206,6 +207,45 @@ def shift_center(cb, wb, c1, rho, alpha):
     return np.clip(np.asarray(cb) + alpha * d, 0, 1)
 
 
+def refine_center_c2(z, cb, wb, centers, smooth=DEFAULT_CSR_HYPERPARAMS['smooth'],
+                     beta=DEFAULT_CSR_HYPERPARAMS['beta'],
+                     rho=DEFAULT_CSR_HYPERPARAMS['rho'],
+                     alpha=DEFAULT_CSR_HYPERPARAMS['alpha'],
+                     dmin=DEFAULT_CSR_HYPERPARAMS['dmin']):
+    """CSR 核心，返回**中心**（不返回框）。需要框时用 :func:`refine_center`。
+
+    与 :func:`refine_center` 的区别只在返回值：这里给出未做 ``[0,1]`` 裁剪的
+    ``c2``，因此可以精确回答「中心被移到了哪里」。**不要**用
+    ``(lo + hi) / 2`` 反推中心——框一旦被裁剪，该式不再成立。
+
+    完整流水线（与论文 §3 一致）：
+        1) 平滑相关性曲线；
+        2) 窗口质心估计 c1；
+        3) dead-zone + 阻尼 → c2；
+        4) 自洽门控：仅当平移后框内 z 均值提升 >= dmin 才接受，否则回退 cb。
+
+    Returns
+    -------
+    (c2, moved, shift) : tuple of np.ndarray
+        c2    精修后的中心（已 clip 到 [0, 1]）。
+        moved bool 数组，是否发生平移。
+        shift |c2 - cb|，平移幅度。
+    """
+    z = np.asarray(z)
+    cb = np.asarray(cb)
+    wb = np.asarray(wb)
+    # 顺序不可颠倒：先 z-score 再平滑（见 CSR_METHOD.md；先平滑会引入尺度偏置）。
+    zs = smooth_curve(zscore(z), smooth)
+    c1 = estimate_window_center(zs, cb, beta, centers)
+    c2 = shift_center(cb, wb, c1, rho, alpha)
+    if dmin is not None:
+        din = inside_score(zs, c2 - wb / 2, c2 + wb / 2, centers) \
+            - inside_score(zs, cb - wb / 2, cb + wb / 2, centers)
+        c2 = np.where(din >= dmin, c2, cb)
+    moved = np.abs(c2 - cb) > 1e-9
+    return c2, moved, np.abs(c2 - cb)
+
+
 def refine_center(z, cb, wb, centers, smooth=DEFAULT_CSR_HYPERPARAMS['smooth'],
                   beta=DEFAULT_CSR_HYPERPARAMS['beta'],
                   rho=DEFAULT_CSR_HYPERPARAMS['rho'],
@@ -238,22 +278,19 @@ def refine_center(z, cb, wb, centers, smooth=DEFAULT_CSR_HYPERPARAMS['smooth'],
         lo, hi  精修框起 / 止（宽度保持 = wb）。
         moved   bool 数组，是否发生平移。
         shift   |c2 - cb|，平移幅度。
+
+    Note
+    ----
+    **返回值是 4 元组，顺序为 (lo, hi, moved, shift)**。只要中心时请用
+    :func:`refine_center_c2`；写成 ``c2, moved, shift = refine_center(...)[:3]``
+    会把左边界当成中心（2026-10 在 eval_anet_support.py 中真实发生过）。
     """
-    z = np.asarray(z)
-    cb = np.asarray(cb)
     wb = np.asarray(wb)
-    # 顺序不可颠倒：先 z-score 再平滑（见 CSR_METHOD.md；先平滑会引入尺度偏置）。
-    zs = smooth_curve(zscore(z), smooth)
-    c1 = estimate_window_center(zs, cb, beta, centers)
-    c2 = shift_center(cb, wb, c1, rho, alpha)
-    if dmin is not None:
-        din = inside_score(zs, c2 - wb / 2, c2 + wb / 2, centers) \
-            - inside_score(zs, cb - wb / 2, cb + wb / 2, centers)
-        c2 = np.where(din >= dmin, c2, cb)
+    c2, moved, shift = refine_center_c2(z, cb, wb, centers, smooth=smooth,
+                                        beta=beta, rho=rho, alpha=alpha, dmin=dmin)
     lo = np.clip(c2 - wb / 2, 0, 1)
     hi = np.clip(c2 + wb / 2, 0, 1)
-    moved = np.abs(c2 - cb) > 1e-9
-    return lo, hi, moved, np.abs(c2 - cb)
+    return lo, hi, moved, shift
 
 
 def flood_expand(rel, cb, k, centers):
