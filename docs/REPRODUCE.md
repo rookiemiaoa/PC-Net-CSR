@@ -29,7 +29,8 @@ nltk 3.8.1 / fairseq 0.12.2 / scipy 1.10.1`（CUDA 11.7，RTX 2080 Ti）。
 # 构建（依赖按 requirements.lock.txt 精确安装）
 docker build -t pcnet-csr:1.0 .
 
-# 冒烟：只跑 Novel-Word（695 条，最快；base mIoU 应 ≈ 40.9）
+# 冒烟：只跑 Novel-Word（695 条，最快；`eval_csr` 口径 base 应 ≈ 40.67，
+#       官方日志口径为 41.06，两者差 0.39 属评测路径差异，不是噪声）
 docker run --gpus all -v /path/to/i3d_features.hdf5:/data/i3d_features.hdf5 \
     -e FEAT_PATH=/data/i3d_features.hdf5 pcnet-csr:1.0 bash reproduce.sh smoke
 
@@ -58,8 +59,10 @@ docker run --gpus all -v /path/to/i3d_features.hdf5:/data/i3d_features.hdf5 \
 - 数据切分：`data/charades/{train,test_trivial,novel_comp,novel_word}.json`、
   `data/activitynet/{train,val,test_trivial,novel_comp,novel_word}.json`
 - 词表：`data/{charades,activitynet,tacos,ego4d}/glove.pkl`
-- 官方权重：`checkpoints/{CharadesSTA,ActivityNet,TACoS}/*/model-best.pt`
 - 官方评测日志：`checkpoints/**/*.log`（`RESULTS.md` §1 的来源）
+- **官方权重：不在 git 内**。开发机盘上有 7 个 `model-best.pt`，但 `.gitignore` 排除了
+  `checkpoints/**/*.pt`；公开版需从发布附件下载，并用 `checkpoints/WEIGHTS.md5` 校验后
+  落到 `README.md §3.2` 的同名路径。
 
 **需要自行准备**：视频特征 `i3d_features.hdf5`（Charades，约 3 GB）等。
 配置里写的是裸文件名（`config/charades/main_train_test.json` 中 `"feature_path": "i3d_features.hdf5"`），
@@ -147,6 +150,11 @@ python csr/eval/eval_csr_cnm.py config/charades/main.json checkpoints/<cnm-ckpt>
 ```
 
 CSR 的超参**一字不改**（零调参）。曲线从 CNM 自己的掩码重建阶段读出。
+
+> ⚠️ **`config` 与 `ckpt` 的相对路径是相对 `CNM_ROOT` 的，不是相对本仓库**。
+> `eval_csr_cnm.py` 会先 `chdir(CNM_ROOT)`（见 `csr/paths.py`），而本仓库**没有**
+> `config/charades/main.json`。正确写法是 `"$CNM_ROOT/config/charades/main.json"` 与
+> `"$CNM_ROOT/checkpoints/.../model-best.pt"`，或在该脚本所在目录下用绝对路径传入。
 
 若要用 CNM 官方口径单独评测，请在 CNM 仓库根目录下运行
 `csr/eval/eval_cnm_base.py`（它需要 `import` 该仓库的 `models` / `datasets`）。

@@ -89,6 +89,31 @@ RBR 的长桶增益更高，但代价是短桶 @0.5 掉 2.98pt。
 
 ---
 
+## 2.2 ISR：同族的两参数点（不作为独立贡献）
+
+```bash
+python csr/eval/eval_final.py config/charades/main_train_test.json \
+    checkpoints/CharadesSTA/8_2025-05-14_13-26-12/model-best.pt
+```
+
+Charades-CG Test-Trivial，K_REP = 3，同一检查点、同一读出曲线：
+
+| 方法 | mIoU | ΔmIoU |
+|---|---:|---:|
+| base | 47.20 | — |
+| CSR（β=0.20） | 48.33 | +1.13 |
+| ISR（γ=0.5, T=2） | **48.36** | **+1.16** |
+| ISR（γ=0.7, T=3） | 见脚本输出 | — |
+
+ISR 是 CSR 的迭代收缩窗版本（mean-shift 式，窗宽 `β_{t+1}=γ·β_t`），两者差距仅 +0.03，
+说明结论**不依赖 β 的单一取值**。它只报 mIoU，`eval_final.py` 不产出 R1@0.5 / R1@0.7，
+因此正文只把它用作「同族参数点」的稳健性证据，不列为独立贡献。
+
+> 口径提醒：`eval_final.py` 的 base 与 `eval_csr.py` 的 base 都是 47.20（同一评测路径），
+> 与 `reproduce_base.py` 的 47.12（官方日志口径）**不可混引**。
+
+---
+
 ## 3. ActivityNet-CG：结构性失效（负结果，如实报告）
 
 Charades-CG Test-Trivial，本机复现基线 32.39 / 28.64 / 13.47（mIoU/@0.5/@0.7）：

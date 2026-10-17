@@ -6,11 +6,11 @@
 [![Python](https://img.shields.io/badge/python-3.8-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/pytorch-2.0.1-orange)](https://pytorch.org/)
 [![License](https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-green)](LICENSE)
-[![Paper](https://img.shields.io/badge/paper-Neurocomputing%20submission-lightgrey)](#引用)
+[![Paper](https://img.shields.io/badge/paper-under%20review%20(anonymous)-lightgrey)](#引用)
 
 本仓库是论文 **《On the Improvability Boundary of Inference-Time Refinement for Weakly
 Supervised Compositional Moment Retrieval: A Two-Axis Validity Map and Training-Free
-Centre-Shift Refinement》**（Neurocomputing 投稿）的官方代码发布。它在
+Centre-Shift Refinement》**（匿名投稿，评审中；录用后在此更新出处）的官方代码发布。它在
 **PC-Net**（NeurIPS 2025, WSCMR）之上新增三个推理期精化算子及其完整评测/分析代码，
 **不改动上游任何一个字节**。
 
@@ -63,8 +63,8 @@ Charades-CG **Test-Trivial**（N = 3096，官方发布权重，K_REP = 3，`vote
 |---|---:|---:|---:|---:|
 | base | 47.20 | — | — | — |
 | **CSR**（本文核心） | **48.33** | **+1.13** | **+0.67** | **+2.09** |
-| ISR(γ=0.5, T=2) | 48.36 | +1.13 | — | — |
-| RBR k=0.15 | 48.18 | +0.98 | −0.97 | +1.09 |
+| ISR(γ=0.5, T=2) | 48.36 | +1.16 | — | — |
+| RBR k=0.15 | 48.28 | +1.08 | −0.97 | +1.09 |
 
 CSR 在其余两个 Charades-CG 切分上同样为正：
 
@@ -120,7 +120,9 @@ docker run --gpus all -v /path/to/data:/data pcnet-csr smoke
 **不入库、需另行获取**的是模型权重与特征：
 
 - `checkpoints/*/…/model-best.pt` —— 7 个官方发布权重（22–29 MB/个，合计约 170 MB）。
-  为控制仓库体积与历史长度，权重以发布附件形式提供；落到同名路径后 `csr/eval/*.py` 可直接使用。
+  为控制仓库体积与历史长度，权重**不入库**（`.gitignore` 排除 `checkpoints/**/*.pt`），
+  以发布附件形式提供；下载后落到下表同名路径即可，`csr/eval/*.py` 直接可用。
+  完整性用 `checkpoints/WEIGHTS.md5` 校验（`md5sum -c checkpoints/WEIGHTS.md5`）。
   | 路径 | 字节数 |
   |---|---|
   | `checkpoints/ActivityNet/8_2025-05-14_14-07-12/model-best.pt` | 29,434,581 |
@@ -164,9 +166,19 @@ python csr/analysis/attrib_csr.py
 from csr import CenterShiftRefiner, RelevanceBoundaryRefiner
 from csr import ops                       # 纯 NumPy，无需 torch
 
-csr = CenterShiftRefiner(beta=0.20, rho=0.10, alpha=1.0, dmin=0.01)
-c_new = csr.refine(centers, widths, rel_curves)   # 宽度不做缩放（见 §1 注）
+# 方式 A：端到端（需要已加载权重的 PC-Net 模型，走一次逐点提案前向读曲线）
+refiner = CenterShiftRefiner(model, num_point=50)   # 首参是 model；num_point 默认 max_frames//4
+out = refiner(net_input)
+out['boxes_top1']    # [bsz, 2] 精修 top-1 框 (start, end)
+out['boxes_pool5']   # [bsz, 5, 2] CSR 顶替原 top-1 + 原 rank2..5
+
+# 方式 B：只做后处理（已有相关性曲线时；也是所有 eval 脚本实际走的路径）
+lo, hi, moved, shift = ops.refine_center(
+    z, cb, wb, centers, smooth=7, beta=0.20, rho=0.10, alpha=1.0, dmin=0.01)
 ```
+
+> 注意：算子**不进入模型的 `forward`/`predict`**，只作用于评测后的预测框；
+> 工程里 `models/`、`runners/`、`train.py` 不含任何开启开关，需显式调用上述接口。
 
 ---
 
@@ -223,7 +235,8 @@ PC-Net-CSR/
 | **ISR** | 中心（**保宽**） | mean-shift 式迭代收缩窗中心估计；与 CSR 同族的两参数点 | 同 CSR |
 | **RBR** | 边界（**扩框**） | 沿相关性曲线从 top-1 中心 flood 扩展 | 仅当 ρ_geo ≪ 1（框过窄） |
 
-三者共享同一份纯 NumPy 实现（`csr/ops.py`），因此 CPU 也能跑通全部离线分析。
+CSR 与 RBR 的纯 NumPy 实现在 `csr/ops.py`；ISR 与它们同族，实现见 `csr/eval/eval_final.py::isr_delta`。
+三者都不依赖 GPU，因此 CPU 也能跑通全部离线分析。
 
 ---
 
@@ -338,9 +351,9 @@ git push -u origin main
 想先本地确认一遍再推：
 
 ```bash
-git ls-files | wc -l          # 227
+git ls-files | wc -l          # 228
 git status                    # 应为 clean
-git log --oneline             # 两条提交
+git log --oneline | wc -l     # 12
 ```
 
 推送后把仓库地址回填到论文的「Code is available at ...」处即可。

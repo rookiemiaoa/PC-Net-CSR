@@ -52,7 +52,8 @@ if [ "$MODE" = "smoke" ]; then
   K_REP=1 run smoke_novel_word \
     "$PY" csr/eval/eval_csr.py config/charades/main_novel_word.json "$CH_CKPT"
   echo ""
-  echo "[OK] 冒烟完成。若 base mIoU ≈ 40.9（Novel-Word），环境可用。"
+  echo "[OK] 冒烟完成。若 base mIoU ≈ 40.67（Novel-Word，eval_csr 口径），环境可用。"
+  echo "     注：官方日志口径为 41.06，两者差 0.39，属评测路径差异。"
   exit 0
 fi
 
@@ -69,6 +70,13 @@ echo ""
 echo "[对照] docs/RESULTS.md §1–§2（Charades-CG，K_REP=3）"
 echo "  Test-Trivial base 47.12 / 54.84 / 26.68 ；CSR 48.33 / 55.89 / 28.67"
 echo "  Novel-Comp   base 38.04 / 41.69 / 16.73"
+
+# ---------------------------------------------------------------- ISR
+# eval_final.py 是 ISR 数字的唯一产出入口（此前不在本脚本内，导致文档可复现性缺口）
+say "PART 1b / ISR 对照（eval_final.py）"
+run "isr_charades_train_test" "$PY" csr/eval/eval_final.py \
+    config/charades/main_train_test.json "$CH_CKPT"
+echo "  ISR(γ=0.5,T=2) 应为 48.36（base 47.20 ⇒ Δ +1.16）"
 
 # ---------------------------------------------------------------- ActivityNet
 if [ "$MODE" = "all" ]; then
