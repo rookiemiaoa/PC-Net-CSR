@@ -50,7 +50,10 @@ git push origin --tags
 # 体积与残留
 du -sh .git
 git rev-list --objects --all | grep -c '\.pt$'      # 期望 0
-git grep -n -F -e '<WS_BASE>' -e '10.102.64.'    # 期望无输出
+# 内网地址 / 开发机绝对路径（用通用正则，不要把真实地址写进本文件）
+git grep -n -E '([0-9]{1,3}\.){3}[0-9]{1,3}' -- '*.md' '*.py' '*.json' '*.sh' \
+  | grep -vE '0\.0\.0\.0|127\.0\.0\.1'                # 期望无输出
+git grep -n -F -e '<WS_BASE>' -e '/Disks/'           # 期望无输出
 
 # 许可链完整
 test -f NOTICE && test -f LICENSE && head -3 models/modules/net_vlad.py

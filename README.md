@@ -338,7 +338,7 @@ CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT
 
 ## 10. 上传到 GitHub
 
-本目录**已经是初始化好的 git 仓库**（分支 `main`，228 个受控文件，最大单文件 16.6 MB
+本目录**已经是初始化好的 git 仓库**（分支 `main`，236 个受控文件，最大单文件 16.6 MB
 即 `data/activitynet/glove.pkl`，远低于 GitHub 的 100 MB 上限；模型权重已排除、改由发布页提供），
 只需接上远端即可推送：
 
@@ -354,9 +354,9 @@ git push -u origin main
 想先本地确认一遍再推：
 
 ```bash
-git ls-files | wc -l          # 228
+git ls-files | wc -l          # 236
 git status                    # 应为 clean
-git log --oneline | wc -l     # 12
+git log --oneline | wc -l     # 17
 ```
 
 推送后把仓库地址回填到论文的「Code is available at ...」处即可。
