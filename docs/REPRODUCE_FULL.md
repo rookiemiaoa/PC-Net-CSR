@@ -36,7 +36,11 @@ pip install -r <REPO>/requirements.lock.txt     # 逐位复现用锁定版本
 ```
 
 实测组合：`Python 3.8.20 / torch 2.0.1 / numpy 1.24.4 / h5py 3.9.0 / nltk 3.8.1 /
-fairseq 0.12.2 / scipy 1.10.1`，CUDA 11.7，单卡 RTX 2080 Ti（11 GB）。
+fairseq 0.12.2 / scipy 1.10.1`，CUDA 11.7，单卡 RTX 2080 Ti（22 GB）。
+
+> 开发环境实测补充（数值，不含路径）：conda 环境约 **4.7 GB**，装在系统盘；
+> 8× RTX 2080 Ti 22 GB，单进程训练约 3.5–4 GB 显存。若你的 2080 Ti 是 11 GB 版本，
+> 把 `BS` 减半即可，其余不变。
 
 额外（只有画图需要）：
 
@@ -78,9 +82,9 @@ python csr/tools/check_assets.py           # 权重 / 特征 / 外部仓库 / �
 
 | 资产 | 用途 | 备注 |
 |---|---|---|
-| `i3d_features.hdf5`（≈3 GB） | Charades-CG | 放 `<DATA_ROOT>/` 并 `export FEAT_PATH=` |
-| `sub_activitynet_v1-3.c3d.hdf5`（≈4.5–5.5 GB） | ActivityNet-CG | 同上，**ANET 阶段才需要** |
-| `tacos_features_c3d.hdf5`（≈0.4 GB） | TACoS | 同上 |
+| `i3d_features.hdf5`（实测 3.0 GB） | Charades-CG | 放 `<DATA_ROOT>/` 并 `export FEAT_PATH=` |
+| `sub_activitynet_v1-3.c3d.hdf5`（实测 3.9 GB） | ActivityNet-CG | 同上，**ANET 阶段才需要** |
+| `tacos_features_c3d.hdf5`（实测 0.5 GB） | TACoS | 同上 |
 | `WS_BASE`（含 CPL / QMN / PPS / CCR 克隆） | 表 2 的四个外部基线 | 只跑 S0–S3 时不需要 |
 | `CNM_ROOT`（CNM 克隆 + 其 ckpt） | 表 2 的 CNM 行、§4 跨骨干 | 同上 |
 
@@ -96,17 +100,23 @@ export OUTDIR=$REPO/results/logs          # 每个脚本的 stdout 落这里
 export WS_BASE=<...>  CNM_ROOT=<...>      # 只在 S3/S4 需要
 ```
 
-磁盘（单盘场景，务必按此顺序）：
+磁盘（单盘场景）：
 
 | 阶段 | 峰值占用 | 说明 |
 |---|---:|---|
 | 仓库 + 权重 + `.git` | 0.42 GB | 工作树 0.25 + 权重 0.17 |
 | + Charades hdf5 | 3.5 GB | S1/S2 用 |
 | + 基线重训 ckpt + 日志 | 6.5 GB | S4 用 |
-| + ANET hdf5 | 11–12 GB | **会超**，见下 |
+| + ANET hdf5 | 11–12 GB | S6 用 |
 
-⚠️ **只剩约 9.6 GB 的盘装不下全部**。S4/S5 结束后把 Charades 的 hdf5 移到别的盘
-（`mv $FEAT_PATH /other/disk/`）再进 S6；ANET 跑完可删。任何时刻剩余 < 1 GB 就停下来。
+**结论：一张 12 GB 以上的盘就能完整跑完 S0–S7。** 开发机数据盘实测可用 **582 GB**，
+因此上面的顺序不是硬约束，只是为了让人知道每一步吃掉多少。若盘确实紧张：
+
+1. 先跑 S1/S2/S5（Charades 系），它们只用 3.5 GB；
+2. S4 的基线 ckpt 跑完即可删（只留日志与 JSON）；
+3. S6 的 ANET hdf5 最后放，`mv $FEAT_PATH /other/disk/` 腾出 Charades 的 3 GB 再进。
+
+任何时刻剩余 < 1 GB 就停下来——**写满系统盘会让 conda 和 ssh 都进不去**。
 
 ---
 
@@ -268,7 +278,9 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
 ## 6. 并行与调度
 
 - **并发 ≤ 3 个 hdf5 读进程**。再高会在 2080Ti 节点上出现 IO 抖动，总时间反而变长。
-- **1 进程 / 1 卡**。11 GB 卡上不要叠两个 L=50 的前向。
+- **1 进程 / 1 卡**。22 GB 卡实测单进程 3.5–4 GB，理论上能叠 3 路，但 **DataLoader 会先打满 CPU**：
+  每进程 `num_workers=16`，3 路并发 = 48 个 worker，单 epoch 从 ~1.7 min 涨到 ~4.5 min。
+  ⇒ 想快就用 3 张卡各跑 1 路，不要 1 张卡跑 3 路。
 - S4 用 3 张卡，S6 用另外 3 张卡，**不要与 Charades 评测同时跑**。
 - 长任务用 `tmux` + `tee` 落日志，日志名与 §5 的表格一一对应。
 
@@ -307,15 +319,23 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
 
 ---
 
-## 9. 尚未闭环的两项（务必如实转述，不要猜）
+## 9. 尚未闭环的三项（务必如实转述，不要猜）
 
-1. **表 4 的「训练」列没有生成器**。它的数据（PC-Net 0.742 / CPL 0.508 / QMN 0.491 /
-   CCR 0.453）来自 `exp/rc/w61/`（脚本 + JSON + 日志），**不在本仓库**。
-   在取回之前，这一列只能作为历史测量引用，不能宣称可端到端重跑。
+1. **表 4 的「训练」列没有入库的生成器**。它的数据（PC-Net 0.742 / CPL 0.508 / QMN 0.491 /
+   CCR 0.453）来自开发机的 `w61` 批次评估产物（8 个 JSON：`{pcnet,cpl,qmn,ccr}` × `{probe,test}`），
+   该批次已定位并核对存在，但**生成脚本未入库**。
+   在脚本取回之前，这一列只能作为历史测量引用，不能宣称可端到端重跑。
    不要用测试列的 0.776/0.510/0.472/0.447 顶替训练列。
-2. **表 3 只有产物、没有生成器**。`results/curve_availability/w34_*.json`、`w36_cnm.json`
-   是已入库的测量结果，渲染器 `scripts/render_table3.py` 能一字不差地复现表格，
-   但「从零重测这 30 个格子」需要 `w32_baseline_csr.py` / `w34_curve_usability.py` /
-   `w36_cnm_curve.py`，它们同样未入库。
+2. **表 3 只有产物、生成器不全**。`results/curve_availability/*.json` 是已入库的测量结果，
+   渲染器 `scripts/render_table3.py` 能一字不差地复现表格（30 格全部 `CHECK PASS`）。
+   但「从零重测这 30 个格子」需要三个采集脚本，现状是：
+   `w34_curve_usability.py` **已定位**（在开发机实验目录，未入 git）；
+   `w32_baseline_csr.py`、`w36_cnm_curve.py` **全盘检索未见**，只有产物 `w36_cnm.json`。
+3. **发布版 `train.py` 与研究版不同，二者不可互换**。本仓库的 `train.py` 是干净的发布版
+   （76 行，只有上游参数）；产出论文数字的是研究分支版本（103 行，多出 `depend_center` /
+   `depend_width` / `depend_width_log` / `depend_spread` / `rel_width` / `alpha_dep` / `probe`
+   七个内部开关）。这些开关在论文里没有对应消融，属于内部实验设施，**故意不发布**。
+   ⇒ 用发布版训练得到的是 PC-Net 基线（G1 的 47.12），CSR 是其后处理，不受影响；
+   但若你想逐位复现研究版训练轨迹，需要那些开关，本仓库不提供。
 
-这两项补上之后，本手册的 S0–S7 才是完整闭环。
+这三项补上之后，本手册的 S0–S7 才是完整闭环。

@@ -6,11 +6,11 @@
 [![Python](https://img.shields.io/badge/python-3.8-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/pytorch-2.0.1-orange)](https://pytorch.org/)
 [![License](https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-green)](LICENSE)
-[![Paper](https://img.shields.io/badge/paper-under%20review%20(anonymous)-lightgrey)](#引用)
+[![Paper](https://img.shields.io/badge/paper-manuscript%20in%20preparation%20(anonymous)-lightgrey)](#引用)
 
 本仓库是论文 **《On the Improvability Boundary of Inference-Time Refinement for Weakly
 Supervised Compositional Moment Retrieval: A Two-Axis Validity Map and Training-Free
-Centre-Shift Refinement》**（匿名投稿，评审中；录用后在此更新出处）的官方代码发布。它在
+Centre-Shift Refinement》**（匿名稿，准备中；投稿后在此更新出处）的配套代码。它在
 **PC-Net**（NeurIPS 2025, WSCMR）之上新增三个推理期精化算子及其完整评测/分析代码，
 **不改动上游任何一个字节**。
 
@@ -301,12 +301,12 @@ python csr/tools/format_lint.py
              Weakly Supervised Compositional Moment Retrieval:
              A Two-Axis Validity Map and Training-Free Centre-Shift Refinement},
   author  = {{Anonymous Authors}},
-  journal = {Under review},
+  journal = {Manuscript in preparation},
   year    = {2026}
 }
 ```
 
-> 双盲审稿期间作者与刊物字段留空；camera-ready 时按 `docs/RELEASE_CHECKLIST.md` 恢复。
+> 双盲期间作者与刊物字段留空；投稿 / camera-ready 时按 `docs/RELEASE_CHECKLIST.md` 恢复。
 
 本工作建立在 **PC-Net** 之上，请一并引用：
 
@@ -330,7 +330,7 @@ python csr/tools/format_lint.py
 上游 PC-Net 代码遵循其原始许可，版权归原作者所有。
 CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT 授权。
 
-> 双盲审稿期间版权人写作 `Anonymous Authors`，提交邮箱亦已替换为匿名地址。
+> 双盲投稿期间版权人写作 `Anonymous Authors`，提交邮箱亦已替换为匿名地址。
 > 请使用匿名镜像仓库（如 anonymous.4open.science），不要直接给出带作者姓名的 GitHub 地址；
 > camera-ready 后按 `docs/RELEASE_CHECKLIST.md` 恢复实名。
 

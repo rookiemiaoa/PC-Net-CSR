@@ -1,6 +1,6 @@
 # 发布检查清单（匿名版 → 实名版）
 
-本仓库的公开副本当前处于**双盲审稿模式**：版权人为 `Anonymous Authors`，
+本仓库的公开副本当前处于**双盲投稿模式**：版权人为 `Anonymous Authors`，
 提交元数据已统一改写为匿名地址，正文与文档中不含作者单位、姓名与联系邮箱。
 录用后按下列步骤恢复实名。**本文件本身不记录真实姓名**，实名信息另存于仓库外的作者私有记录。
 
@@ -12,8 +12,8 @@
 |---|---|---|---|---|
 | 1 | `LICENSE` | 第 3 行 | `Copyright (c) 2026 Anonymous Authors` | 真实版权人 + 单位 |
 | 2 | `NOTICE` | 第 2 行 | 同上 | 同上 |
-| 3 | `README.md` | §8 引用块 | `author = {{Anonymous Authors}}`、`journal = {Under Review}` | 真实作者列表与正式出处 |
-| 4 | `README.md` | §9 提示 | 「双盲审稿期间版权人写作 …」 | 删除该提示段 |
+| 3 | `README.md` | §8 引用块 | `author = {{Anonymous Authors}}`、`journal = {Manuscript in preparation}` | 真实作者列表与正式出处 |
+| 4 | `README.md` | §9 提示 | 「双盲投稿期间版权人写作 …」 | 删除该提示段 |
 | 5 | `README.md` | §10 | 远端占位 `<user>/<repo>` | 正式组织/仓库名 |
 | 6 | `docs/RELEASE_CHECKLIST.md` | 本文件 | —— | 可选：保留为发布流程说明 |
 

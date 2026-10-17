@@ -44,6 +44,10 @@ w4x_check/
 /*.log
 !checkpoints/**/*.log
 !results/**/*.log
+# 但 results/ 顶层的日志是 `reproduce.sh check` 每次运行都会重写的运行时输出，
+# 不是证据（证据日志都在 results/multiseed/ 与 results/oracle_bounds/ 子目录里），
+# 不入库，否则自检一次就把工作区弄脏。
+/results/*.log
 
 # ---- 编辑器 / 系统 ----
 .idea/
