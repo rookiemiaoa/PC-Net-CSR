@@ -306,8 +306,9 @@ CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT
 
 ## 10. 上传到 GitHub
 
-本目录**已经是初始化好的 git 仓库**（分支 `main`，227 个受控文件，最大单文件 29 MB，
-远低于 GitHub 的 100 MB 上限），只需接上远端即可推送：
+本目录**已经是初始化好的 git 仓库**（分支 `main`，222 个受控文件，最大单文件 16.6 MB
+即 `data/activitynet/glove.pkl`，远低于 GitHub 的 100 MB 上限；模型权重已排除、改由发布页提供），
+只需接上远端即可推送：
 
 ```bash
 cd PC-Net-master
