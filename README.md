@@ -5,7 +5,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.8-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/pytorch-2.0.1-orange)](https://pytorch.org/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-green)](LICENSE)
 [![Paper](https://img.shields.io/badge/paper-Neurocomputing%20submission-lightgrey)](#引用)
 
 本仓库是论文 **《On the Improvability Boundary of Inference-Time Refinement for Weakly
@@ -294,8 +294,13 @@ python csr/tools/format_lint.py
 ## 9. 许可与致谢
 
 本仓库以 **MIT** 许可发布（见 [`LICENSE`](LICENSE)）。
+其中 `models/modules/net_vlad.py` 来自 Antoine Miech（2018），以 **Apache-2.0** 授权，
+其许可证头已原样保留，合并作品的归属见 [`NOTICE`](NOTICE)。
 上游 PC-Net 代码遵循其原始许可，版权归原作者所有。
 CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT 授权。
+
+> 双盲审稿期间请使用匿名镜像仓库（如 anonymous.4open.science），
+> 不要直接给出带作者姓名的 GitHub 地址；camera-ready 后再换成正式仓库。
 
 ---
 

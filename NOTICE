@@ -1,0 +1,13 @@
+PC-Net-CSR
+Copyright (c) 2026 Zhichao Feng, Wei Xie, Hao Sun (Central China Normal University)
+
+This product includes software developed by Antoine Miech
+  models/modules/net_vlad.py
+licensed under the Apache License, Version 2.0
+  http://www.apache.org/licenses/LICENSE-2.0
+
+The upstream PC-Net implementation (NeurIPS 2025) is used as the base model;
+copyright belongs to its original authors. See the citation section in README.md.
+
+Third-party components retain their own licenses; this NOTICE must be
+preserved in redistributions of the combined work.
