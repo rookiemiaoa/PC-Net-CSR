@@ -87,7 +87,8 @@ CSR 在其余两个 Charades-CG 切分上同样为正：
 CSR 在**全部 9 个（切分 × 桶）格子**上均为 5/5 为正。
 
 > 全部数字 → [`docs/RESULTS.md`](docs/RESULTS.md)
-> 复现实验 → [`docs/REPRODUCE.md`](docs/REPRODUCE.md)
+> 复现实验（快速路径）→ [`docs/REPRODUCE.md`](docs/REPRODUCE.md)
+> 复现实验（全流程，4 张表）→ [`docs/REPRODUCE_FULL.md`](docs/REPRODUCE_FULL.md)
 > 方法细节 → [`docs/CSR_METHOD.md`](docs/CSR_METHOD.md)
 
 ---
@@ -206,7 +207,9 @@ PC-Net-CSR/
 │   └── tools/                   count_params.py / format_lint.py
 │
 ├── docs/
-│   ├── REPRODUCE.md             完整复现指南
+│   ├── REPRODUCE.md             快速复现指南（单卡 / Docker / CPU 离线）
+│   ├── REPRODUCE_FULL.md        全流程复现手册（服务器，4 张表端到端）
+│   ├── IMPLEMENTATION_MAP.md    脚本 → 数学实现 → 产出哪张表
 │   ├── CSR_METHOD.md            CSR 方法细节
 │   ├── RESULTS.md               全部结果数字
 │   └── UPSTREAM_VERIFICATION.md 上游溯源核验

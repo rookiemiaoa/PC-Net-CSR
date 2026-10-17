@@ -46,6 +46,21 @@ run() {  # run <logname> <cmd...>
   return "${PIPESTATUS[0]}"
 }
 
+# ---------------------------------------------------------------- 自检（纯 CPU）
+if [ "$MODE" = "check" ]; then
+  say "CHECK / 代码与资产自检（不需要 GPU、不需要 hdf5，约 5 分钟）"
+  run "check_assets" "$PY" csr/tools/check_assets.py || true
+  run "parity"       "$PY" csr/tools/parity_check.py  || exit 1
+  run "table3"       "$PY" scripts/render_table3.py --check || exit 1
+  for S in scan_center_final attrib_csr ablate_gate oracle_gate; do
+    run "analysis_$S" "$PY" "csr/analysis/$S.py" || exit 1
+  done
+  run "stats_s8" "$PY" scripts/s2_stats.py within results/multiseed/s1/s8_test_trivial.npz || exit 1
+  echo ""
+  echo "[OK] 自检通过：算子实现可对拍、表 3 与论文一致、离线分析可重跑。"
+  exit 0
+fi
+
 # ---------------------------------------------------------------- 冒烟
 if [ "$MODE" = "smoke" ]; then
   say "SMOKE: Charades Novel-Word (695) base + CSR"

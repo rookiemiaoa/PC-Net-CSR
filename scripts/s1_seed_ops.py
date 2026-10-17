@@ -14,8 +14,10 @@
 用法: python s1_seed_ops.py <config> <ckpt> <tag>
 环境: BS=16 K_REP=3 OUT_NPZ=/path/to.npz
 """
+import hashlib
 import os
 import pickle
+import subprocess
 import sys
 import time
 
@@ -78,9 +80,32 @@ _OUTDIR = os.environ.get('CSR_OUTPUT_DIR') or os.path.join(ROOT, 'csr', 'outputs
 os.makedirs(_OUTDIR, exist_ok=True)
 OUT_NPZ = os.environ.get('OUT_NPZ', os.path.join(_OUTDIR, 's1_%s.npz' % TAG))
 loader = DataLoader(ds, batch_size=BS, shuffle=False, collate_fn=COLLATE, num_workers=8)
+
+
+# ---- 溯源：把「哪个检查点、哪个 commit、哪个切分」写进日志与 npz ----
+# 历史 npz 没记这些，导致 seed 8 的 base=0.4658 与官方权重的 0.4720 对不上时无法判因。
+def _md5_of(path, chunk=1 << 20):
+    h = hashlib.md5()
+    with open(path, 'rb') as fh:
+        for blk in iter(lambda: fh.read(chunk), b''):
+            h.update(blk)
+    return h.hexdigest()
+
+
+CKPT_MD5 = _md5_of(ckpt)
+try:
+    GIT_HEAD = subprocess.check_output(
+        ['git', '-C', ROOT, 'rev-parse', '--short', 'HEAD'],
+        stderr=subprocess.DEVNULL).decode().strip()
+except Exception:                                       # noqa: BLE001
+    GIT_HEAD = 'unknown'
+SPLIT_NAME = os.path.basename(dargs['test_data'])
+
 print('[GPU] %s' % torch.cuda.get_device_name(0), flush=True)
 print('[DATA] %s split=%s N=%d P=%d L=%d K_REP=%d' % (
-    DS_NAME, os.path.basename(dargs['test_data']), len(ds), P, L, K_REP), flush=True)
+    DS_NAME, SPLIT_NAME, len(ds), P, L, K_REP), flush=True)
+print('[PROV] ckpt=%s md5=%s git=%s feature=%s' % (
+    ckpt, CKPT_MD5, GIT_HEAD, os.path.basename(FP)), flush=True)
 
 centers_g = CG
 
@@ -148,7 +173,14 @@ def isr_delta(z_raw, cb, wb, beta0=0.20, gamma=0.5, T=2, rho=0.10, alpha=1.0, dm
 
 
 def flood_expand(z_raw, cb, k):
-    """RBR：自框中心向外泛洪，相关性 z>=k 处继续扩张；返回并集边界。"""
+    """RBR（**本脚本口径**）：自框中心向外泛洪，平滑后相关性 ``z >= k`` 处继续扩张。
+
+    ⚠️ 与 ``csr/ops.py::flood_expand`` **不是同一个估计器**，数字不可互引：
+    这里的阈值是**绝对值** ``z >= k``，ops 版是**相对值** ``z > mean(z) + k*std(z)``；
+    这里的边界取 bin 边界 ``a/L`` 与 ``(b+1)/L``，ops 版取网格中心 ``centers[a]``。
+    论文正文与表 2 的 RBR 行用 ``eval_csr.py`` → ``ops.flood_expand``；
+    本脚本产出的 RBR 列只用于 ``results/multiseed`` 的多种子对照。
+    """
     zs = smooth_curve(zscore(z_raw), 7)
     n = len(zs)
     lo = np.zeros(n); hi = np.zeros(n)
@@ -241,6 +273,11 @@ save['gs'] = DIAG['gs']; save['ge'] = DIAG['ge']
 save['cb'] = DIAG['cb']; save['wb'] = DIAG['wb']
 save['meta__N'] = np.array([len(DIAG['gs'])])
 save['meta__K_REP'] = np.array([K_REP])
+# 溯源字段（字符串数组）；老 npz 没有这几项，读取方需容错
+save['meta__ckpt'] = np.array([os.path.basename(os.path.dirname(ckpt))])
+save['meta__ckpt_md5'] = np.array([CKPT_MD5])
+save['meta__git_head'] = np.array([GIT_HEAD])
+save['meta__split'] = np.array([SPLIT_NAME])
 os.makedirs(os.path.dirname(OUT_NPZ), exist_ok=True)
 np.savez_compressed(OUT_NPZ, **save)
 print('[mIoU over %d rep] ' % K_REP + '  '.join(

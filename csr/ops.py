@@ -335,6 +335,10 @@ def isr_shift(z, cb, wb, centers, beta0=0.20, gamma=0.5, T=2,
 def flood_expand(rel, cb, k, centers):
     """RBR：从 top-1 中心沿 z-score 化相关性曲线向两侧 flood 扩展。
 
+    ⚠️ 阈值是**相对值** ``z > mean(z) + k*std(z)``，边界取网格中心 ``centers[a]``。
+    ``scripts/s1_seed_ops.py::flood_expand`` 用的是**绝对值** ``z >= k`` 与 bin 边界，
+    是另一个估计器——两处的 RBR 数字不可互相引用（正文与表 2 用本函数）。
+
     Args
     ----
     rel : np.ndarray ``[N, L]``
