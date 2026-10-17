@@ -235,8 +235,8 @@ PC-Net-CSR/
 | **ISR** | 中心（**保宽**） | mean-shift 式迭代收缩窗中心估计；与 CSR 同族的两参数点 | 同 CSR |
 | **RBR** | 边界（**扩框**） | 沿相关性曲线从 top-1 中心 flood 扩展 | 仅当 ρ_geo ≪ 1（框过窄） |
 
-CSR 与 RBR 的纯 NumPy 实现在 `csr/ops.py`；ISR 与它们同族，实现见 `csr/eval/eval_final.py::isr_delta`。
-三者都不依赖 GPU，因此 CPU 也能跑通全部离线分析。
+CSR / ISR / RBR 三个算子的纯 NumPy 实现都在 `csr/ops.py`（`refine_center_c2` /
+`isr_shift` / `flood_expand`），评测脚本一律 import 这里的实现，CPU 也能跑通全部离线分析。
 
 ---
 

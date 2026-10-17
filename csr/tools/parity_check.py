@@ -47,20 +47,54 @@ CG = (np.arange(L) + 0.5) / L
 
 
 # ---------------------------------------------------------------- 冻结参考实现
-# 以下两份实现是 2026-10-17 重构前的逐字快照，**故意不复用 ops 的流水线**，
-# 只用 ops 的无状态原语（zscore / smooth_curve / 质心 / 框内均值），
-# 以便把「流水线接错」这类 bug 暴露出来（eval_anet_support 就是接错了）。
+# 以下实现是 2026-10-17 重构前 `eval_final.py` / `diag41_anet_oracle.py` 的逐字快照，
+# **自带 smooth/zscore/质心/框内均值，不复用 ops 的任何函数**——否则就是自己对自己，
+# 证明不了「重构后数值不变」。两处细则（先 z-score 再平滑、门控用最终框）必须保持。
+
+def _r_smooth(z, window):
+    z = np.asarray(z, dtype=np.float64)
+    if window <= 1:
+        return z
+    pad = window // 2
+    zp = np.concatenate([np.repeat(z[:, :1], pad, 1), z, np.repeat(z[:, -1:], pad, 1)], 1)
+    cs = np.concatenate([np.zeros((len(z), 1)), np.cumsum(zp, 1)], 1)
+    return (cs[:, window:] - cs[:, :-window]) / float(window)
+
+
+def _r_zscore(rel):
+    rel = np.asarray(rel, dtype=np.float64)
+    return (rel - rel.mean(1, keepdims=True)) / (rel.std(1, keepdims=True) + 1e-8)
+
+
+def _r_inside(z, lo, hi, centers):
+    z = np.asarray(z)
+    centers = np.asarray(centers)
+    T = z.shape[1]
+    cs = np.concatenate([np.zeros((len(z), 1)), np.cumsum(z, 1)], 1)
+    li = np.clip(np.searchsorted(centers, lo), 0, T - 1)
+    hi_i = np.clip(np.searchsorted(centers, hi, side='right') - 1, 0, T - 1)
+    cnt = np.maximum(hi_i - li + 1, 1)
+    return (cs[np.arange(len(z)), hi_i + 1] - cs[np.arange(len(z)), li]) / cnt
+
+
+def _r_centroid(z, cb, beta, centers):
+    m = np.abs(np.asarray(centers)[None, :] - np.asarray(cb)[:, None]) <= beta
+    pm = np.where(m, np.maximum(z, 0.0), 0.0)
+    s = pm.sum(1)
+    c = (pm @ np.asarray(centers)) / np.maximum(s, 1e-12)
+    return np.where(s < 1e-12, cb, c)
+
 
 def _ref_csr_center(z_raw, cb, wb, smooth=7, beta=0.20, rho=0.10, alpha=1.0, dmin=0.01):
     """diag41_anet_oracle.py::csr_center 的等价实现（返回 c2，中间量不 clip）。"""
-    zs = ops.smooth_curve(ops.zscore(z_raw), smooth)
-    c1 = ops.estimate_window_center(zs, cb, beta, CG)
+    zs = _r_smooth(_r_zscore(z_raw), smooth)
+    c1 = _r_centroid(zs, cb, beta, CG)
     d = c1 - np.asarray(cb)
     d = np.where(np.abs(d) < rho * np.asarray(wb), 0.0, d)
     c2 = np.clip(np.asarray(cb) + alpha * d, 0, 1)
     if dmin is not None:
-        din = (ops.inside_score(zs, c2 - wb / 2, c2 + wb / 2, CG)
-               - ops.inside_score(zs, np.asarray(cb) - wb / 2, np.asarray(cb) + wb / 2, CG))
+        din = (_r_inside(zs, c2 - wb / 2, c2 + wb / 2, CG)
+               - _r_inside(zs, np.asarray(cb) - wb / 2, np.asarray(cb) + wb / 2, CG))
         c2 = np.where(din >= dmin, c2, cb)
     return c2
 
@@ -68,18 +102,18 @@ def _ref_csr_center(z_raw, cb, wb, smooth=7, beta=0.20, rho=0.10, alpha=1.0, dmi
 def _ref_isr_delta(z_raw, cb, wb, beta0=0.20, gamma=0.5, T=2,
                    rho=0.10, alpha=1.0, dmin=0.01):
     """eval_final.py::isr_delta 的逐字快照（返回位移 d，不返回中心）。"""
-    zs = ops.smooth_curve(ops.zscore(z_raw), 7)
+    zs = _r_smooth(_r_zscore(z_raw), 7)
     c = np.asarray(cb).copy()
     b = beta0
     for _ in range(T):
-        c = ops.estimate_window_center(zs, c, b, CG)
+        c = _r_centroid(zs, c, b, CG)
         b = b * gamma
     d = c - np.asarray(cb)
     d = np.where(np.abs(d) < rho * np.asarray(wb), 0.0, d) * alpha
     c2 = np.clip(np.asarray(cb) + d, 0, 1)
     if dmin is not None:
-        din = (ops.inside_score(zs, c2 - wb / 2, c2 + wb / 2, CG)
-               - ops.inside_score(zs, np.asarray(cb) - wb / 2, np.asarray(cb) + wb / 2, CG))
+        din = (_r_inside(zs, c2 - wb / 2, c2 + wb / 2, CG)
+               - _r_inside(zs, np.asarray(cb) - wb / 2, np.asarray(cb) + wb / 2, CG))
         d = np.where(din >= dmin, d, 0.0)
     return d
 

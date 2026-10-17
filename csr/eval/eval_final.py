@@ -34,6 +34,7 @@ sys.path.insert(0, ROOT)
 os.chdir(ROOT)
 
 from csr.paths import DATA_ROOT        # noqa: E402
+from csr import ops                    # noqa: E402  （ISR 的权威实现在此）
 
 from utils import load_json            # noqa: E402
 import datasets as da                  # noqa: E402
@@ -131,19 +132,13 @@ def csr_center(z_raw, cb, wb, beta=0.20, rho=0.10, alpha=1.0, dmin=0.01):
 
 
 def isr_delta(z_raw, cb, wb, beta0=0.20, gamma=0.5, T=2, rho=0.10, alpha=1.0, dmin=0.01):
-    """迭代收缩窗的中心位移（返回 d）。门控仍以最终框做自洽检验。"""
-    zs = smooth_curve(zscore(z_raw), 7)
-    c = np.asarray(cb).copy(); b = beta0
-    for _ in range(T):
-        c = est_centroid(zs, c, b)
-        b = b * gamma
-    d = c - cb
-    d = np.where(np.abs(d) < rho * wb, 0.0, d) * alpha
-    c2 = np.clip(cb + d, 0, 1)
-    if dmin is not None:
-        din = inside_score(zs, c2 - wb / 2, c2 + wb / 2, centers_g) - inside_score(zs, cb - wb / 2, cb + wb / 2, centers_g)
-        d = np.where(din >= dmin, d, 0.0)
-    return d
+    """迭代收缩窗的中心位移（返回 d）。门控仍以最终框做自洽检验。
+
+    实现已收归 ``csr/ops.py::isr_shift``——本文件此前有一份逐字副本，
+    两份等价性由 ``csr/tools/parity_check.py`` 在 3×3096 条真实曲线上逐元素验证。
+    """
+    return ops.isr_shift(z_raw, cb, wb, centers_g, beta0=beta0, gamma=gamma, T=T,
+                         rho=rho, alpha=alpha, dmin=dmin)
 
 
 def boxes(c, w):

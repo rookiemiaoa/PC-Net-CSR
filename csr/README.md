@@ -45,7 +45,7 @@
 csr/
 ├── __init__.py                  惰性导出 CenterShiftRefiner / RelevanceBoundaryRefiner；直接导出 ops
 ├── paths.py                     统一的路径解析（本目录是唯一定义处）
-├── ops.py                       ★ 纯 NumPy 算子（iou/平滑/质心/中心重定位/flood），单一权威实现
+├── ops.py                       ★ 纯 NumPy 算子（iou/平滑/质心/中心重定位/ISR 位移/flood），单一权威实现
 ├── csr.py                       ★ CSR 算子：CenterShiftRefiner（核心贡献）
 ├── refine.py                    ★ RBR 算子：RelevanceBoundaryRefiner（对照）
 ├── eval/                        需要 GPU + 权重，产出论文表格里的数字

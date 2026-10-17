@@ -39,6 +39,7 @@ __all__ = [
     'shift_center',
     'refine_center_c2',
     'refine_center',
+    'isr_shift',
     'flood_expand',
     'boxes_from_center_width',
     'metrics_from_iou',
@@ -291,6 +292,44 @@ def refine_center(z, cb, wb, centers, smooth=DEFAULT_CSR_HYPERPARAMS['smooth'],
     lo = np.clip(c2 - wb / 2, 0, 1)
     hi = np.clip(c2 + wb / 2, 0, 1)
     return lo, hi, moved, shift
+
+
+def isr_shift(z, cb, wb, centers, beta0=0.20, gamma=0.5, T=2,
+              rho=DEFAULT_CSR_HYPERPARAMS['rho'],
+              alpha=DEFAULT_CSR_HYPERPARAMS['alpha'],
+              dmin=DEFAULT_CSR_HYPERPARAMS['dmin']):
+    """ISR：迭代收缩窗的中心位移（返回位移 ``d``，**不返回中心**）。
+
+    与 :func:`refine_center_c2` 的差别只在中心估计：CSR 用一次固定窗
+    ``beta=0.20`` 的质心，ISR 用 mean-shift 式的 ``T`` 次迭代，窗宽按
+    ``beta_{t+1} = gamma * beta_t`` 收缩。其余四步（z-score→平滑、dead-zone、
+    阻尼、自洽门控）完全一致。
+
+    调用方拿到 ``d`` 后再做 ``c2 = clip(cb + d, 0, 1)``、按基线宽度建框——
+    这一点必须保持，否则门控里的「最终框」会算错。
+
+    Returns
+    -------
+    np.ndarray ``[N]``
+        中心位移 ``d``（未通过的样本为 0）。
+    """
+    z = np.asarray(z)
+    cb = np.asarray(cb)
+    wb = np.asarray(wb)
+    zs = smooth_curve(zscore(z), DEFAULT_CSR_HYPERPARAMS['smooth'])
+    c = cb.copy()
+    b = beta0
+    for _ in range(int(T)):
+        c = estimate_window_center(zs, c, b, centers)
+        b = b * gamma
+    d = c - cb
+    d = np.where(np.abs(d) < rho * wb, 0.0, d) * alpha
+    c2 = np.clip(cb + d, 0, 1)
+    if dmin is not None:
+        din = inside_score(zs, c2 - wb / 2, c2 + wb / 2, centers) \
+            - inside_score(zs, cb - wb / 2, cb + wb / 2, centers)
+        d = np.where(din >= dmin, d, 0.0)
+    return d
 
 
 def flood_expand(rel, cb, k, centers):
