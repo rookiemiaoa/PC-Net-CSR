@@ -83,3 +83,30 @@ export CACHE_DIR=/path/to/feat_cache          # 或 FEAT_CACHE_DIR
 
 `w47` 的默认数据目录是包内 `results/curve_availability/`，可用
 `python w47_traj_calibration.py <dir>` 或环境变量 `CSR_CURVE_DIR` 覆盖。
+
+## 表 3 的采集器（`w34`）与辅助测量
+
+前面那批脚本都是**读已有产物**；下面这几个是**真正去测量**的，需要 GPU 与 ckpt。
+
+| 脚本 | 产出 | 对应论文的哪一格 |
+|---|---|---|
+| `w34_curve_usability.py` | 每个骨干一份 `w34_<tag>.json`：`rho_geo` / `mae_c` / `mae_c1` / `dir_acc` / `oracle_c` / `oracle_w` / `dm` | **表 3 的全部 30 个格子** |
+| `w50_curve_dump.py` | 逐样本曲线与几何量的 `npz` + 摘要 `json` | 图 4 的定量底数 |
+| `w52_width_official.py` | 官方 ckpt 的宽度轴测量 | 宽度轴与中心轴的对照 |
+| `w53_mask_ensemble.py` | 多种子掩码集成 | 「集成 vs 单次前向」的对照 |
+
+```bash
+# <repo_root> 指被测骨干的代码根（本仓库，或外部基线仓库）
+# <ckpt>      该骨干的 model-best.pt
+python csr/analysis/w34_curve_usability.py <repo_root> <config> <ckpt> <tag>
+
+# 输出默认落到 <repo_root>/results/curve_availability/w34_<tag>.json
+# 可用 OUT=... 覆盖；K_REP / BS / WPT / THR 同样是环境变量
+```
+
+**为什么 `w34` 必须随仓库分发**：`results/curve_availability/w34_*.json` 只是产物，
+`scripts/render_table3.py` 只能把产物渲染成表格。若没有采集器，审稿人无法验证
+这 30 个格子是怎么测出来的，也无法在新骨干上复算。
+
+⚠️ `w34` 只做前向与后处理，**不训练**；它输入的是该骨干自己的相关性曲线，
+输出的 `dir_acc` 就是论文用来判「曲线方向是否可用」的第二坐标。
