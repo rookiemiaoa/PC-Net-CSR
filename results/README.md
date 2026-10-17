@@ -37,9 +37,10 @@ ActivityNet-CG 三个切分的**重测基线**。论文正文与已发表值存�
 仅用于分析，不进入部署。
 
 ⚠️ 表 3 的 `ORACLE_c = +23.23` **不是同一个量**：它取自
-`curve_availability/w34_pcnet.json`（`split = test_trivial.json`，N = 3,096，K_REP = 3，
-WPT = 0.1，base mIoU 47.1325 → 70.3659）。本节日志用的是全测试集、单次中心替换的诊断口径
-（base 0.4720 → 0.7040）。两者相差 0.02 点来自切片与评测流程差异，不可互换引用。
+`curve_availability/w34_pcnet.json`（`split = test_trivial.json`，N = 3,096，L = 50，K_REP = 3，
+WPT = 0.1，base mIoU 47.1325 → 70.3659）。本节日志 `w6` 在同一 split 上的 base 读数是 0.4720
+→ 0.7040。两者走的是两条评测路径（w6 为单次中心替换诊断，w34 为等后处理框架），
+base 相差 0.07、Δ 相差 0.02 点，**不可互换引用**。
 
 详细说明见 `oracle_bounds/README.md`。
 
