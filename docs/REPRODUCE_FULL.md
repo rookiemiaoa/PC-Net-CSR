@@ -342,23 +342,29 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
 
 ---
 
-## 9. 尚未闭环的三项（务必如实转述，不要猜）
+## 9. 尚未闭环的项（务必如实转述，不要猜）
 
-1. **表 4 的「训练」列没有入库的生成器**。它的数据（PC-Net 0.742 / CPL 0.508 / QMN 0.491 /
-   CCR 0.453）来自开发机的 `w61` 批次评估产物（8 个 JSON：`{pcnet,cpl,qmn,ccr}` × `{probe,test}`），
-   该批次已定位并核对存在，但**生成脚本未入库**。
-   在脚本取回之前，这一列只能作为历史测量引用，不能宣称可端到端重跑。
-   不要用测试列的 0.776/0.510/0.472/0.447 顶替训练列。
-2. **表 3 有产物、也有采集器了，但仍有两个脚本缺失**。`results/curve_availability/*.json`
-   是已入库的测量结果，`scripts/render_table3.py` 能一字不差地复现表格（30 格 `CHECK PASS`）。
-   「从零重测这 30 个格子」的采集器 `csr/analysis/w34_curve_usability.py` **已入库**，
-   换一个新骨干也能重测。仍缺的两个：`w32_baseline_csr.py`（其功能已被 `w34` 覆盖）与
-   `w36_cnm_curve.py`（只服务 CNM，而 CNM 的代码与权重都已不可得，见 §9.1 的口径）。
+> 状态随时可用 `python scripts/repro_gate.py --offline` 查询：七行里哪几行 PASS、
+> 哪几行 PENDING、缺什么，一次列全。
+
+1. **表 4 的「训练」列：已闭环**。生成器就是 `csr/analysis/w61_train_split.py`
+   （内部复用 `w34_curve_usability.py`，只是换 `TEST_DATA` 与 `K_REP`），
+   8 个产物与渲染门禁 `scripts/render_table4.py --check` 均已入库。
+   口径：训练列 `TEST_DATA=train.json / cg_train.json`、`K_REP=1`、`N=8281`；
+   测试列 `test_trivial.json`、`K_REP=3`、`N=3096`；两列同为 `BS=16 WPT=0.1 DDIR=0.08`。
+   **不要用测试列顶替训练列**，也不要为了凑 0.742 去改 `DDIR`。
+2. **表 3 的采集器：`w34` 已入库，`w36`（CNM 专用）仍缺**。
+   `w32_baseline_csr.py` 的功能已被 `w34` 覆盖，不再需要。
+   CNM 的曲线无法用 `w34` 读出（`CNM.forward` 在 eval 下返回 `(center, width)`
+   而不是 dict，也没有 `fc_gauss` / `proposal_generator`），必须单独实现；
+   在 `w36_cnm_curve.py` 入库前，表 3 的 CNM 行只能作为历史测量引用。
 3. **发布版 `train.py` 与研究版不同，二者不可互换**。本仓库的 `train.py` 是干净的发布版
    （76 行，只有上游参数）；产出论文数字的是研究分支版本（103 行，多出 `depend_center` /
    `depend_width` / `depend_width_log` / `depend_spread` / `rel_width` / `alpha_dep` / `probe`
    七个内部开关）。这些开关在论文里没有对应消融，属于内部实验设施，**故意不发布**。
    ⇒ 用发布版训练得到的是 PC-Net 基线（G1 的 47.12），CSR 是其后处理，不受影响；
    但若你想逐位复现研究版训练轨迹，需要那些开关，本仓库不提供。
-
-这三项补上之后，本手册的 S0–S7 才是完整闭环。
+4. **表 3 的 PC-Net 行需要发布权重**。该行的六个数由 2025-05-14 那次训练的权重产出，
+   初始 RNG 状态不随代码分发。权重作为 release 附件提供，
+   `checkpoints/WEIGHTS.release.md5` 给出附件名与 md5，下载后
+   `scripts/check_release_assets.py` 校验并落盘即可逐位复现。

@@ -53,12 +53,16 @@ if [ "$MODE" = "check" ]; then
   run "config"       "$PY" csr/tools/config_parity.py --published || exit 1
   run "parity"       "$PY" csr/tools/parity_check.py  || exit 1
   run "table3"       "$PY" scripts/render_table3.py --check || exit 1
+  run "table4"       "$PY" scripts/render_table4.py --check || exit 1
+  run "weights"      "$PY" scripts/check_release_assets.py --list > /dev/null || exit 1
   for S in scan_center_final attrib_csr ablate_gate oracle_gate; do
     run "analysis_$S" "$PY" "csr/analysis/$S.py" || exit 1
   done
   run "stats_s8" "$PY" scripts/s2_stats.py within results/multiseed/s1/s8_test_trivial.npz || exit 1
   echo ""
-  echo "[OK] 自检通过：算子实现可对拍、表 3 与论文一致、离线分析可重跑。"
+  run "gate" "$PY" scripts/repro_gate.py --offline || true
+  echo ""
+  echo "[OK] 自检通过：算子实现可对拍、表 3/表 4 与论文一致、离线分析可重跑。"
   exit 0
 fi
 
