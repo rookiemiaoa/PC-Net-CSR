@@ -39,6 +39,11 @@ git push origin --tags
 
 # ② 权重作为 release asset 上传（不入库）
 #    checkpoints/**/model-best.pt 共 7 个，合计约 170 MB
+#    7 个文件原名相同，必须按 checkpoints/WEIGHTS.release.md5 的「附件名」改名，
+#    否则同一 Release 内会重名冲突。
+#    上传后本地自检（下载侧同样适用）：
+#      python scripts/check_release_assets.py --list
+#      python scripts/check_release_assets.py --dir <下载目录> --copy --dest .
 ```
 
 - 论文摘要/脚注中的匿名链接替换为正式仓库地址。

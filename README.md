@@ -122,17 +122,26 @@ docker run --gpus all -v /path/to/data:/data pcnet-csr smoke
 
 - `checkpoints/*/…/model-best.pt` —— 7 个官方发布权重（22–29 MB/个，合计约 170 MB）。
   为控制仓库体积与历史长度，权重**不入库**（`.gitignore` 排除 `checkpoints/**/*.pt`），
-  以发布附件形式提供；下载后落到下表同名路径即可，`csr/eval/*.py` 直接可用。
-  完整性用 `checkpoints/WEIGHTS.md5` 校验（`md5sum -c checkpoints/WEIGHTS.md5`）。
-  | 路径 | 字节数 |
-  |---|---|
-  | `checkpoints/ActivityNet/8_2025-05-14_14-07-12/model-best.pt` | 29,434,581 |
-  | `checkpoints/TACoS/8_2025-05-14_21-05-09/model-best.pt` | 26,688,789 |
-  | `checkpoints/CharadesSTA/8_2025-05-14_13-26-12/model-best.pt` | 22,891,349 |
-  | `checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
-  | `checkpoints/CharadesSTA/12_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
-  | `checkpoints/CharadesSTA/13_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
-  | `checkpoints/CharadesSTA/14_2026-09-14_17-39-33/model-best.pt` | 22,891,285 |
+  以发布附件形式提供。7 个文件原名都是 `model-best.pt`，同一 Release 内会重名，
+  因此附件按「数据集_种子_训练日期」改名；`checkpoints/WEIGHTS.release.md5` 给出
+  **附件名 → md5 → 落盘路径** 的完整映射。
+
+  | 附件名 | 落盘路径 | 字节数 |
+  |---|---|---|
+  | `activitynet_seed8_20250514_model-best.pt` | `checkpoints/ActivityNet/8_2025-05-14_14-07-12/model-best.pt` | 29,434,581 |
+  | `tacos_seed8_20250514_model-best.pt` | `checkpoints/TACoS/8_2025-05-14_21-05-09/model-best.pt` | 26,688,789 |
+  | `charades_seed8_20250514_model-best.pt` | `checkpoints/CharadesSTA/8_2025-05-14_13-26-12/model-best.pt` | 22,891,349 |
+  | `charades_seed11_20260914_model-best.pt` | `checkpoints/CharadesSTA/11_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
+  | `charades_seed12_20260914_model-best.pt` | `checkpoints/CharadesSTA/12_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
+  | `charades_seed13_20260914_model-best.pt` | `checkpoints/CharadesSTA/13_2026-09-14_17-09-28/model-best.pt` | 22,891,285 |
+  | `charades_seed14_20260914_model-best.pt` | `checkpoints/CharadesSTA/14_2026-09-14_17-39-33/model-best.pt` | 22,891,285 |
+
+  下载后先校验、再落盘（脚本会顺带把文件放到上表路径）：
+
+  ```bash
+  python scripts/check_release_assets.py --dir ~/Downloads/pcnet-release --copy --dest .
+  # 或手动放好后：md5sum -c checkpoints/WEIGHTS.md5
+  ```
 
 **需要自行准备**的是特征文件 `i3d_features.hdf5`（约 3 GB，I3D 特征）。
 把 `FEAT_PATH` 指向它，或放在仓库根目录：

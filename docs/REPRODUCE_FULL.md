@@ -13,7 +13,9 @@
 | 类别 | 内容 | 复现标准 |
 |---|---|---|
 | **可逐位复现**（同硬件同版本） | Charades-CG 的 base / CSR / ISR；表 3 的 30 个格子；表 4 的两列；图 3 的工作点 | 见 §8 的容差表 |
-| **可区间复现** | 5 个外部基线（CPL / CCR / PPS / QMN / CNM）的重训 | ±0.5 mIoU 属正常，逐位不可能（GPU/驱动/数据顺序） |
+| **可复现（需下载发布权重）** | 表 3 的 **PC-Net 行**：该行的 ρ_geo / dir_acc / ORACLE_* 由 2025-05-14 那次训练的权重产出，初始 RNG 状态不随代码分发 | 附件 md5 见 `checkpoints/WEIGHTS.release.md5`；下载后 `scripts/check_release_assets.py` 校验，再跑 `render_table3.py --check` |
+| **可逐位复现（seed=8 + 确定性内核）** | CPL / CCR / QMN 的重训 | `train.py` 设了 `cudnn.deterministic=True`，实测 172 个张量 `max|ΔW|=0`、表 3 的 27 个格子差 `0.0000` |
+| **可区间复现** | PPS 等其余外部基线；CNM（见 §9） | ±0.5 mIoU 属正常，逐位不可能（GPU/驱动/数据顺序） |
 | **不可复现，只能引用** | ActivityNet 的**绝对** base（官方日志 36.45，本机 32.39） | 只用同一份特征下的复现值做比较，不与官方值混用 |
 | **仅证据，非产物** | 表 1（概念表）、架构图 `method_figure/method_pdf.png` | 无程序化生成路径 |
 
