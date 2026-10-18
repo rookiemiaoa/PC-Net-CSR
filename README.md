@@ -311,6 +311,31 @@ CSR **不是**普遍有效的。部署前请先量两个坐标：
 python csr/tools/format_lint.py
 ```
 
+### 7.1 一条命令看七行判定
+
+```bash
+python scripts/repro_gate.py            # 七行 PASS / FAIL / PENDING
+python scripts/repro_gate.py --row 5    # 只看某一行
+```
+
+| 行 | 判据 | 需要的文件 |
+|---|---|---|
+| R1 核心论点 | 5 seed Δ = +1.37±0.21；三条基线全负；`dir_acc` 跨过 a\*=0.543 | `results/multiseed/`、`results/curve_availability/` |
+| R2 表 2 PC-Net | 47.20 → 48.33（+1.13/+0.67/+2.09） | `results/main_table/` |
+| R3 表 3 三基线 | 18 格逐位 | `results/curve_availability/` |
+| R4 表 3 PC-Net | 权重 md5 7/7 + 与 `official_8` 行为等价 2×5 + 6 格 | `checkpoints/` + `results/` |
+| R5 表 3 CNM | 重训产物 ρ/dir/Δm 与论文一致 | `results/curve_availability/w36_cnm.retrained.json` |
+| R6 表 4 两列 | 训练 .742/.508/.491/.453、测试 .776/.510/.472/.447 | `results/table4/` |
+| R7 §3.1 ANET | ORACLE_c ΔmIoU = +12.216±0.05 | `results/oracle_bounds/` |
+
+2026-10-18 在本机实测 **7/7 PASS**（`python scripts/repro_gate.py`，退出码 0）。
+其中 R5 是当天从零重训 CNM 得到的：训练轨迹 600 次 loss 比对最大差 `0.000e+00`，
+表 3 那一行六个数字与论文逐格相同。细节见 `docs/REPRODUCE_FULL.md` §9.1。
+
+> R2/R4/R5/R6/R7 需要权重与 hdf5 特征，仓库不含（体积原因）。
+> 权重按 §3.2 下载后 `md5sum -c checkpoints/WEIGHTS.md5` 校验；
+> 缺文件时门禁返回 `PENDING` 并打印缺什么，不会误报 `FAIL`。
+
 ---
 
 ## 8. 引用
