@@ -64,14 +64,15 @@ inter_lambda`，其默认值为 `3 / 8 / 1.0 / 1.0 / 0.13`，而论文用的是
 
 ---
 
-## 4. 缺口（2026-10-18 更新：表 4 已闭环）
+## 4. 缺口（2026-10-18 更新：七行全绿）
 
 | 论文位置 | 现状 | 说明 |
 |---|---|---|
 | **表 4 的「训练」列** | **已闭环**：驱动 `csr/analysis/w61_train_split.py`、8 个产物 `results/table4/w61_*.json`、门禁 `scripts/render_table4.py` 均已入库 | 指标实现复用 `w34`（表 4 = 换 `TEST_DATA` + 换 `K_REP` 的同一采集器），`--check` 8 格 + A1–A7 断言全过。不要用测试列顶替训练列 |
-| **表 3 的生成器** | `w34_curve_usability.py` **已入库**（`csr/analysis/`，表 3 的唯一采集器） | 渲染器 `scripts/render_table3.py` 能逐格复现（`--check` 30/30 PASS）。`w32_baseline_csr.py` 的功能已被 `w34` 覆盖、不再需要；`w36_cnm_curve.py`（CNM 专用）仍缺——`CNM.forward` 返回 `(center, width)`，与 w34 的 dict 契约不兼容 |
+| **表 3 的生成器** | **两个都已入库**：`w34_curve_usability.py`（PC-Net 系）与 `w36_cnm_curve.py`（CNM） | 两者输出同构 JSON，由 `scripts/render_table3.py` 统一消费。**不可互换**：`CNM.forward` 只返回 `(center, width)`，没有 `words_logit` 与 `fc_gauss/proposal_generator`，w34 会抛「未找到任何高斯参数挂钩」 |
 | **训练脚本的研究分支** | 本仓库 `train.py` 是 76 行发布版；产出论文数字的是 103 行研究版（多 7 个内部开关） | 见 §5。发布版足以复现 base 与全部 CSR 结果，但复现不出研究版的训练轨迹 |
-| **表 3 / 表 2 的 CNM 行** | CNM 代码公开（`github.com/minghangz/cnm`），Charades-CG 训练配置见 `cnm_cfg/`；在 CG 上重训的那版权重已丢失 | 需重训才能转绿，见 `scripts/repro_gate.py` 的 R5 |
+| **表 3 的 CNM 行** | **已重训并逐位复现**（2026-10-18）：`results/curve_availability/w36_cnm.retrained.json` + `results/cnm_training/` 两份训练日志 | 见 `docs/REPRODUCE_FULL.md` §9.1。600 次 loss 比对最大差 0.000e+00，6 个表格数字与论文相同 |
+| **表 3 的 PC-Net 行** | **已证明发布权重即论文权重**：`official_8` 与 `8_2025-05-14_13-26-12` 在两个切分 × 5 指标上逐位相同 | `scripts/check_weight_equiv.py`，容差 1e-12 |
 | **图 3 以外的图** | 架构图 `method_figure/method_pdf.png` 非程序化生成 | 源文件不随仓库分发 |
 
 ---

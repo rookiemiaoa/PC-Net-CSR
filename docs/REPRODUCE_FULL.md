@@ -342,7 +342,7 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
 
 ---
 
-## 9. 尚未闭环的项（务必如实转述，不要猜）
+## 9. 各项缺口的现状（2026-10-18 更新，务必如实转述，不要猜）
 
 > 状态随时可用 `python scripts/repro_gate.py --offline` 查询：七行里哪几行 PASS、
 > 哪几行 PENDING、缺什么，一次列全。
@@ -353,18 +353,59 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
    口径：训练列 `TEST_DATA=train.json / cg_train.json`、`K_REP=1`、`N=8281`；
    测试列 `test_trivial.json`、`K_REP=3`、`N=3096`；两列同为 `BS=16 WPT=0.1 DDIR=0.08`。
    **不要用测试列顶替训练列**，也不要为了凑 0.742 去改 `DDIR`。
-2. **表 3 的采集器：`w34` 已入库，`w36`（CNM 专用）仍缺**。
+2. **表 3 的采集器：两个都已入库**。
+   `csr/analysis/w34_curve_usability.py` 服务 PC-Net 系骨干（有 `fc_gauss` /
+   `proposal_generator` 的模型）；`csr/analysis/w36_cnm_curve.py` 服务 CNM。
+   两者**不能互换**：`CNM.forward` 在 eval 下只返回 `(center, width)`，既没有
+   `words_logit` 也没有高斯提案头，w34 的 `install_point_mask` 会直接抛
+   「未找到任何高斯参数挂钩」。w36 复刻 `csr/eval/eval_csr_cnm.py` 的 L 点掩码
+   + 掩码词重建 nll 读曲线，但输出与 w34 **严格同构**的 JSON，因此表 3 的五行
+   由同一个 `scripts/render_table3.py` 消费。
    `w32_baseline_csr.py` 的功能已被 `w34` 覆盖，不再需要。
-   CNM 的曲线无法用 `w34` 读出（`CNM.forward` 在 eval 下返回 `(center, width)`
-   而不是 dict，也没有 `fc_gauss` / `proposal_generator`），必须单独实现；
-   在 `w36_cnm_curve.py` 入库前，表 3 的 CNM 行只能作为历史测量引用。
 3. **发布版 `train.py` 与研究版不同，二者不可互换**。本仓库的 `train.py` 是干净的发布版
    （76 行，只有上游参数）；产出论文数字的是研究分支版本（103 行，多出 `depend_center` /
    `depend_width` / `depend_width_log` / `depend_spread` / `rel_width` / `alpha_dep` / `probe`
    七个内部开关）。这些开关在论文里没有对应消融，属于内部实验设施，**故意不发布**。
    ⇒ 用发布版训练得到的是 PC-Net 基线（G1 的 47.12），CSR 是其后处理，不受影响；
    但若你想逐位复现研究版训练轨迹，需要那些开关，本仓库不提供。
-4. **表 3 的 PC-Net 行需要发布权重**。该行的六个数由 2025-05-14 那次训练的权重产出，
-   初始 RNG 状态不随代码分发。权重作为 release 附件提供，
-   `checkpoints/WEIGHTS.release.md5` 给出附件名与 md5，下载后
-   `scripts/check_release_assets.py` 校验并落盘即可逐位复现。
+4. **表 3 的 PC-Net 行需要发布权重——且已证明发布权重就是论文权重**。
+   该行的六个数由 2025-05-14 那次训练的权重产出，初始 RNG 状态不随代码分发。
+   `official_8` 已不在盘上，无法比 md5，所以改用**行为等价**证明：同一采集器
+   在 `train.json` 与 `test_trivial.json` 上跑发布包的
+   `checkpoints/CharadesSTA/8_2025-05-14_13-26-12/`，与 `official_8` 的产物在
+   `mae_base / mae_c1 / mae_final / dir_acc_c1 / dir_acc_final` 五个量上
+   **逐位相同**（`scripts/check_weight_equiv.py`，容差 1e-12；实测两个切分都通过）。
+   ⇒ 判定为「可复现（需下载权重）」：下载 release 附件、
+   `md5sum -c checkpoints/WEIGHTS.md5` 通过，即可逐位复现，无需重训。
+
+### 9.1 CNM 行的重训结果（2026-10-18）
+
+原始权重已丢失，但代码与配置可重放。本次从 clone 到出表全跑了一遍：
+
+| 步骤 | 命令 | 结果 |
+|---|---|---|
+| 取代码 | `git clone https://github.com/minghangz/cnm` | 自带 Charades-STA 权重与 `config/charades/i3d_features.json` |
+| 换切分 | `cp train.json cg_train.json`、`cp test_trivial.json cg_test_trivial.json` | CNM 的 `cg_*.json` 只是别名，格式与 PC-Net 的四元组完全一致；日志确认 `train: 8281 / test: 3096` |
+| 重训 | `train.py --config-path config/charades/cg_main.json --tag cg_main --seed 8` | 50 epoch，`cudnn.deterministic=True` |
+| 采集 | `w36_cnm_curve.py <cnm_root> <cfg> model-best.pt cnm_retrained` | K_REP=3、N=3096 |
+
+**训练轨迹逐位复现**：`scripts/compare_cnm_trace.py` 比对 2026-09 与本次的日志，
+100 条 batch 记录 × 6 个 loss 分量 = 600 次比对，**最大绝对差 0.000e+00**；
+51 个 epoch 的 mIoU 最大差 **0.0000**；Best 六个数字完全相同
+（`0.3843 / 0.7607 / 0.5979 / 0.3731 / 0.1544 / 0.0333`）。
+
+**表 3 的 CNM 行也逐位复现**（`results/curve_availability/w36_cnm.retrained.json`）：
+
+| | ρ_geo | ΔMAE | dir_acc | ORACLE_c | ORACLE_w | ΔmIoU |
+|---|---|---|---|---|---|---|
+| 重训 | 1.7253 | −0.0229 | 0.6999 | 64.98 | 35.52 | +3.00 |
+| 论文 | 1.7253 | −0.0229 | 0.6999 | 64.98 | 35.52 | +3.00 |
+
+⇒ CNM 行从「历史测量」升级为「可从零重跑」，且论文数字无需修改。
+
+**踩过的坑（复现时注意）**：CNM 的 `datasets/charades_sta.py::_load_frame_features`
+**每次 `__getitem__` 都重新 `h5py.File` 打开整个 3 GB 文件**。在共享盘（DiskC）上
+20 条要 2.8–3.4 s，8281 条约 12 min/epoch；页缓存热了之后降到 0.063 s。
+如果训练卡在 `D` 状态且 GPU 0%，不是死锁，是 IO——等首次扫描完成或把
+`i3d_features.hdf5` 放到本地/内存盘即可（但 `/dev/shm` 可能被系统清理，
+本机就遇到过复制完成数分钟后文件消失，故正式跑建议用磁盘副本 + 热缓存）。
