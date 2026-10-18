@@ -180,7 +180,25 @@ def row4():
     gap = abs((d['rows']['CSR']['mIoU'] - d['rows']['base']['mIoU']) - d['rows']['CSR']['dm'])
     if gap > 1e-6:
         return 'FAIL', 'CSR.dm 自洽残差 %.2e' % gap
-    return 'PASS', '权重 md5 7/7 + 表 3 PC-Net 6/6 格'
+    # 权重行为等价：发布包 8_2025-05-14 必须与论文所用 official_8 逐位不可区分。
+    # official_8 已不在盘上，无法比 md5，只能在两个切分上比 CSR 全链路的 5 个统计量。
+    eq_bad, eq_n = [], 0
+    for pa, pb in ((os.path.join(T4, 'w61_pcnet_TT_probe.json'),
+                    os.path.join(RES, 'main_table', 'pcnet_r4_train.json')),
+                   (os.path.join(T4, 'w61_pcnet_TT_test.json'),
+                    os.path.join(CA, 'w34_pcnet.json'))):
+        if not (os.path.exists(pa) and os.path.exists(pb)):
+            continue
+        ca, cb = _json(pa)['curve'], _json(pb)['curve']
+        for k in ('mae_base', 'mae_c1', 'mae_final', 'dir_acc_c1', 'dir_acc_final'):
+            eq_n += 1
+            if abs(float(ca[k]) - float(cb[k])) > 1e-12:
+                eq_bad.append('%s %.3e' % (k, abs(ca[k] - cb[k])))
+    if eq_bad:
+        return 'FAIL', '权重与 official_8 不等价：%s' % '; '.join(eq_bad[:3])
+    if eq_n == 0:
+        return 'PASS', '权重 md5 7/7 + 表 3 PC-Net 6/6 格（等价断言缺产物，未执行）'
+    return 'PASS', '权重 md5 7/7 + 等价 2 切分×5 指标逐位 + 表 3 PC-Net 6/6 格'
 
 
 # --------------------------------------------------------------------------- R5
