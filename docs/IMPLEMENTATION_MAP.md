@@ -52,6 +52,15 @@
 | `csr/analysis/w47_traj_calibration.py` | 18 个互异工作点、`a*` 反解 | **表 4 的 a 坐标、图 3 的门限** |
 | `csr/analysis/w48_fig3_validity_map.py` | 有效性地图 PNG | **图 3** |
 | `csr/analysis/{scan_center_final,attrib_csr,ablate_gate,oracle_gate}.py` | 稳健性 / 误伤归因 / 门控消融 / ORACLE 门控 | 正文的消融段（读 `feat_cache/`，无需 GPU） |
+| `csr/tools/config_parity.py` | 训练配置与「产出论文权重的日志」逐键对账（44 键） | 不产出数字；**S1 之前必跑**，否则会用错超参（见下） |
+
+**训练超参陷阱（会让复现者拿到完全不同的模型）**：`train.py:46-52` 在读完 JSON 后
+**无条件用 argparse 覆盖** `num_iteration / num_props / co_cl_loss / co_qua_loss /
+inter_lambda`，其默认值为 `3 / 8 / 1.0 / 1.0 / 0.13`，而论文用的是
+`4 / 8 / 0.5 / 1.0 / 0.146`，配置里 `sigma_neg` 也要从发布默认的 `4.5` 改成 `9`。
+`config/charades/main_train_test.paper.json` + `--published` 校验即是这一口径的固化：
+`python csr/tools/config_parity.py --published` 应输出 `DIFF: 0`，而不带 `--published`
+会如实报出 4 处差异。
 
 ---
 

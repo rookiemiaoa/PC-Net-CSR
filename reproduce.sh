@@ -50,6 +50,7 @@ run() {  # run <logname> <cmd...>
 if [ "$MODE" = "check" ]; then
   say "CHECK / 代码与资产自检（不需要 GPU、不需要 hdf5，约 5 分钟）"
   run "check_assets" "$PY" csr/tools/check_assets.py || true
+  run "config"       "$PY" csr/tools/config_parity.py --published || exit 1
   run "parity"       "$PY" csr/tools/parity_check.py  || exit 1
   run "table3"       "$PY" scripts/render_table3.py --check || exit 1
   for S in scan_center_final attrib_csr ablate_gate oracle_gate; do

@@ -158,6 +158,17 @@ python csr/analysis/scan_center_final.py
 python csr/analysis/attrib_csr.py
 ```
 
+**若要自己训练**，必须先确认超参口径——`train.py` 会用 argparse 值覆盖配置里的五项，
+默认值与论文不同（`num_iteration` 3 vs 4、`co_cl_loss` 1 vs 0.5、`inter_lambda` 0.13 vs
+0.146），配置里的 `sigma_neg` 也要 4.5 → 9。仓库提供固化好的论文配置与校验工具：
+
+```bash
+python csr/tools/config_parity.py --published   # 应输出 DIFF: 0
+python train.py --config-path config/charades/main_train_test.paper.json \
+    --log_dir LOG --seed 8 --slot_num_iteration 4 \
+    --co_cl_loss 0.5 --co_qua_loss 1 --num_props 8 --inter_lambda 0.146
+```
+
 > ⚠️ **`K_REP ≥ 3` 是硬要求**：`_mask_words` 未固定随机种子，单次评测噪声约 ±0.005；
 > 低于 3 次重复无法区分 ±1 pt 量级的改进。
 

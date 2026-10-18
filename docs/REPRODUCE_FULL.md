@@ -141,6 +141,7 @@ export WS_BASE=<...>  CNM_ROOT=<...>      # 只在 S3/S4 需要
 ```bash
 cd $REPO && conda activate pcnet
 python csr/tools/check_assets.py                 # 资产是否齐
+python csr/tools/config_parity.py --published    # 训练配置是否等于论文所用（DIFF 应为 0）
 python csr/tools/parity_check.py                 # 三算子实现是否可对拍（max|Δ| 应为 0）
 python scripts/render_table3.py --check          # 表 3 的 30 个格子是否与论文一致
 python csr/analysis/scan_center_final.py | tee $OUTDIR/s0_scan.log
@@ -157,6 +158,25 @@ python scripts/s2_stats.py within results/multiseed/s1/s8_test_trivial.npz
 短桶 +0.58、长桶 +2.72。
 
 ### S1 —— Charades-CG（主结果）
+
+> **先看这一条，否则必然对不上数。** `train.py:46-52` 会用 argparse 的值**无条件覆盖**
+> 配置里的六个字段，而 argparse 默认是 `slot_num_iteration=3`、`inter_lambda=0.13`；
+> 论文用的是 `4` 与 `0.146`。只改 JSON 或不带参数直接跑，训出来的是另一个模型。
+> 仓库因此提供 `config/charades/main_train_test.paper.json`（`sigma_neg=9`、`co_cl_loss=0.5`）
+> 与校验工具：
+>
+> ```bash
+> python csr/tools/config_parity.py --published   # DIFF 0 = 与产出论文权重的日志逐键一致
+> python csr/tools/config_parity.py               # 裸跑发布配置：DIFF 4，正是这个陷阱
+> ```
+>
+> 训练命令（四个覆盖值缺一不可）：
+>
+> ```bash
+> python train.py --config-path config/charades/main_train_test.paper.json \
+>     --log_dir LOG --seed 8 --slot_num_iteration 4 \
+>     --co_cl_loss 0.5 --co_qua_loss 1 --num_props 8 --inter_lambda 0.146
+> ```
 
 先用 64 条样本校准速度，再放开：
 
