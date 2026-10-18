@@ -83,16 +83,25 @@ def main():
     ap = argparse.ArgumentParser(description='渲染/校验论文表 3')
     ap.add_argument('--check', action='store_true', help='只比对期望值，不写文件')
     ap.add_argument('--stdout', action='store_true', help='只打印，不写文件')
+    ap.add_argument('--cnm', default='w36_cnm.json',
+                    help='CNM 行使用的产物文件名（重训后指向 w36_cnm.retrained.json；'
+                         '此时该行与论文值的偏离记为 revised，不计 FAIL）')
     args = ap.parse_args()
+    is_retrained = (args.cnm != 'w36_cnm.json')
 
-    table, metas, fails = [], [], []
+    table, metas, fails, revised = [], [], [], []
     for name, fn, exp in ROWS:
-        vals, meta = load(fn)
+        f_use = args.cnm if name == 'CNM' else fn
+        vals, meta = load(f_use)
         metas.append((name, meta))
         table.append((name, vals))
         for c, v, e in zip(COLS, vals, exp):
             if abs(v - e) > TOL:
-                fails.append('%s / %s: 实测 %.6f  论文 %.6f  (Δ=%.6f)' % (name, c, v, e, v - e))
+                msg = '%s / %s: 实测 %.6f  论文 %.6f  (Δ=%.6f)' % (name, c, v, e, v - e)
+                if name == 'CNM' and is_retrained:
+                    revised.append(msg)
+                else:
+                    fails.append(msg)
 
     # ---- 打印
     head = '| 骨干 | ' + ' | '.join(COLS) + ' |'
@@ -111,6 +120,10 @@ def main():
 
     if args.check or args.stdout:
         print('')
+        if revised:
+            print('[revised] CNM 行来自重训（%s），与论文值的偏离不作为 FAIL：' % args.cnm)
+            for s in revised:
+                print('  - ' + s)
         if fails:
             print('CHECK FAIL (%d 项)' % len(fails))
             for s in fails:

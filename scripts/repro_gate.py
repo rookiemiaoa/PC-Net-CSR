@@ -261,23 +261,26 @@ def row6():
 # --------------------------------------------------------------------------- R7
 def row7():
     """§3.1 ANET：ORACLE_c 的 ΔmIoU（+12.2）。"""
-    cands = sorted([p for p in os.listdir(OB) if re.search(r'diag41_anet_oracle.*rerun.*\.log$', p)]
-                   if os.path.isdir(OB) else [])
+    # 认两类文件名：重跑产物（*rerun*）与带日期的正式重跑（anet_oracle_YYYYMMDD.log）。
+    pat = re.compile(r'(diag41_anet_oracle.*rerun.*\.log$)|(anet_oracle_\d{8}\.log$)')
+    cands = sorted([p for p in os.listdir(OB) if pat.search(p)],
+                   key=lambda p: os.path.getmtime(os.path.join(OB, p))) \
+        if os.path.isdir(OB) else []
     legacy = 'diag41_anet_oracle.log'
     if not cands:
         if os.path.exists(os.path.join(OB, legacy)):
             return 'PENDING', ('只有 2026-09-12 的旧日志（ORACLE_c +12.2160）；'
                                '需在服务器上用 ANET 特征重跑并落新日志（GPU 25 min）')
-        return 'PENDING', '缺 results/oracle_bounds/diag41_anet_oracle*.log'
+        return 'PENDING', '缺 results/oracle_bounds/anet_oracle_*.log'
     txt = open(os.path.join(OB, cands[-1]), encoding='utf-8', errors='replace').read()
     m = re.search(r'^ORACLE_c\s+\+\S+\s+\+\S+\s+([+-]\d+\.\d+)', txt, re.M)
-    b = re.search(r'^base\s+(\S+?)±\S+\s+\S+?\ \s*(\S+?)±\S+\s+(\d\.\d{4})±', txt, re.M)
+    b = re.search(r'^base\s+\S+±\S+\s+\S+±\S+\s+(\d+\.\d{4})±', txt, re.M)
     if not m:
         return 'FAIL', '解析不到 ORACLE_c 的 ΔmIoU（日志格式变了？）'
     dm = float(m.group(1))
     if abs(dm - 12.216) > 0.05:
         return 'FAIL', 'ORACLE_c ΔmIoU = %+.4f（应 +12.216±0.05）' % dm
-    base = ('base mIoU=%s' % b.group(3)) if b else ''
+    base = ('base mIoU=%s' % b.group(1)) if b else ''
     return 'PASS', 'ORACLE_c ΔmIoU=%+.2f → 正文 +12.2（%s，%s）' % (dm, base, cands[-1])
 
 
