@@ -11,12 +11,12 @@ diag38  逐侧扩展决策的【信号筛选】  dataset=CharadesSTA  校准集=
     [calib rep0] batch 300/518  134.0s
     [calib rep0] batch 400/518  164.7s
     [calib rep0] batch 500/518  190.8s
-    [calib] 已缓存 -> /Disks/DiskC/fzc/repro_20261017/code/csr/analysis/feat_cache/CharadesSTA__train__r1__lim0__L50__v2.pkl
+    [calib] 已缓存 -> <DATA_ROOT>/repro_20261017/code/csr/analysis/feat_cache/CharadesSTA__train__r1__lim0__L50__v2.pkl
       N=8281
 
 [2/5] 测试集特征 ...
     [test rep0] batch 100/194  38.4s
-    [test] 已缓存 -> /Disks/DiskC/fzc/repro_20261017/code/csr/analysis/feat_cache/CharadesSTA__test_trivial__r1__lim0__L50__v2.pkl
+    [test] 已缓存 -> <DATA_ROOT>/repro_20261017/code/csr/analysis/feat_cache/CharadesSTA__test_trivial__r1__lim0__L50__v2.pkl
       N=3096  K_REP=1
 
 [3/5] 复现校验
