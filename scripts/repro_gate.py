@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""repro_gate.py —— 论文可复现性的七行总门禁
+"""repro_gate.py —— 论文可复现性的八行总门禁
 
-把散落在 docs、results、脚本里的判定收敛成**一条命令、固定七行、机器可判**。
+把散落在 docs、results、脚本里的判定收敛成**一条命令、固定八行、机器可判**。
 每一行只有三种状态：
 
     PASS    证据在仓库里，且与论文值一致
@@ -13,12 +13,12 @@
 
 用法
 ----
-    python scripts/repro_gate.py                 # 七行总表
+    python scripts/repro_gate.py                 # 八行总表
     python scripts/repro_gate.py --offline       # 同上，不打印补跑命令
     python scripts/repro_gate.py --row 4         # 只看某一行
     python scripts/repro_gate.py --json          # 机器可读
 
-退出码：0 = 七行全 PASS；1 = 有 FAIL 或 PENDING。
+退出码：0 = 八行全 PASS；1 = 有 FAIL 或 PENDING。
 """
 import argparse
 import hashlib
@@ -284,6 +284,34 @@ def row7():
     return 'PASS', 'ORACLE_c ΔmIoU=%+.2f → 正文 +12.2（%s，%s）' % (dm, base, cands[-1])
 
 
+# --------------------------------------------------------------------------- R8
+def row8():
+    """§3.1 Charades：ORACLE_c 的 ΔmIoU（+23.2）。"""
+    pat = re.compile(r'(w6_charades_oracle.*\.log$)|(charades_oracle_\d{8}\.log$)')
+    cands = sorted([p for p in os.listdir(OB) if pat.search(p)],
+                   key=lambda p: os.path.getmtime(os.path.join(OB, p))) \
+        if os.path.isdir(OB) else []
+    if not cands:
+        return 'PENDING', '缺 results/oracle_bounds/w6_charades_oracle*.log（GPU 约 10 min）'
+    txt = open(os.path.join(OB, cands[-1]), encoding='utf-8', errors='replace').read()
+    b = re.search(r'^base:\s*ALL\s+mIoU=([\d.]+)', txt, re.M)
+    m = re.search(r'完美中心\(框宽不变\)\s+mIoU=([\d.]+).*?ΔmIoU\s+([+-][\d.]+)', txt)
+    if not (b and m):
+        return 'FAIL', '解析不到 base 或「完美中心」的 mIoU（日志格式变了？）'
+    base, oc, dm = float(b.group(1)), float(m.group(1)), float(m.group(2))
+    bad = []
+    if abs(base - 0.4720) > 5e-4:
+        bad.append('base %.4f≠0.4720' % base)
+    if abs(oc - 0.7040) > 5e-4:
+        bad.append('ORACLE_c %.4f≠0.7040' % oc)
+    if abs(dm - 23.21) > 0.05:
+        bad.append('ΔmIoU %+.2f≠+23.21' % dm)
+    if bad:
+        return 'FAIL', '; '.join(bad)
+    return 'PASS', ('base %.4f → ORACLE_c %.4f，ΔmIoU=%+.2f → 正文 +23.2（%s）'
+                    % (base, oc, dm, cands[-1]))
+
+
 ROWS = [
     ('R1', '核心论点', row1),
     ('R2', '表 2 PC-Net 行', row2),
@@ -292,13 +320,14 @@ ROWS = [
     ('R5', '表 3 CNM 行', row5),
     ('R6', '表 4 训练/测试列', row6),
     ('R7', '§3.1 ANET +12.2', row7),
+    ('R8', '§3.1 Charades +23.2', row8),
 ]
 
 
 def main():
-    ap = argparse.ArgumentParser(description='论文可复现性七行总门禁')
+    ap = argparse.ArgumentParser(description='论文可复现性八行总门禁')
     ap.add_argument('--offline', action='store_true', help='只读已入库产物（默认行为）')
-    ap.add_argument('--row', type=int, choices=range(1, 8), help='只看某一行')
+    ap.add_argument('--row', type=int, choices=range(1, 9), help='只看某一行')
     ap.add_argument('--json', action='store_true', help='输出 JSON')
     args = ap.parse_args()
 

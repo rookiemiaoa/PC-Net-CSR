@@ -290,7 +290,7 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
 | 表 2（CNM） | S3 | 38.43→41.43（+3.00）；NC +2.17；NW +2.84 | ±0.25 |
 | 表 3 | `render_table3.py --check` | PC-Net +1.05 / CNM +3.00 / CPL −3.76 / QMN −3.53 / CCR −3.18；dir_acc 0.776/0.700/0.510/0.472/0.447 | 5e-3 |
 | 表 4（测试列） | `w47` + 表 3 的 dir_acc | 0.776 / 0.510 / 0.472 / 0.447 | ±0.002 |
-| 表 4（训练列） | **仓库内无生成器**（见 §9） | 0.742 / 0.508 / 0.491 / 0.453 | ±0.002 |
+| 表 4（训练列） | `csr/analysis/w61_train_split.py`（驱动 `w34` + 训练切分）→ `scripts/render_table4.py --check` | 0.742 / 0.508 / 0.491 / 0.453 | ±0.002 |
 | 图 3 | `w47` + `w48` | 18 个互异工作点；a\* ∈ (0.5096, 0.5691)；conv_only 0.5759；all 0.5430 | 4 位小数 |
 
 `ORACLE_c` 有两个量，**不可互换**：§3.1 的 +23.2（Charades）/ +12.2（ANET）是单骨干、
@@ -342,9 +342,9 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
 
 ---
 
-## 9. 各项缺口的现状（2026-10-18 更新，务必如实转述，不要猜）
+## 9. 各项缺口的现状（2026-10-19 更新，务必如实转述，不要猜）
 
-> 状态随时可用 `python scripts/repro_gate.py --offline` 查询：七行里哪几行 PASS、
+> 状态随时可用 `python scripts/repro_gate.py --offline` 查询：八行里哪几行 PASS、
 > 哪几行 PENDING、缺什么，一次列全。
 
 1. **表 4 的「训练」列：已闭环**。生成器就是 `csr/analysis/w61_train_split.py`
@@ -377,6 +377,10 @@ python scripts/render_table3.py                   # 表 3 → results/tables/
    **逐位相同**（`scripts/check_weight_equiv.py`，容差 1e-12；实测两个切分都通过）。
    ⇒ 判定为「可复现（需下载权重）」：下载 release 附件、
    `md5sum -c checkpoints/WEIGHTS.md5` 通过，即可逐位复现，无需重训。
+5. **§3.1 的两个 oracle 都已进门禁，但口径不同、不可互换**。
+   ANET 的 +12.2 是 R7（`anet_oracle_20261018.log`，2026-10-18 重跑 +12.2160）；
+   Charades 的 +23.2 是 R8（`w6_charades_oracle.log`，base 0.4720 → 0.7040，+23.21）。
+   前者是跨数据集诊断、后者是单骨干单次中心替换；不要把一个数搬到另一个数据集上。
 
 ### 9.1 CNM 行的重训结果（2026-10-18）
 

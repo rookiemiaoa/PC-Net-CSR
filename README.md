@@ -311,10 +311,10 @@ CSR **不是**普遍有效的。部署前请先量两个坐标：
 python csr/tools/format_lint.py
 ```
 
-### 7.1 一条命令看七行判定
+### 7.1 一条命令看八行判定
 
 ```bash
-python scripts/repro_gate.py            # 七行 PASS / FAIL / PENDING
+python scripts/repro_gate.py            # 八行 PASS / FAIL / PENDING
 python scripts/repro_gate.py --row 5    # 只看某一行
 ```
 
@@ -326,10 +326,11 @@ python scripts/repro_gate.py --row 5    # 只看某一行
 | R4 表 3 PC-Net | 权重 md5 7/7 + 与 `official_8` 行为等价 2×5 + 6 格 | `checkpoints/` + `results/` |
 | R5 表 3 CNM | 重训产物 ρ/dir/Δm 与论文一致 | `results/curve_availability/w36_cnm.retrained.json` |
 | R6 表 4 两列 | 训练 .742/.508/.491/.453、测试 .776/.510/.472/.447 | `results/table4/` |
-| R7 §3.1 ANET | ORACLE_c ΔmIoU = +12.216±0.05 | `results/oracle_bounds/` |
+| R7 §3.1 ANET | ORACLE_c ΔmIoU = +12.216±0.05 | `results/oracle_bounds/anet_oracle_*.log` |
+| R8 §3.1 Charades | base 0.4720 → ORACLE_c 0.7040，ΔmIoU = +23.21±0.05 | `results/oracle_bounds/w6_charades_oracle.log` |
 
-2026-10-18 在本机实测 **7/7 PASS**（`python scripts/repro_gate.py`，退出码 0）。
-其中 R5 是当天从零重训 CNM 得到的：训练轨迹 600 次 loss 比对最大差 `0.000e+00`，
+2026-10-19 在本机实测 **8/8 PASS**（`python scripts/repro_gate.py`，退出码 0）。
+其中 R5 是 10-18 从零重训 CNM 得到的：训练轨迹 600 次 loss 比对最大差 `0.000e+00`，
 表 3 那一行六个数字与论文逐格相同。细节见 `docs/REPRODUCE_FULL.md` §9.1。
 
 > R2/R4/R5/R6/R7 需要权重与 hdf5 特征，仓库不含（体积原因）。
