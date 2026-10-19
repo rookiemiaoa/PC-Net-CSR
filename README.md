@@ -414,7 +414,7 @@ P4 用 `NOTE` 而不是 `FAIL` 是有意的：它测的是**同一算子在不�
 
 ## 10. 上传到 GitHub
 
-本目录**已经是初始化好的 git 仓库**（分支 `main`，{{FILE_COUNT}} 个受控文件，最大单文件 16.6 MB
+本目录**已经是初始化好的 git 仓库**（分支 `main`，295 个受控文件，最大单文件 16.6 MB
 即 `data/activitynet/glove.pkl`，远低于 GitHub 的 100 MB 上限；模型权重已排除、改由发布页提供），
 只需接上远端即可推送：
 
@@ -430,7 +430,7 @@ git push -u origin main
 想先本地确认一遍再推：
 
 ```bash
-git ls-files | wc -l          # {{FILE_COUNT}}
+git ls-files | wc -l          # 295
 git status                    # 应为 clean
 git log --oneline | wc -l     # 以实际输出为准（历史长度随发布递增）
 ```
