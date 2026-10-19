@@ -2,7 +2,7 @@
 """发布前清理：把证据文件里的开发机绝对路径换成占位符。
 
 只替换 ``/Disks/DiskC/<账户>/`` 这一层（保留其后的相对结构），因此
-``/Disks/DiskC/fzc/ws_base2/CCR/...`` -> ``<DATA_ROOT>/ws_base2/CCR/...``。
+``/Disks/DiskC/<账户>/ws_base2/CCR/...`` -> ``<DATA_ROOT>/ws_base2/CCR/...``。
 用户名与内网目录布局不会出现在公开仓库里，证据的结构信息仍然完整。
 
 用法
