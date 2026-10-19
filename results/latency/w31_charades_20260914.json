@@ -1,0 +1,21 @@
+{
+ "tag": "charades",
+ "dataset": "CharadesSTA",
+ "N_eval": 512,
+ "BS": 16,
+ "L": 50,
+ "ckpt": "checkpoints/CharadesSTA/8_2025-05-14_13-26-12/model-best.pt",
+ "params_total": 5709252,
+ "params_M": 5.709,
+ "params_new": 0,
+ "ms_per_query_base": 6.224559992551804,
+ "ms_per_query_dense": 8.697795867919922,
+ "dense_over_base": 1.397335053132679,
+ "gpu_peak_MiB": 584.45703125,
+ "gpu_act_MiB": 562.6779632568359,
+ "ms_cpu_per_query": {
+  "CSR": 0.021622851490974426,
+  "ISR(g.5,T2)": 0.024648606777191162,
+  "RBR k=0.15": 0.028262734413146973
+ }
+}

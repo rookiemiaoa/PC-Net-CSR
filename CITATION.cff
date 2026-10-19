@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this code or the CSR / ISR / RBR operators, please cite the paper below."
+title: "PC-Net-CSR: an inference-time center-refinement extension of PC-Net"
+abstract: >-
+  Reference implementation and full reproduction package for the CSR
+  (Center-Shift Refinement), ISR (Iterative Shrink-Refine) and RBR
+  (Relevance-Boundary Refinement) inference-time operators, built on top of
+  PC-Net. Includes per-table evidence, the eight-row reproduction gate and
+  the calibration caches.
+authors:
+  - name: "Anonymous Authors"
+version: "1.0.0"
+date-released: "2026-10-19"
+license: MIT
+repository-code: "https://github.com/<user>/PC-Net-CSR"
+references:
+  - type: software
+    title: "PC-Net: Weakly Supervised Compositional Moment Retrieval via Proposal-Centric Network"
+    authors:
+      - name: "Mingyao Zhou"
+      - name: "Hao Sun"
+      - name: "Wei Xie"
+      - name: "Ming Dong"
+      - name: "Chengji Wang"
+      - name: "Mang Ye"
+    notes: "NeurIPS 2025. Upstream base model: https://github.com/mingyao1120/PC-Net"
+  - type: software
+    title: "CNM: Contrastive Negative sample Mining for weakly supervised moment retrieval"
+    authors:
+      - name: "Minghang Zheng"
+    notes: "AAAI 2022. https://github.com/minghangz/cnm"

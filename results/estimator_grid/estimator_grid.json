@@ -1,0 +1,63 @@
+{
+  "cache": "C:\\Users\\22834\\WorkBuddy\\2026-09-10-13-00-21\\PC-Net-master\\csr\\analysis\\feat_cache\\charades_test_trivial_r3.pkl",
+  "rep": 0,
+  "n": 3096,
+  "definitions": {
+    "curve": "Z (z-scored -nll, unsmoothed)",
+    "grid": "cg=(i+0.5)/50",
+    "gt_center": "(GS+GE)/2",
+    "softmax_tau": 0.25,
+    "dir_subgroup": "|c_g - c_b| > 0.02",
+    "dir_subgroup_n": 2750
+  },
+  "estimators": {
+    "baseline_c_b": {
+      "mae": 0.1699,
+      "dir_acc": 0.0,
+      "dir_subgroup_n": 2750,
+      "paper_mae": 0.1699,
+      "paper_dir_acc": null,
+      "match": true
+    },
+    "global_argmax": {
+      "mae": 0.1742,
+      "dir_acc": 0.6844,
+      "dir_subgroup_n": 2750,
+      "paper_mae": 0.1742,
+      "paper_dir_acc": 0.684,
+      "match": true
+    },
+    "softmax_tau0.25": {
+      "mae": 0.1499,
+      "dir_acc": 0.7695,
+      "dir_subgroup_n": 2750,
+      "paper_mae": 0.1499,
+      "paper_dir_acc": 0.77,
+      "match": true
+    },
+    "windowed_centroid_beta0.50": {
+      "mae": 0.1441,
+      "dir_acc": 0.7691,
+      "dir_subgroup_n": 2750,
+      "paper_mae": 0.1441,
+      "paper_dir_acc": 0.769,
+      "match": true
+    },
+    "windowed_centroid_beta0.30": {
+      "mae": 0.1443,
+      "dir_acc": 0.7782,
+      "dir_subgroup_n": 2750,
+      "paper_mae": 0.1443,
+      "paper_dir_acc": 0.778,
+      "match": true
+    },
+    "windowed_centroid_beta0.20": {
+      "mae": 0.1483,
+      "dir_acc": 0.7691,
+      "dir_subgroup_n": 2750,
+      "paper_mae": 0.1483,
+      "paper_dir_acc": 0.769,
+      "match": true
+    }
+  }
+}

@@ -122,7 +122,12 @@ docker run --gpus all -v /path/to/data:/data pcnet-csr smoke
 
 - `checkpoints/*/…/model-best.pt` —— 7 个官方发布权重（22–29 MB/个，合计约 170 MB）。
   为控制仓库体积与历史长度，权重**不入库**（`.gitignore` 排除 `checkpoints/**/*.pt`），
-  以发布附件形式提供。7 个文件原名都是 `model-best.pt`，同一 Release 内会重名，
+  以发布附件形式提供。
+
+  **下载地址**：<https://github.com/<user>/PC-Net-CSR/releases/tag/v1.0-repro>
+  （7 个附件，`checkpoints/WEIGHTS.release.md5` 与本表逐项对应）。
+
+  7 个文件原名都是 `model-best.pt`，同一 Release 内会重名，
   因此附件按「数据集_种子_训练日期」改名；`checkpoints/WEIGHTS.release.md5` 给出
   **附件名 → md5 → 落盘路径** 的完整映射。
 
@@ -389,12 +394,17 @@ P4 用 `NOTE` 而不是 `FAIL` 是有意的：它测的是**同一算子在不�
 
 ## 9. 许可与致谢
 
-本仓库以 **MIT** 许可发布（见 [`LICENSE`](LICENSE)）。
-其中 `models/modules/net_vlad.py` 来自 Antoine Miech（2018），以 **Apache-2.0** 授权，
+本仓库的**新增部分**（`csr/`、`docs/`、`results/`、`scripts/` 与顶层构建文件）
+以 **MIT** 许可发布（见 [`LICENSE`](LICENSE)）。
+
+`models/`、`datasets/`、`runners/`、`optimizers/`、`config/`、`data/`、`train.py`、
+`utils.py`、`vocab.py` 派生自上游 PC-Net 仓库。**上游仓库未附 LICENSE 文件**，
+因此本仓库不对这些文件再许可；它们只为使本文数字可复现而随包分发，
+版权归原作者所有（核验记录见 [`docs/UPSTREAM_VERIFICATION.md`](docs/UPSTREAM_VERIFICATION.md)）。
+
+`models/modules/net_vlad.py` 来自 Antoine Miech（2018），以 **Apache-2.0** 授权，
 其许可证头已原样保留；`optimizers/` 下文件源自 fairseq（Facebook，MIT 授权）。
 合并作品的完整归属见 [`NOTICE`](NOTICE)。
-上游 PC-Net 代码遵循其原始许可，版权归原作者所有。
-CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT 授权。
 
 > 双盲投稿期间版权人写作 `Anonymous Authors`，提交邮箱亦已替换为匿名地址。
 > 请使用匿名镜像仓库（如 anonymous.4open.science），不要直接给出带作者姓名的 GitHub 地址；
@@ -404,23 +414,23 @@ CSR / ISR / RBR 三个算子及其评测、分析代码为本文新增，按 MIT
 
 ## 10. 上传到 GitHub
 
-本目录**已经是初始化好的 git 仓库**（分支 `main`，236 个受控文件，最大单文件 16.6 MB
+本目录**已经是初始化好的 git 仓库**（分支 `main`，{{FILE_COUNT}} 个受控文件，最大单文件 16.6 MB
 即 `data/activitynet/glove.pkl`，远低于 GitHub 的 100 MB 上限；模型权重已排除、改由发布页提供），
 只需接上远端即可推送：
 
 ```bash
 cd PC-Net-master
 
-# ① 在 GitHub 网页端建一个空仓库（不要勾选 README / .gitignore / LICENSE）
-# ② 接上远端（把 <user>/<repo> 换成你的）
-git remote add origin https://github.com/<user>/<repo>.git
+# ① 在 GitHub 网页端建一个空仓库 PC-Net-CSR（不要勾选 README / .gitignore / LICENSE）
+# ② 接上远端（把 <user> 换成你的账号）
+git remote add origin https://github.com/<user>/PC-Net-CSR.git
 git push -u origin main
 ```
 
 想先本地确认一遍再推：
 
 ```bash
-git ls-files | wc -l          # 236
+git ls-files | wc -l          # {{FILE_COUNT}}
 git status                    # 应为 clean
 git log --oneline | wc -l     # 以实际输出为准（历史长度随发布递增）
 ```

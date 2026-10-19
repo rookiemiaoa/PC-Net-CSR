@@ -1,0 +1,13 @@
+[GPU] NVIDIA GeForce RTX 2080 Ti
+[DATA] CharadesSTA N=512 BS=16 WARM=3 REP=20 L=50
+[参数] 权重总量 = 5709252 (5.709 M)   可训练 = 0
+2026-09-14 15:44:58 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+[预热] 3 批 2.24s
+[GPU 前向] 320 查询  t_base=1.99s (6.225 ms/查询)  t_dense=2.78s (8.698 ms/查询)  dense/base=1.40x
+[GPU 显存] 峰值分配 584.5 MiB（权重 21.8 MiB，激活峰值约 562.7 MiB）
+[CPU 后处理] CSR             0.346 ms / 16 查询批  =   0.0216 ms/查询
+[CPU 后处理] ISR(g.5,T2)     0.394 ms / 16 查询批  =   0.0246 ms/查询
+[CPU 后处理] RBR k=0.15      0.452 ms / 16 查询批  =   0.0283 ms/查询
+[标量] CSR/ISR/RBR 新增参数 = 0，新增可训练量 = 0
+WROTE <DATA_ROOT>/dev_diag/w31_charades.json
+DONE

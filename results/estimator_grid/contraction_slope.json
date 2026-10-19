@@ -1,0 +1,30 @@
+{
+  "cache": "C:\\Users\\22834\\WorkBuddy\\2026-09-10-13-00-21\\PC-Net-master\\csr\\analysis\\feat_cache\\charades_test_trivial_r3.pkl",
+  "smooth": 7,
+  "beta": 0.2,
+  "definition": "polyfit(c1-cb, c_g-c_b, deg=1) with intercept",
+  "paper_slope": 1.763,
+  "per_rep": [
+    {
+      "rep": 0,
+      "slope": 1.7627482882472738,
+      "intercept": -0.011284449253162743,
+      "realized_fraction": 0.5672959699732936,
+      "n": 3096
+    },
+    {
+      "rep": 1,
+      "slope": 1.8168407126691035,
+      "intercept": -0.008869474839562169,
+      "realized_fraction": 0.550405983874563,
+      "n": 3096
+    },
+    {
+      "rep": 2,
+      "slope": 1.7620577029256987,
+      "intercept": -0.010646870551903885,
+      "realized_fraction": 0.5675183045025214,
+      "n": 3096
+    }
+  ]
+}

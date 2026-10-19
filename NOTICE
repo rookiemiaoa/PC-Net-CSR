@@ -12,6 +12,12 @@ are derived from fairseq, distributed under the MIT License.
 
 The upstream PC-Net implementation (NeurIPS 2025) is used as the base model;
 copyright belongs to its original authors. See the citation section in README.md.
+The upstream repository does **not** ship a LICENSE file, so no license is
+asserted here for the upstream-derived directories; they are redistributed only
+to make the reported numbers reproducible. See LICENSE, section 2.
+
+Model checkpoints in the GitHub Release are redistributed for research
+reproduction only (LICENSE, section 4).
 
 Third-party components retain their own licenses; this NOTICE must be
 preserved in redistributions of the combined work.

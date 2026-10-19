@@ -6,7 +6,7 @@
  "L": 50,
  "K_REP": 1,
  "WPT": 0.1,
- "ckpt": "/Disks/DiskC/fzc/ws_base2/cpl/checkpoints/cg_main/base/model-best.pt",
+ "ckpt": "<DATA_ROOT>/ws_base2/cpl/checkpoints/cg_main/base/model-best.pt",
  "rho_geo": 1.3366463179513814,
  "med_wb": 0.3481983244419098,
  "med_gl": 0.26050146532074236,

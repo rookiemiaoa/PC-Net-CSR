@@ -1,0 +1,16 @@
+cache   : C:\Users\22834\WorkBuddy\2026-09-10-13-00-21\PC-Net-master\csr\analysis\feat_cache\charades_test_trivial_r3.pkl
+rep     : 0 / 3    N = 3096
+定义    : dirAcc 分母 = |c_g - c_b| > 0.02 的样本
+
+estimator                            MAE     paper |    dirAcc     paper | match
+------------------------------------------------------------------------------------------------
+baseline_c_b                      0.1699    0.1699 |         -         - | OK
+global_argmax                     0.1742    0.1742 |    0.6844     0.684 | OK
+softmax_tau0.25                   0.1499    0.1499 |    0.7695     0.770 | OK
+windowed_centroid_beta0.50        0.1441    0.1441 |    0.7691     0.769 | OK
+windowed_centroid_beta0.30        0.1443    0.1443 |    0.7782     0.778 | OK
+windowed_centroid_beta0.20        0.1483    0.1483 |    0.7691     0.769 | OK
+------------------------------------------------------------------------------------------------
+子群样本数 n = 2750（论文写作 2750）
+结论：6/6 项与论文逐位一致
+wrote results/estimator_grid/estimator_grid.json

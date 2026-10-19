@@ -6,7 +6,7 @@
  "L": 50,
  "K_REP": 3,
  "WPT": 0.1,
- "ckpt": "/Disks/DiskC/fzc/repro_20261017/cnm/checkpoints/charades/cg_main/cg_main/model-best.pt",
+ "ckpt": "<DATA_ROOT>/repro_20261017/cnm/checkpoints/charades/cg_main/cg_main/model-best.pt",
  "rho_geo": 1.725324337419232,
  "med_wb": 0.44991135597229004,
  "med_gl": 0.2607691471188975,

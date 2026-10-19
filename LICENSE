@@ -21,11 +21,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------
-Third-party notice
+Scope of this license, and third-party material
 
-The directories models/, datasets/, runners/, optimizers/, config/, scripts/,
-train.py, utils.py and vocab.py are derived from the upstream PC-Net
-repository (https://github.com/mingyao1120/PC-Net) and remain under their
-original license. Copyright of those files belongs to their original authors.
-The csr/ directory, docs/, results/ and the top-level build files are new
-contributions of this work and are licensed under the MIT terms above.
+1. New contributions of this work -- the `csr/` directory, `docs/`,
+   `results/`, `scripts/`, and the top-level build files (`reproduce.sh`,
+   `requirements*.txt`, `Dockerfile`, `README.md`, `CITATION.cff`,
+   `RELEASE_NOTES.md`) -- are released under the MIT License above.
+
+2. Upstream-derived files -- `models/`, `datasets/`, `runners/`,
+   `optimizers/`, `config/`, `data/`, `train.py`, `utils.py`, `vocab.py` --
+   are copied from the official PC-Net repository
+   (https://github.com/mingyao1120/PC-Net, NeurIPS 2025). **That repository
+   ships no LICENSE file**, so this package grants no license for those files
+   beyond what their authors permit; they are included solely so that the
+   released numbers can be reproduced. Copyright remains with the original
+   authors (see `docs/UPSTREAM_VERIFICATION.md`).
+
+3. `models/modules/net_vlad.py` is code by Antoine Miech, licensed under the
+   Apache License 2.0; its header is kept verbatim. Files under `optimizers/`
+   derive from fairseq and carry Facebook copyright headers (MIT).
+
+4. Model checkpoints distributed as GitHub Release assets are provided for
+   research reproduction only.
+
+5. If you are an upstream author and want the derived files removed from this
+   repository, please open an issue; they will be dropped and replaced by a
+   setup script that copies them from upstream.

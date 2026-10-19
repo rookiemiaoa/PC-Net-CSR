@@ -36,7 +36,7 @@
 | docstring 首行的历史名 | 现文件名 |
 |---|---|
 | `w11_eval_final.py` | `csr/eval/eval_final.py` |
-| `w30_main_ops.py` | 见独立发布包 `PC-Net-CSR-release/eval_all_ops.py` |
+| `w30_main_ops.py` | `csr/eval/eval_csr.py`（同时输出 base / CSR / ISR / RBR 四行） |
 | `w46_prop2_proof_check.py` | `csr/analysis/w46_prop2_proof_check.py`（名未变） |
 | `w47_traj_analysis.py` | `csr/analysis/w47_traj_calibration.py` |
 | `w48_fig3_b.py` | `csr/analysis/w48_fig3_validity_map.py` |

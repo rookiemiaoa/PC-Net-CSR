@@ -6,7 +6,7 @@
  "L": 50,
  "K_REP": 1,
  "WPT": 0.1,
- "ckpt": "/Disks/DiskC/fzc/ws_base2/QMN/checkpoints/cg_main/qmn/8_2026-09-23_17-02-56/model-best.pt",
+ "ckpt": "<DATA_ROOT>/ws_base2/QMN/checkpoints/cg_main/qmn/8_2026-09-23_17-02-56/model-best.pt",
  "rho_geo": 1.3207985502481463,
  "med_wb": 0.3440699577331543,
  "med_gl": 0.26050146532074236,

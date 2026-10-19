@@ -1,0 +1,8 @@
+CPU 后处理复测：BS=16, warmup=20, reps=300, rounds=5
+超参：smooth=7 beta=0.20 rho=0.10 alpha=1.00 dmin=0.01
+本机：0.0143 ms/查询（各轮 0.0167, 0.0184, 0.0143, 0.0139, 0.0141）
+论文：0.0216 ms/查询（2026-09-14, RTX 2080 Ti 主机）
+偏差：-33.7%
+归档：base 6.2246 ms | dense 8.6978 ms | CSR-cpu 0.021623 ms
+wrote results/latency/csr_cpu_local.json
+结论：OK（同数量级判据 ±50%）

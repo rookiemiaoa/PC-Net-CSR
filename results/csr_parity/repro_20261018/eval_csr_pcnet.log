@@ -1,6 +1,6 @@
 feature_path=i3d_features.hdf5  exists=True
 cfg=config/charades/main_train_test.paper.json
-ckpt=/Disks/DiskC/fzc/repro_20261017/code/checkpoints/CharadesSTA/8_2026-10-17_18-50-42/model-best.pt
+ckpt=<DATA_ROOT>/repro_20261017/code/checkpoints/CharadesSTA/8_2026-10-17_18-50-42/model-best.pt
 dataset=CharadesSTA  N=3096  num_props=8  L=50  BS=16  K_REP=3
 CSR: SMOOTH=7 BETA=0.20 RHO=0.10 ALPHA=1.00 DMIN=0.01 THR=0.35
 2026-10-17 19:54:00 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
