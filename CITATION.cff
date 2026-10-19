@@ -8,11 +8,11 @@ abstract: >-
   PC-Net. Includes per-table evidence, the eight-row reproduction gate and
   the calibration caches.
 authors:
-  - name: "Anonymous Authors"
+  - name: "Zhichao Feng"
 version: "1.0.0"
 date-released: "2026-10-19"
 license: MIT
-repository-code: "https://github.com/<user>/PC-Net-CSR"
+repository-code: "https://github.com/rookiemiaoa/PC-Net-CSR"
 references:
   - type: software
     title: "PC-Net: Weakly Supervised Compositional Moment Retrieval via Proposal-Centric Network"

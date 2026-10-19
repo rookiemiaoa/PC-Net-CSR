@@ -124,7 +124,7 @@ docker run --gpus all -v /path/to/data:/data pcnet-csr smoke
   为控制仓库体积与历史长度，权重**不入库**（`.gitignore` 排除 `checkpoints/**/*.pt`），
   以发布附件形式提供。
 
-  **下载地址**：<https://github.com/<user>/PC-Net-CSR/releases/tag/v1.0-repro>
+  **下载地址**：<https://github.com/rookiemiaoa/PC-Net-CSR/releases/tag/v1.0-repro>
   （7 个附件，`checkpoints/WEIGHTS.release.md5` 与本表逐项对应）。
 
   7 个文件原名都是 `model-best.pt`，同一 Release 内会重名，
@@ -371,13 +371,12 @@ P4 用 `NOTE` 而不是 `FAIL` 是有意的：它测的是**同一算子在不�
   title   = {On the Improvability Boundary of Inference-Time Refinement for
              Weakly Supervised Compositional Moment Retrieval:
              A Two-Axis Validity Map and Training-Free Centre-Shift Refinement},
-  author  = {{Anonymous Authors}},
+  author  = {Zhichao Feng},
   journal = {Manuscript in preparation},
   year    = {2026}
 }
 ```
 
-> 双盲期间作者与刊物字段留空；投稿 / camera-ready 时按 `docs/RELEASE_CHECKLIST.md` 恢复。
 
 本工作建立在 **PC-Net** 之上，请一并引用：
 
@@ -406,10 +405,6 @@ P4 用 `NOTE` 而不是 `FAIL` 是有意的：它测的是**同一算子在不�
 其许可证头已原样保留；`optimizers/` 下文件源自 fairseq（Facebook，MIT 授权）。
 合并作品的完整归属见 [`NOTICE`](NOTICE)。
 
-> 双盲投稿期间版权人写作 `Anonymous Authors`，提交邮箱亦已替换为匿名地址。
-> 请使用匿名镜像仓库（如 anonymous.4open.science），不要直接给出带作者姓名的 GitHub 地址；
-> camera-ready 后按 `docs/RELEASE_CHECKLIST.md` 恢复实名。
-
 ---
 
 ## 10. 上传到 GitHub
@@ -422,8 +417,8 @@ P4 用 `NOTE` 而不是 `FAIL` 是有意的：它测的是**同一算子在不�
 cd PC-Net-master
 
 # ① 在 GitHub 网页端建一个空仓库 PC-Net-CSR（不要勾选 README / .gitignore / LICENSE）
-# ② 接上远端（把 <user> 换成你的账号）
-git remote add origin https://github.com/<user>/PC-Net-CSR.git
+# ② 接上远端
+git remote add origin https://github.com/rookiemiaoa/PC-Net-CSR.git
 git push -u origin main
 ```
 
