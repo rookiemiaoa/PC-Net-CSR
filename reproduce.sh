@@ -54,6 +54,7 @@ if [ "$MODE" = "check" ]; then
   run "parity"       "$PY" csr/tools/parity_check.py  || exit 1
   run "table3"       "$PY" scripts/render_table3.py --check || exit 1
   run "table4"       "$PY" scripts/render_table4.py --check || exit 1
+  run "csr_parity"   "$PY" scripts/check_csr_parity.py || exit 1
   run "weights"      "$PY" scripts/check_release_assets.py --list > /dev/null || exit 1
   for S in scan_center_final attrib_csr ablate_gate oracle_gate; do
     run "analysis_$S" "$PY" "csr/analysis/$S.py" || exit 1
